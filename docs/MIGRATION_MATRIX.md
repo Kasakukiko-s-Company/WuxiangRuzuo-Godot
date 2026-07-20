@@ -15,7 +15,7 @@
 | `docs/DEMO_SAVE_AND_CALENDAR.md` | adapt | 新 Save Schema / adapters 的权威输入 |
 | `docs/MINE_COMBAT_SLICE.md` | adapt | G8 目标；Cocos adapter 改 Godot |
 | `docs/DEMO_MAP_FLOW.md` | adapt | G6 四地图拓扑/锚点输入 |
-| `docs/GAME_DESIGN.md` | adapt | 产品愿景与 Demo 支柱，当前实现更新为 G1 |
+| `docs/GAME_DESIGN.md` | adapt | 产品愿景与 Demo 支柱；G1 重写，后续随当前里程碑维护事实 |
 | `docs/TECH_SPEC.md` | rewrite | Godot 技术事实与里程碑 |
 | `docs/PLATFORM.md` | rewrite | `windows-native`/`web` + 渠道抽象 |
 | `docs/DATA_SCHEMA.md` | rewrite | JSON v1 目录与 Godot 新存档 schema |

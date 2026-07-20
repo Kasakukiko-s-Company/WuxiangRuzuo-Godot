@@ -21,4 +21,4 @@ Windows 使用原子文件 adapter；Web/微信受存储配额和生命周期约
 
 ## 当前事实
 
-G1 的 `AppCompositionRoot` 只证明装配入口存在，尚无任何真实平台服务。Web/微信/Steam 均未验证，详见 `GODOT_PLATFORM_FEASIBILITY.md`。
+G2 已建立五类 abstract service contracts、输入/安全区/存档结果值对象，以及合法环境/渠道组合校验。`AppCompositionRoot` 当前只选择 `windows-native + standalone` 描述符，尚未装配真实存档、输入、音频或分析 adapter。Web/微信/Steam 均未验证，详见 `GODOT_PLATFORM_FEASIBILITY.md`。

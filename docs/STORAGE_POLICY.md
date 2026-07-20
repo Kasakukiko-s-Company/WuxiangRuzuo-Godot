@@ -13,6 +13,8 @@
 
 Godot `_sc_`、D 盘 `editor_data` 和项目根均已确认。项目 `.godot` 位于 `D:\lzq\AI游戏\WuxiangRuzuo-Godot\.godot`，最终验证后为 9 个文件、约 0.005 MiB（含 D 盘 parse 日志），且被 Git 忽略。G1 不下载模板、不修改系统 TEMP/TMP、不修改系统环境变量。
 
+G2 最终扫描后，项目 `.godot` 为 24 个文件、670057 bytes（约 0.64 MiB），仍位于项目 D 盘目录并被 Git 忽略。Godot 在 `C:\Users\26478\AppData\Roaming\Godot\app_userdata\雾乡如昨\logs` 自动留下 5 个运行日志、合计 2709 bytes；它们不包含项目资源或存档，也不是任何长期文件的唯一副本。G2 未修改系统环境变量或 TEMP/TMP。
+
 Godot 4.7.1 self-contained 模式把编辑器设置/帮助缓存放在 D 盘，但 Windows 运行时 `user://` 仍使用 `%APPDATA%`。本轮 headless 运行在 `C:\Users\26478\AppData\Roaming\Godot\app_userdata\雾乡如昨\logs` 生成 2 个日志，共 0.56 KiB。它们不是项目资源、源文件、存档或唯一副本；长期项目事实仍全部在 D 盘。后续自动命令可用 `--log-file` 显式把诊断日志写入项目 `.godot`，G5 再对开发期/发行期 SaveService 路径分别验证，不通过系统环境变量强行重定向。
 
 ## 构建与缓存

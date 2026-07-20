@@ -10,7 +10,22 @@
       "map.home_interior.name": "主角住宅",
       "map.hometown_main.name": "故乡",
       "map.boundary_pass.name": "北侧山路",
-      "map.old_mine.name": "旧矿道"
+      "map.old_mine.name": "旧矿道",
+      "npc.luo_censhan.name": "罗岑山",
+      "npc.ning_zhao.name": "宁昭",
+      "npc.yan_xun.name": "晏巡",
+      "npc.du_heng.name": "杜蘅",
+      "npc.qiao_yu.name": "乔榆",
+      "npc.shen_he.name": "沈禾",
+      "npc.wen_shu.name": "文澍",
+      "npc.mu_yuan.name": "穆原",
+      "npc.qiao_ling.name": "乔苓",
+      "npc.tang_mi.name": "唐米",
+      "npc.he_zhou.name": "何舟",
+      "npc.li_qing.name": "黎青",
+      "npc.chi_que.name": "池雀",
+      "npc.a_tao.name": "阿桃",
+      "npc.chen_yun.name": "陈蕴"
     }
   }
 }

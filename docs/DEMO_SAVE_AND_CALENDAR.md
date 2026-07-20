@@ -28,4 +28,4 @@ Windows adapter 采用同目录临时文件+替换/重命名或等价原子策�
 
 ## 当前事实
 
-G1 没有 SaveCodec 或 SaveService。三档、历法与旧档导入目标安排在 G5；不得把旧单槽技术 MVP 当作当前能力。
+G2 已有纯领域 `SaveSnapshot`/`SaveCodec`，但没有 SaveService、档位文件、自动保存、历法推进或恢复流程。三档、历法与旧档导入目标安排在 G5；不得把 codec 往返测试或旧单槽技术 MVP 当作可玩的存档能力。

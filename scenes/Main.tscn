@@ -52,7 +52,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
 theme_override_font_sizes/font_size = 16
-text = "Godot migration · G1"
+text = "Godot migration · G2"
 horizontal_alignment = 1
 
 [node name="StatusLabel" type="Label" parent="Margin/Center/Content"]
@@ -67,5 +67,5 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.48, 0.55, 0.54, 1)
 theme_override_font_sizes/font_size = 12
-text = "工程基础已就绪；玩法迁移尚未开始"
+text = "数据 Schema 与纯领域模块已就绪；场景玩法尚未开始"
 horizontal_alignment = 1

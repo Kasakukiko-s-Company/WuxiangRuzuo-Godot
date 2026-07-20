@@ -19,7 +19,7 @@ home_interior <-> hometown_main <-> boundary_pass
 | `boundary_pass` | 40×24 | 1280×768 | `boundary_entry`/`boundary_return` |
 | `old_mine` | 32×24 | 1024×768 | `mine_safe_return` |
 
-完整必需锚点与 portal 已迁入 `data/demo_world.json`。G1 的 `scenePath` 全为 null，表示四图场景尚不存在。
+完整必需锚点与 portal 已迁入 `data/demo_world.json` 并通过 G2 交叉校验；`scenePath` 仍全为 null，表示四图场景尚不存在。
 
 ## 地图层语义
 
@@ -31,4 +31,4 @@ home_interior <-> hometown_main <-> boundary_pass
 
 ## 当前事实
 
-旧库没有四张正式 TMX，只有 `mvp_farm.tmx` 冒烟图。G1 未复制或导入地图；G3 先验证小图，G6 才实现四图与切换。
+旧库没有四张正式 TMX，只有 `mvp_farm.tmx` 冒烟图。截至 G2 未复制或导入地图；G3 先验证小图，G6 才实现四图与切换。

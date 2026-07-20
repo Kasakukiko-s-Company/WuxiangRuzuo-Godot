@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "npcs": [
+    {"id": "npc_luo_censhan", "displayNameKey": "npc.luo_censhan.name", "ageAtWorldDay1": 68, "contentTier": "core", "relationshipBoundary": "non-romantic", "defaultAnchorId": "main_npc_village_hall"},
+    {"id": "npc_ning_zhao", "displayNameKey": "npc.ning_zhao.name", "ageAtWorldDay1": 22, "contentTier": "core", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_home_road"},
+    {"id": "npc_yan_xun", "displayNameKey": "npc.yan_xun.name", "ageAtWorldDay1": 34, "contentTier": "core", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_north_gate"},
+    {"id": "npc_du_heng", "displayNameKey": "npc.du_heng.name", "ageAtWorldDay1": 32, "contentTier": "support", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_clinic"},
+    {"id": "npc_qiao_yu", "displayNameKey": "npc.qiao_yu.name", "ageAtWorldDay1": 45, "contentTier": "support", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_workshop"},
+    {"id": "npc_shen_he", "displayNameKey": "npc.shen_he.name", "ageAtWorldDay1": 23, "contentTier": "core", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_farm_edge"},
+    {"id": "npc_wen_shu", "displayNameKey": "npc.wen_shu.name", "ageAtWorldDay1": 30, "contentTier": "support", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_archive"},
+    {"id": "npc_mu_yuan", "displayNameKey": "npc.mu_yuan.name", "ageAtWorldDay1": 39, "contentTier": "ambient", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_tool_yard"},
+    {"id": "npc_qiao_ling", "displayNameKey": "npc.qiao_ling.name", "ageAtWorldDay1": 17, "contentTier": "support", "relationshipBoundary": "minor-until-adult", "defaultAnchorId": "main_npc_workshop_apprentice"},
+    {"id": "npc_tang_mi", "displayNameKey": "npc.tang_mi.name", "ageAtWorldDay1": 36, "contentTier": "ambient", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_communal_kitchen"},
+    {"id": "npc_he_zhou", "displayNameKey": "npc.he_zhou.name", "ageAtWorldDay1": 28, "contentTier": "support", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_river"},
+    {"id": "npc_li_qing", "displayNameKey": "npc.li_qing.name", "ageAtWorldDay1": 25, "contentTier": "ambient", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_pasture"},
+    {"id": "npc_chi_que", "displayNameKey": "npc.chi_que.name", "ageAtWorldDay1": 19, "contentTier": "ambient", "relationshipBoundary": "adult-standard", "defaultAnchorId": "main_npc_square"},
+    {"id": "npc_a_tao", "displayNameKey": "npc.a_tao.name", "ageAtWorldDay1": 10, "contentTier": "ambient", "relationshipBoundary": "minor-until-adult", "defaultAnchorId": "main_npc_old_courtyard"},
+    {"id": "npc_chen_yun", "displayNameKey": "npc.chen_yun.name", "ageAtWorldDay1": 71, "contentTier": "ambient", "relationshipBoundary": "non-romantic", "defaultAnchorId": "main_npc_old_courtyard_elder"}
+  ]
+}

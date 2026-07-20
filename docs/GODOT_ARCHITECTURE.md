@@ -1,8 +1,8 @@
 # Godot 架构基线
 
-## 当前事实（G1）
+## 当前事实（G2）
 
-项目只有最小 `Main.tscn`、`main.gd`、`AppCompositionRoot` 脚手架、JSON 清单与 headless 冒烟测试。没有领域玩法、地图、存档 adapter、NPC、战斗或正式 UI。此文档的其余内容是后续实现边界，不是完成声明。
+项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。项目仍没有移动/碰撞/相机、完整农耕闭环、存档 adapter、正式地图、NPC、战斗或正式 UI。
 
 ## 目录与依赖方向
 
@@ -25,23 +25,24 @@ scenes / scripts/gameplay / scripts/ui
 - `persistence` 提供 SaveService adapter、原子文件写入、schema codec 与显式旧档导入。
 - `app` 是唯一装配入口；release 构建不得静默使用内存存档。
 
-## 目标深模块
+## 深模块状态
 
 | 目标模块 | 形态 | 职责 |
 | --- | --- | --- |
-| `FarmState` | `RefCounted`/值对象 | 农田权威状态与可耕格事务 |
-| `InventoryState` | `RefCounted`/值对象 | 堆叠、容量、增减与八格快捷栏事务 |
+| `GameCatalogCodec` | 已实现 G2 | 七份目录文档的原子强类型解码与交叉校验 |
+| `FarmState` | 已实现 G2 | 农田权威状态与开垦格事务；地图可耕查询后续接入 |
+| `InventoryState` | 已实现 G2 | 堆叠、容量、增减与八格快捷栏事务 |
 | `CropPlanting` | 纯函数/服务 | 农田+背包原子播种 |
 | `CropGrowth` | 纯函数/服务 | 浇水条件、跨天成长、阶段推导 |
 | `CropHarvesting` | 纯函数/服务 | 成熟检查、背包容量与原子收获 |
 | `FarmDayCycle` | 领域服务 | 睡觉、跨天顺序、当日重置 |
-| `SaveCodec` | 纯 codec | 新 Godot schema 的编码/解码/校验 |
+| `SaveCodec` | 已实现 G2 | 新 Godot schema 的编码/解码/完整快照校验；不负责存储 |
 | `CocosSaveImporter` | 独立迁移器 | 显式读取旧 v1 payload；不污染正常 codec |
 | `RelationshipLedger` | 领域服务 | 全员好感、多 dating、唯一配偶、年龄边界 |
 
 ## 平台能力
 
-至少保留 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService`。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 是 Windows 渠道；微信能力只能在 G12 技术验证后决定 adapter。
+G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；具体 adapter 尚未实现，微信能力只能在 G12 技术验证后决定。
 
 ## 场景与状态
 
@@ -53,7 +54,7 @@ scenes / scripts/gameplay / scripts/ui
 
 ## 存档 seam
 
-`SaveCodec` 只处理领域快照；`SaveService` 只处理不透明 payload；application session 决定何时捕获/恢复。Windows adapter 使用 D 盘可控的 Godot user data 路径/文件协议并实现临时文件替换；Web/微信和 Steam adapter 不改变领域 schema。
+`SaveCodec` 已只处理领域快照；`SaveService` 契约只处理不透明 payload；G5 的 application session 决定何时捕获/恢复。Windows adapter 将使用 D 盘可控的 Godot user data 路径/文件协议并实现临时文件替换；Web/微信和 Steam adapter 不改变领域 schema。
 
 ## 质量与测试
 

@@ -2,7 +2,7 @@
 
 ## 当前结论
 
-G1 只证明本机 Windows 上 Godot 4.7.1 stable 项目可解析和启动。尚未执行 Windows 导出、Steam SDK 接入、Web 导出或微信小游戏真机验证。
+G2 证明本机 Windows 上 Godot 4.7.1 stable 项目可解析、启动并通过平台契约测试，但没有实现发行 adapter。尚未执行 Windows 导出、Steam SDK 接入、Web 导出或微信小游戏真机验证。
 
 ## Windows PC
 

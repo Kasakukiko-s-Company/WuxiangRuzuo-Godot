@@ -1,16 +1,18 @@
 # Godot 技术规格
 
-## 已实现（G1）
+## 已实现（G0～G2）
 
 - Godot 4.7.1 stable、GDScript、Compatibility Renderer。
 - 640×360 viewport，`canvas_items` + `keep` 横屏拉伸。
-- `Main.tscn`、最小 composition root、headless smoke test。
+- `Main.tscn`、真实数据 composition root、G1 回归和 G2 headless 领域测试。
 - D 盘 self-contained `editor_data` 与项目内 `.godot` 缓存策略。
-- 稳定 JSON 清单和四地图拓扑（未接运行时）。
+- 七份版本化 JSON、强类型 `GameCatalog` 和原子交叉引用验证，含 15 名 NPC 稳定身份。
+- 不依赖 Node 的 `InventoryState`、八格快捷栏事务和 `FarmState`。
+- 新 `SaveSnapshot.schemaVersion=1`、纯 `SaveCodec` 往返/损坏校验；不兼容旧 Cocos `saveVersion`。
+- 平台能力 abstract contracts；运行环境与发行渠道分开。
 
 ## 未实现/计划
 
-- G2：强类型 catalog codec、领域状态与平台契约。
 - G3：CharacterBody2D、碰撞滑动、Camera2D、瓦片坐标与 InputMap。
 - G4/G5：农作闭环、三档存档和跨天。
 - G6：TileMapLayer 地图、触发器和场景切换。
@@ -31,4 +33,4 @@
 
 ## 数据与存档
 
-目录 JSON 与存档均有 `schemaVersion`，但版本生命周期分开。跨引用由 G2 validator 校验。新 SaveCodec 不读取 Cocos localStorage；显式旧档导入器只在未来需要时实现。
+目录 JSON 与存档均有 `schemaVersion`，但版本生命周期分开。目录跨引用已由 G2 validator 校验。新 SaveCodec 不读取 Cocos localStorage 或文件系统；三档容器、原子文件和自动保存属于 G5，显式旧档导入器只在未来需要时实现。
