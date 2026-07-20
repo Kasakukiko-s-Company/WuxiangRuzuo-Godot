@@ -1,8 +1,8 @@
-# 《雾乡如昨》Godot 迁移计划
+# 《雾乡如昨》完整游戏制作计划
 
 ## 状态口径
 
-旧 Cocos 阶段 0～9 是历史技术基线，不代表本 Godot 仓库已实现。Godot 迁移仅使用 G0～G13。
+旧 Cocos 工程是未达到 Demo 标准的雏形，只能提供可选素材、技术经验和反例。G0～G2 记录已经完成的迁移审计与技术底座，不定义完整游戏规模；旧 G3～G13 已停止，不再按 Cocos 功能清单推进。
 
 ## 已建立基线：G0～G1
 
@@ -65,20 +65,40 @@
 
 自动验证（2026-07-20）：Godot editor/import、G1 smoke、六个 G2 测试和默认 Main 启动全部 exit 0；G1+G2 共 99 项行为检查通过。完整记录见 `docs/G2_VERIFICATION.md`。
 
-## 后续里程碑（均未开始）
+## P0 产品重基线
 
-- G3：移动、碰撞、相机和瓦片交互垂直切片。
-- G4：耕地、播种、浇水、成长、收获与背包闭环。
-- G5：睡觉、跨天、三档位存档与状态恢复。
-- G6：四地图导入、场景切换和地图触发器。
-- G7：NPC、对白、好感与关系预览。
-- G8：旧矿道、采矿、基础战斗和安全撤离。
-- G9：开场、标题、存档界面、HUD 与设置。
-- G10：已确认正式资源回接和画质档位。
-- G11：Windows 导出与性能验证。
-- G12：Web/微信小游戏可行性验证。
-- G13：Steam adapter 与发行准备。
+状态：产品方向与 P1 规格已获用户确认；相关文件仍与 P1 一起位于未提交工作区，尚未建立或推送基线。
+
+已形成 `FULL_GAME_VISION.md`、`PRODUCT_BRIEF.md`、`FULL_GAME_ROADMAP.md`、`CONTENT_AND_ASSET_STRATEGY.md`、`CONTENT_BUDGET.md`、`P0_DECISION_LOG.md` 与 `P1_EXPERIENCE_PROTOTYPE.md`。正式游戏目标、内容生产轨和“战斗必须存在”已经取代旧 Cocos 雏形范围。
+
+## 当前验收点：P1 体验原型
+
+状态：实现、自动回归和 Compatibility Renderer 画面检查已完成；尚未提交或推送，未进入 P2。
+
+可玩入口：默认 `res://scenes/Main.tscn` 的“进入 P1 体验原型”按钮，或直接运行 `res://scenes/prototypes/p1_experience_probe.tscn`。
+
+已实现：
+
+- 40×28、32px 基础格的全新 `prototype_mist_edge` 灰盒，不复用旧四图。
+- 强类型移动意图、四方向面向、对角归一化、96 px/s 移动、`CharacterBody2D` 碰撞与贴墙滑动。
+- Camera2D 边界、平滑跟随和 reduce-motion 回退。
+- world/cell/facing-cell 坐标 seam，以及 F3 调试叠层。
+- 键盘/手柄共用的语义输入 adapter；移动、交互、画质、暂停、重置与调试动作均有默认绑定。
+- 8 个可检查对象，一次性/可重复反馈，交互锁定与自动恢复。
+- 可整体替换的程序化地形、玩家、前景遮挡、高低画质和原创生成式原型音频；未导入来源不明资源。
+- Main 场景明确入口和可重复的非 headless 视觉捕获工具。
+
+自动验证（2026-07-20）：
+
+- Godot 4.7.1 stable editor/import、默认 Main 与 P1 直接启动均为 exit 0，最终日志无解析错误或对象泄漏警告。
+- G1+G2 原有 99 项行为检查和 P1 35 项行为检查全部通过，共 134 项。
+- Compatibility Renderer 实际使用 Intel Iris Xe / OpenGL 3.3 渲染；自动生成高、低画质与调试视图，均为 640×360 逻辑视口的 2× 物理输出（1280×720）。
+- 高/低画质像素输出不同；低画质仍保留路径、角色、碰撞边界和交互提示。完整记录见 `docs/P1_VERIFICATION.md`。
+
+## 后续制作阶段
+
+正式阶段见 `docs/FULL_GAME_ROADMAP.md`。概要为 P1 体验原型、P2 核心生活循环垂直切片、P3 城镇与关系垂直切片、P4 探索与叙事垂直切片、P5 内容生产管线和质量标杆、P6 全流程 Alpha、P7 内容完成、P8 Beta、P9 Windows/Steam 发行候选。Web/微信实际开发已确认后置到 P9 之后，依次执行 W0 标准 Web、W1 微信可行性和 W2 发布决策；当前不下载模板、不安装微信插件、不承诺发布。
 
 ## 停止条件
 
-用户已明确授权建立并推送 G2 基线；推送后仍停在 G2，不自动进入 G3。
+当前停在 P1 验收点。未经用户明确授权，不提交或推送 P0～P1 工作区基线，也不开始 P2。

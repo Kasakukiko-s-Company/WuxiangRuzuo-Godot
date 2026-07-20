@@ -1,4 +1,6 @@
-# Demo 四地图拓扑与锚点
+# 旧 Demo 四地图拓扑与锚点（历史参考）
+
+> 四图只是 G2 目录验证和旧原型灰盒种子，不是完整世界地图。P0/P1 可保留、扩充、合并、替换或废弃该拓扑。
 
 ## 拓扑
 
@@ -23,12 +25,12 @@ home_interior <-> hometown_main <-> boundary_pass
 
 ## 地图层语义
 
-表现层目标：Ground、Ground_Detail、Water、Path、Objects_Back、Characters、Objects_Front、Effects。逻辑层/对象表达碰撞、farmable、sleep、spawn、portal、anomaly trigger 和 safe anchor。具体采用 TileSet custom data 或对象层转换，必须在 G3 小图验证后决定。
+表现层候选：Ground、Ground_Detail、Water、Path、Objects_Back、Characters、Objects_Front、Effects。逻辑层/对象表达碰撞、farmable、sleep、spawn、portal、anomaly trigger 和 safe anchor。具体采用 TileSet custom data 或对象层转换，必须在 P1 代表灰盒地图中验证后决定。
 
 ## 坐标护栏
 
-旧 TMX 是有限正交、right-down、左上行序；旧领域代码曾把 Cocos Tiled Y 转为底左原点。Godot 不能照抄 Cocos 世界坐标。G3 必须逐点验证 map/local/world、角色锚点、碰撞、遮挡和 Camera2D limits，并将转换集中到单一 adapter。
+旧 TMX 是有限正交、right-down、左上行序；旧领域代码曾把 Cocos Tiled Y 转为底左原点。Godot 不能照抄 Cocos 世界坐标。P1 必须逐点验证 map/local/world、角色锚点、碰撞、遮挡和 Camera2D limits，并将转换集中到单一 adapter。
 
 ## 当前事实
 
-旧库没有四张正式 TMX，只有 `mvp_farm.tmx` 冒烟图。截至 G2 未复制或导入地图；G3 先验证小图，G6 才实现四图与切换。
+旧库没有正式地图，只有 `mvp_farm.tmx` 冒烟图。截至 G2 未复制或导入地图；P1 使用为新体验命题设计的灰盒验证坐标和空间尺度，正式世界结构在后续内容生产阶段实现，不承诺正好四图。

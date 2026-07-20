@@ -34,7 +34,7 @@ relationships { affinity, relationshipState, spouseCharacterId }
 mineRun { worldDay, brokenNodeIds, defeatedEncounterIds }
 ```
 
-`SaveSnapshot` 和 `SaveCodec` 已覆盖上述权威字段、八格背包、引用范围和损坏拒绝，并能完成 JSON 往返。档位容器、metadata、currentSnapshot、未来 protectedRecoverySnapshot、三个物理隔离档位、最近档和原子文件仍属于 G5，尚未实现。
+`SaveSnapshot` 和 `SaveCodec` 已覆盖上述当前字段、八格背包、引用范围和损坏拒绝，并能完成 JSON 往返。档位容器、metadata、currentSnapshot、恢复快照、档位数量、最近档和原子文件仍未实现；P2 起根据完整游戏保存体验确定容器结构，P6 前验证全流程和 Schema 升级。旧“三个物理档位”只是候选，不再因原型文档自动成为最终 UI 规格。
 
 ## 迁移原则
 

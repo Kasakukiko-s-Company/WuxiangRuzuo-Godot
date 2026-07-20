@@ -2,6 +2,7 @@ class_name InputSnapshot
 extends RefCounted
 
 var move: Vector2
+var interact: bool
 var primary_action: bool
 var secondary_action: bool
 var watering_action: bool
@@ -11,6 +12,9 @@ var quickbar_slot_index: int
 var select_previous: bool
 var select_next: bool
 var pause: bool
+var debug_toggle: bool
+var reset: bool
+var reduce_motion_toggle: bool
 
 
 static func neutral() -> InputSnapshot:

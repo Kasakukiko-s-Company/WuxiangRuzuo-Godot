@@ -1,8 +1,8 @@
 # Godot 架构基线
 
-## 当前事实（G2）
+## 当前事实（G2 技术底座 + P1 体验原型）
 
-项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。项目仍没有移动/碰撞/相机、完整农耕闭环、存档 adapter、正式地图、NPC、战斗或正式 UI。
+项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。P1 新增独立灰盒中的 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController`、`GodotInputService`、碰撞、Camera2D、交互与程序化表现 seam；这些是可复用技术决策，不是正式地图或正式资产。项目仍没有完整农耕闭环、存档 adapter、正式世界、NPC 日程/关系事件、战斗或正式 UI。
 
 ## 目录与依赖方向
 
@@ -42,7 +42,7 @@ scenes / scripts/gameplay / scripts/ui
 
 ## 平台能力
 
-G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；具体 adapter 尚未实现，微信能力只能在 G12 技术验证后决定。
+G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；具体 adapter 尚未实现，微信能力只能通过独立可行性闸门决定。
 
 ## 场景与状态
 
@@ -50,11 +50,20 @@ G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioSe
 
 ## 地图 seam
 
-地图定义提供稳定 map ID、场景路径、命名锚点、入口、功能层和安全回退。地图坐标转换集中在单一 adapter；领域瓦片坐标不得依赖 TMX 行号、Godot cell source ID 或世界像素。G3 先用小图验证，G6 才落地四张正式地图。
+地图定义提供稳定 map ID、场景路径、命名锚点、入口、功能层和安全回退。地图坐标转换集中在单一 adapter；领域瓦片坐标不得依赖 TMX 行号、Godot cell source ID 或世界像素。P1 用代表灰盒验证 seam；正式世界可以包含任意经产品设计确认的区域数量，不受 G2 四图 fixture 限制。
+
+P1 的实际坐标约定为左上原点、Y 向下、32×32 基础格；`TileCoordinateMapper` 负责 world/cell/cell-center/facing-cell 转换。`prototype_mist_edge` 只是 40×28 的验证场，不登记进正式 `world.json`。
+
+## P1 场景 seam
+
+- `MovementIntent` 是纯 `RefCounted`，只把语义输入解析为归一化方向和四方向面向。
+- `P1PlayerController` 是 `CharacterBody2D` 桥接层，负责物理帧、`move_and_slide` 与交互信号，不读取物理键。
+- `GodotInputService` 是当前 Godot adapter，把键盘/手柄映射为 `InputSnapshot`；玩法场景只依赖语义快照。
+- `P1ExperienceProbe` 负责场景装配、重置、交互显示、画质/减弱镜头开关和调试状态；程序化地形、玩家、前景和音频均可整体替换。
 
 ## 存档 seam
 
-`SaveCodec` 已只处理领域快照；`SaveService` 契约只处理不透明 payload；G5 的 application session 决定何时捕获/恢复。Windows adapter 将使用 D 盘可控的 Godot user data 路径/文件协议并实现临时文件替换；Web/微信和 Steam adapter 不改变领域 schema。
+`SaveCodec` 已只处理领域快照；`SaveService` 契约只处理不透明 payload；P2 起由 application session 决定何时捕获/恢复，P6 前覆盖完整流程。Windows adapter 将使用受控的 Godot user data 路径/文件协议并实现临时文件替换；Web/微信和 Steam adapter 不改变领域 schema。
 
 ## 质量与测试
 

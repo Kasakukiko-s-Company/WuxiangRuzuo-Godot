@@ -11,13 +11,13 @@
 - 新 `SaveSnapshot.schemaVersion=1`、纯 `SaveCodec` 往返/损坏校验；不兼容旧 Cocos `saveVersion`。
 - 平台能力 abstract contracts；运行环境与发行渠道分开。
 
-## 未实现/计划
+## 未实现/制作方向
 
-- G3：CharacterBody2D、碰撞滑动、Camera2D、瓦片坐标与 InputMap。
-- G4/G5：农作闭环、三档存档和跨天。
-- G6：TileMapLayer 地图、触发器和场景切换。
-- G7～G10：NPC/对白、战斗、应用 UI、正式资源与画质。
-- G11～G13：Windows/Web/微信/Steam 验证与发行 adapter。
+- P1：CharacterBody2D、碰撞、Camera2D、语义输入、交互和代表灰盒地图。
+- P2：具有实际玩家价值的生活生产循环、时间推进、真实保存恢复和代表性 UI/视听反馈。
+- P3/P4：人物关系与内容管线、探索/调查，以及确定要实现的战斗形态、AI、成长和失败恢复验证。
+- P5～P8：可重复内容管线、完整流程、正式内容/资源、平衡、可访问性和性能。
+- P9：Windows/Steam 发行链路；Web/微信通过独立可行性闸门决定。
 
 ## 代码规则
 
@@ -25,7 +25,7 @@
 
 ## 坐标和地图
 
-权威领域格坐标统一为 `Vector2i`，原点/轴向由地图 adapter 明确转换。正式地图层：Ground、Ground_Detail、Water、Path、Objects_Back、Characters、Objects_Front、Effects。碰撞、可耕、床、出生、出口和触发器必须从可验证数据生成。G3 先小图，G6 再四图。
+权威领域格坐标统一为 `Vector2i`，原点/轴向由地图 adapter 明确转换。地图表现层候选为 Ground、Ground_Detail、Water、Path、Objects_Back、Characters、Objects_Front、Effects。碰撞、可耕、出生、出口和触发器必须从可验证数据生成。P1 先以代表灰盒验证 seam；正式地图数量和结构由完整世界设计决定。
 
 ## 视觉预算
 
@@ -33,4 +33,4 @@
 
 ## 数据与存档
 
-目录 JSON 与存档均有 `schemaVersion`，但版本生命周期分开。目录跨引用已由 G2 validator 校验。新 SaveCodec 不读取 Cocos localStorage 或文件系统；三档容器、原子文件和自动保存属于 G5，显式旧档导入器只在未来需要时实现。
+目录 JSON 与存档均有 `schemaVersion`，但版本生命周期分开。目录跨引用已由 G2 validator 校验。新 SaveCodec 不读取 Cocos localStorage 或文件系统；真实档位/容器、原子文件和自动保存从 P2 起按完整游戏体验实现，显式旧档导入器只在确有玩家数据迁移需求时实现。

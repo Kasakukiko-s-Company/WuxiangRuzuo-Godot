@@ -1,0 +1,279 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_experience_probe.gd" id="1_probe"]
+[ext_resource type="Script" path="res://scripts/gameplay/player/p1_player_controller.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/prototype_inspectable.gd" id="3_inspectable"]
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_terrain.gd" id="4_terrain"]
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_player_view.gd" id="5_player_view"]
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_audio.gd" id="6_audio"]
+[ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_foreground.gd" id="7_foreground"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(18, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_outer_horizontal"]
+size = Vector2(1280, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_outer_vertical"]
+size = Vector2(16, 896)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house"]
+size = Vector2(240, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_water"]
+size = Vector2(220, 300)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grove"]
+size = Vector2(160, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(320, 32)
+
+[node name="P1ExperienceProbe" type="Node2D"]
+script = ExtResource("1_probe")
+
+[node name="Terrain" type="Node2D" parent="."]
+script = ExtResource("4_terrain")
+
+[node name="PrototypeAudio" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("6_audio")
+
+[node name="WorldCollision" type="Node2D" parent="."]
+
+[node name="OuterWalls" type="StaticBody2D" parent="WorldCollision"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Top" type="CollisionShape2D" parent="WorldCollision/OuterWalls"]
+position = Vector2(640, -8)
+shape = SubResource("RectangleShape2D_outer_horizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="WorldCollision/OuterWalls"]
+position = Vector2(640, 904)
+shape = SubResource("RectangleShape2D_outer_horizontal")
+
+[node name="Left" type="CollisionShape2D" parent="WorldCollision/OuterWalls"]
+position = Vector2(-8, 448)
+shape = SubResource("RectangleShape2D_outer_vertical")
+
+[node name="Right" type="CollisionShape2D" parent="WorldCollision/OuterWalls"]
+position = Vector2(1288, 448)
+shape = SubResource("RectangleShape2D_outer_vertical")
+
+[node name="House" type="StaticBody2D" parent="WorldCollision"]
+position = Vector2(220, 160)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldCollision/House"]
+shape = SubResource("RectangleShape2D_house")
+
+[node name="Water" type="StaticBody2D" parent="WorldCollision"]
+position = Vector2(1050, 520)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldCollision/Water"]
+shape = SubResource("RectangleShape2D_water")
+
+[node name="Grove" type="StaticBody2D" parent="WorldCollision"]
+position = Vector2(680, 168)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldCollision/Grove"]
+shape = SubResource("RectangleShape2D_grove")
+
+[node name="GateWall" type="StaticBody2D" parent="WorldCollision"]
+position = Vector2(490, 420)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldCollision/GateWall"]
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="Inspectables" type="Node2D" parent="."]
+
+[node name="DoorLintel" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(240, 528)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(7, 16)
+prompt_text = "检查门楣"
+inspect_text = "木头仍带着潮气。这里不是旧屋复刻，而是用来确认空间尺度的新门廊。"
+marker_color = Color(0.67, 0.5, 0.32, 1)
+marker_size = Vector2(24, 12)
+
+[node name="StoneWell" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(496, 560)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(15, 17)
+prompt_text = "查看石井"
+inspect_text = "井口传来很轻的回声。雾让声音显得比距离更远。"
+marker_color = Color(0.42, 0.58, 0.6, 1)
+marker_size = Vector2(22, 22)
+
+[node name="ReedMarker" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(944, 496)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(29, 15)
+prompt_text = "拨开芦苇"
+inspect_text = "水面没有风，芦苇却朝同一个方向低伏。"
+marker_color = Color(0.5, 0.68, 0.42, 1)
+marker_size = Vector2(12, 28)
+
+[node name="MistStone" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(816, 272)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(25, 8)
+prompt_text = "触碰雾石"
+inspect_text = "石面冰凉，刻痕只是原型符号，还没有被写入正式正史。"
+marker_color = Color(0.58, 0.62, 0.7, 1)
+marker_size = Vector2(22, 30)
+
+[node name="GateRibbon" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(496, 400)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(15, 12)
+prompt_text = "查看路结"
+inspect_text = "布结标记着窄路测试点，不代表旧界碑事件已经进入正式游戏。"
+one_shot = true
+exhausted_text = "布结已经放回原位；窄路仍通向未定稿的雾中。"
+marker_color = Color(0.68, 0.38, 0.38, 1)
+marker_size = Vector2(10, 26)
+
+[node name="HerbPatch" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(336, 720)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(10, 22)
+prompt_text = "观察草叶"
+inspect_text = "叶片边缘凝着细雾。它暂时只是环境样本，不是已确认作物。"
+marker_color = Color(0.45, 0.72, 0.48, 1)
+marker_size = Vector2(20, 14)
+
+[node name="OldPost" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(1104, 656)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(34, 20)
+prompt_text = "阅读木牌"
+inspect_text = "木牌写着：R 重置，F3 显示调试状态，E 或手柄 A 检查。"
+marker_color = Color(0.72, 0.58, 0.34, 1)
+marker_size = Vector2(26, 20)
+
+[node name="GroveBell" type="Node2D" parent="Inspectables" groups=["prototype_inspectable"]]
+position = Vector2(656, 112)
+script = ExtResource("3_inspectable")
+interaction_cell = Vector2i(20, 3)
+prompt_text = "轻碰风铃"
+inspect_text = "没有风，铃舌却轻轻碰了一下。声音系统仍是 P1 原型。"
+marker_color = Color(0.74, 0.72, 0.45, 1)
+marker_size = Vector2(14, 20)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(240, 560)
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("2_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Visual" type="Node2D" parent="Player"]
+script = ExtResource("5_player_view")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(0, -24)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 896
+limit_smoothed = true
+
+[node name="Foreground" type="Node2D" parent="."]
+z_index = 5
+script = ExtResource("7_foreground")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TitlePanel" type="PanelContainer" parent="HUD"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 426.0
+offset_bottom = 86.0
+
+[node name="TitleMargin" type="MarginContainer" parent="HUD/TitlePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="Title" type="Label" parent="HUD/TitlePanel/TitleMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.91, 0.78, 1)
+theme_override_font_sizes/font_size = 13
+text = "P1 · 雾乡边缘体验原型\nWASD/方向键 移动 · E/A 检查 · F/X 画质\nM/RB 减弱镜头 · R 重置 · F3 调试"
+autowrap_mode = 2
+
+[node name="PromptPanel" type="PanelContainer" parent="HUD"]
+offset_left = 184.0
+offset_top = 314.0
+offset_right = 456.0
+offset_bottom = 348.0
+
+[node name="PromptMargin" type="MarginContainer" parent="HUD/PromptPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="PromptLabel" type="Label" parent="HUD/PromptPanel/PromptMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.72, 1)
+text = ""
+horizontal_alignment = 1
+
+[node name="MessagePanel" type="PanelContainer" parent="HUD"]
+visible = false
+offset_left = 96.0
+offset_top = 258.0
+offset_right = 544.0
+offset_bottom = 310.0
+
+[node name="MessageMargin" type="MarginContainer" parent="HUD/MessagePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
+
+[node name="MessageLabel" type="Label" parent="HUD/MessagePanel/MessageMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.82, 1)
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DebugPanel" type="PanelContainer" parent="HUD"]
+visible = false
+offset_left = 440.0
+offset_top = 12.0
+offset_right = 628.0
+offset_bottom = 142.0
+
+[node name="DebugMargin" type="MarginContainer" parent="HUD/DebugPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="DebugLabel" type="Label" parent="HUD/DebugPanel/DebugMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.82, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "P1 PROTOTYPE"

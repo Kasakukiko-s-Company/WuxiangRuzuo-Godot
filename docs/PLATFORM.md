@@ -5,7 +5,9 @@
 - 运行环境：`windows-native`、`web`。
 - 发行渠道：`standalone`、`steam`、`wechat`。
 
-Steam 是 Windows 的渠道；微信可能建立在 Web/平台专用能力之上，但必须由 G12 验证，不预设 Godot 原生支持。
+Steam 是 Windows 的渠道；微信可能建立在 Web/平台专用能力之上，但必须通过独立可行性闸门验证，不预设 Godot 原生支持。
+
+平台顺序已经确认：P2～P9 完成 Windows/Steam 主线后，再执行 W0 标准 Web、W1 微信可行性和 W2 发布决策。当前只保留接口边界，不下载 Web 模板、不安装微信插件、不实现渠道 adapter。
 
 ## 服务边界
 
@@ -21,4 +23,4 @@ Windows 使用原子文件 adapter；Web/微信受存储配额和生命周期约
 
 ## 当前事实
 
-G2 已建立五类 abstract service contracts、输入/安全区/存档结果值对象，以及合法环境/渠道组合校验。`AppCompositionRoot` 当前只选择 `windows-native + standalone` 描述符，尚未装配真实存档、输入、音频或分析 adapter。Web/微信/Steam 均未验证，详见 `GODOT_PLATFORM_FEASIBILITY.md`。
+G2 已建立五类 abstract service contracts、输入/安全区/存档结果值对象，以及合法环境/渠道组合校验。`AppCompositionRoot` 当前只选择 `windows-native + standalone` 描述符，尚未装配真实存档、输入、音频或分析 adapter。Web/微信/Steam 均未验证；Web/微信明确后置到 P9 之后，详见 `GODOT_PLATFORM_FEASIBILITY.md`。

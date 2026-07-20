@@ -1,6 +1,9 @@
 # Godot-generated import and editor state
 .godot/
 
+# Machine-local CodeGraph index; rebuild per checkout, never migrate/commit it
+.codegraph/
+
 # Local/editor overrides
 override.cfg
 *.translation

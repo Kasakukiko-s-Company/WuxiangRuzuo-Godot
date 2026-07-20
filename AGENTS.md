@@ -2,7 +2,7 @@
 
 ## 项目目标
 
-本仓库是《雾乡如昨》的 Godot 4 正式工程。当前完成迁移 G0～G2 验收候选；不得把旧 Cocos 工程或后续里程碑的能力写成当前 Godot 能力。
+本仓库是《雾乡如昨》的 Godot 4 正式工程，目标是完成一款内容、系统、视听和发行质量都成立的完整游戏，而不是复刻旧 Cocos 雏形或只完成技术 Demo。当前 G0～G2 只是已验证的技术底座；不得把它的测试数据、旧原型规模或后续计划写成完整产品事实。
 
 ## 技术基线
 
@@ -18,6 +18,8 @@
 
 旧工程 `D:\lzq\AI游戏\FarmGame` 只读。禁止修改、删除或提交旧文件；禁止复制 `.git`、`.codegraph`、`library`、`temp`、`build`、`profiles`、缓存、Cocos `.meta`、组件 UUID 与自动场景依赖。新仓库自行建立索引与 Git 历史。
 
+旧工程是可拆解、可否决的原型资料库，不是正式版产品规格、内容上限、关卡清单或制作路线。旧内容只有在重新评估玩家价值、叙事一致性、制作成本、授权和质量后才可进入正式游戏；允许扩充、合并、替换或重写。
+
 ## 架构规则
 
 1. 农田、背包、作物、历法、存档编码、关系判定等规则优先放入 `scripts/domain/`，不依赖 Node、场景树、物理帧或平台 API。
@@ -25,30 +27,30 @@
 3. 平台能力通过 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 边界注入；核心玩法不得访问 `window`、`localStorage`、`wx`、Steamworks 或具体文件路径。
 4. 运行环境与发行渠道分开：环境 `windows-native`/`web`；渠道 `standalone`/`steam`/`wechat`。
 5. 使用明确参数与返回类型；避免无边界 `Variant`、巨型全局单例和把全部状态放进 Autoload。
-6. 地图、NPC、作物、物品、对白和存档字段的稳定 ID 不得随迁移随意更名。
+6. 正式数据使用稳定 ID 和显式 Schema 迁移；G2 已存在的 ID 只保证当前技术底座可回归，不把旧原型内容永久冻结。产品重构需要改 ID 时，必须提供迁移或废弃策略。
 7. Godot 的 `.godot` 缓存和资源 UID 由匹配版本引擎生成，不手工伪造。
 
-## 产品与叙事护栏
+## 产品与内容护栏
 
-- Demo 恰好四张玩法地图：`home_interior`、`hometown_main`、`boundary_pass`、`old_mine`。
-- 第一处异常为 `anomaly.first_barrier_fold`；必须由玩家主动触发，之后可回归日常，不泄露核心真相。
-- 十五名 NPC、稳定 ID、年龄与关系规则以 `docs/NPC_BIBLE.md` 为准。
-- 重构村民是拥有独立意识的新生命，不是复活者、空壳或幻影。
-- 恋爱资格不因主角/NPC 性别或幸存者/重构分类变化；未成年人必须保持明确成年边界；罗岑山、陈蕴仅有非恋爱关系。
-- 视觉效果必须能按画质等级关闭；微信低档不依赖实时阴影、多灯、景深、体积雾或高成本后处理。
-- 不在普通工程任务中生成或定稿大量视听资源；只接入来源清楚且经确认的资源。
+- 完整游戏的产品基准以 `docs/FULL_GAME_VISION.md` 为首要输入；先定义目标体验、完整玩家旅程、系统深度、内容覆盖和发行质量，再决定地图、角色、章节和资源数量。
+- 四地图、十五名 NPC、第一处结界异常和旧矿道都只是旧原型候选内容，不是正式版数量上限，也不自动成为最终正史。
+- 正式游戏必须包含战斗；需要通过 P4 验证的是战斗形态、操控、频率、成长、失败成本和内容规模。旧矿道、旧练习杖和旧敌人规则仍只是候选，不能代替重新设计。
+- 原有叙事、人物和关系规则可作为创意输入，但必须在完整游戏结构中重新评估；未成年人边界、知情同意、来源授权等安全和法律规则仍是硬约束。
+- 内容、美术、动画、UI、音乐、环境音和音效是正式生产轨，不再只等待旧资源回接。可按批准的资源 brief 分批创作、采购或委托，并执行来源、许可、质量、性能和回退验收。
+- 视觉效果必须能按画质等级关闭；低档不能因关闭高成本效果而丢失玩法信息。
+- 不以“已经迁移多少 Cocos 功能”衡量产品进度；以可玩性、内容完整度、质量门槛和玩家验证衡量。
 
 ## 存储与资源
 
 - 新工程唯一写入根：`D:\lzq\AI游戏\WuxiangRuzuo-Godot`。
 - 正式构建输出：`D:\lzq\AI游戏\WuxiangRuzuo-Godot-Builds`。
 - `art-source/`、`audio-source/` 和 `builds/` 使用 `.gdignore`。
-- 未登记或来源不明资源不得进入 `assets/` 或发行构建。
+- 未登记或来源不明资源不得进入 `assets/` 或发行构建；正式新制资源同样必须进入来源台账。
 - 大型二进制在 Git LFS 策略获确认前不得提交。
 
-## 迁移里程碑护栏
+## 制作里程碑护栏
 
-使用 G0～G13，不复用旧 Cocos 阶段号。每个阶段必须有入口、验收、可执行测试与回归检查；用户验收后才进入下一阶段和建立/推送基线。当前停在 G2 发布/验收点，不得自动开始 G3；用户已于 2026-07-20 明确授权建立并推送 G2 基线。
+G0～G2 作为迁移审计和技术底座历史保留；旧 G3～G13 路线已停止，不再作为正式游戏 backlog。完整游戏改用 `docs/FULL_GAME_ROADMAP.md` 的产品制作阶段，每阶段都必须有可玩入口、玩家价值、内容/资源交付、自动检查和回归标准。P0 产品重基线已获确认；当前停在 P1 体验原型验收点，未经确认不得开始 P2，也不得擅自提交或推送 P0～P1 工作区基线。
 
 ## 工作流程
 
@@ -63,9 +65,11 @@
 ## 文档权威顺序
 
 1. `AGENTS.md`：工程与流程硬约束。
-2. `docs/DEMO_SCOPE.md`：Demo 范围与明确不做项。
-3. `docs/NARRATIVE_BIBLE.md`、`docs/NPC_BIBLE.md`、`docs/FIRST_BARRIER_ANOMALY.md`：叙事、人物与保密边界。
-4. `docs/DEMO_SAVE_AND_CALENDAR.md`、`docs/MINE_COMBAT_SLICE.md`：存档/历法/矿道规则。
-5. `docs/GODOT_ARCHITECTURE.md`、`docs/TECH_SPEC.md`、`docs/PLATFORM.md`、`docs/DATA_SCHEMA.md`：当前技术事实和未来接口。
-6. 美术/UI/对白/存储/资源工作流文档。
-7. `PLANS.md`：迁移执行顺序与验收记录。
+2. `docs/FULL_GAME_VISION.md`、`docs/PRODUCT_BRIEF.md`：完整游戏目标、玩家、体验结构与完整度定义。
+3. `docs/FULL_GAME_ROADMAP.md`、当前阶段规格：正式制作阶段、入口和出口标准。
+4. `docs/P0_DECISION_LOG.md`：已确认、工作假设、必须原型验证和已停止方案。
+5. `docs/CONTENT_BUDGET.md`、`docs/CONTENT_AND_ASSET_STRATEGY.md`：内容规模假设和资源生产策略。
+6. `docs/GODOT_ARCHITECTURE.md`、`docs/TECH_SPEC.md`、`docs/PLATFORM.md`、`docs/DATA_SCHEMA.md`：当前技术事实和未来接口。
+7. 经产品重基线重新确认的叙事、角色、美术、UI 与对白规范。
+8. `docs/DEMO_SCOPE.md`、`docs/MIGRATION_AUDIT.md`、`docs/MIGRATION_MATRIX.md` 及旧切片文档：历史原型参考，不定义正式版范围。
+9. `PLANS.md`：当前执行状态与验收记录。
