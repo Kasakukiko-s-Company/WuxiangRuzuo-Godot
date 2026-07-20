@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "crops": [
+    {
+      "id": "mistleaf",
+      "seedItemId": "mistleaf_seed",
+      "harvestItemId": "mistleaf",
+      "growthStages": [1, 1, 1],
+      "harvestQuantity": 1,
+      "requiresWater": true,
+      "allowedSeasons": ["all"]
+    }
+  ]
+}

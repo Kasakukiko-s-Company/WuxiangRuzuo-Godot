@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultLocale": "zh-CN",
+  "locales": {
+    "zh-CN": {
+      "item.mistleaf_seed.name": "雾叶草种子",
+      "item.mistleaf.name": "雾叶草",
+      "tool.hoe_basic.name": "旧锄头",
+      "tool.watering_can_basic.name": "小水壶",
+      "map.home_interior.name": "主角住宅",
+      "map.hometown_main.name": "故乡",
+      "map.boundary_pass.name": "北侧山路",
+      "map.old_mine.name": "旧矿道"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "tools": [
+    {
+      "id": "hoe_basic",
+      "displayNameKey": "tool.hoe_basic.name",
+      "action": "till",
+      "rangeTiles": 1
+    },
+    {
+      "id": "watering_can_basic",
+      "displayNameKey": "tool.watering_can_basic.name",
+      "action": "water",
+      "rangeTiles": 1
+    }
+  ]
+}

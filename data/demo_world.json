@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "fallbackMapId": "home_interior",
+  "maps": [
+    {
+      "id": "home_interior",
+      "scenePath": null,
+      "implementationStatus": "planned-g6",
+      "displayNameKey": "map.home_interior.name",
+      "widthTiles": 20,
+      "heightTiles": 12,
+      "tileSizePixels": 32,
+      "safeAnchorId": "home_bed",
+      "requiredAnchorIds": ["home_wake", "home_bed", "home_door_inside", "home_elder_opening", "home_starter_items"]
+    },
+    {
+      "id": "hometown_main",
+      "scenePath": null,
+      "implementationStatus": "planned-g6",
+      "displayNameKey": "map.hometown_main.name",
+      "widthTiles": 64,
+      "heightTiles": 48,
+      "tileSizePixels": 32,
+      "safeAnchorId": "main_safe_spawn",
+      "requiredAnchorIds": ["main_home_door", "main_safe_spawn", "main_farm_plot", "main_tutorial_plot", "main_village_core", "main_relationship_beat", "main_boundary_path", "main_old_mine_path", "main_old_mine_return"]
+    },
+    {
+      "id": "boundary_pass",
+      "scenePath": null,
+      "implementationStatus": "planned-g6",
+      "displayNameKey": "map.boundary_pass.name",
+      "widthTiles": 40,
+      "heightTiles": 24,
+      "tileSizePixels": 32,
+      "safeAnchorId": "boundary_entry",
+      "requiredAnchorIds": ["boundary_entry", "boundary_return", "boundary_probe", "boundary_marker", "boundary_clue", "boundary_exit_blocked", "boundary_npc_watch", "boundary_npc_stream"]
+    },
+    {
+      "id": "old_mine",
+      "scenePath": null,
+      "implementationStatus": "planned-g6",
+      "displayNameKey": "map.old_mine.name",
+      "widthTiles": 32,
+      "heightTiles": 24,
+      "tileSizePixels": 32,
+      "safeAnchorId": "mine_safe_return",
+      "requiredAnchorIds": ["mine_entry", "mine_exit", "mine_safe_return", "mine_ore_patch", "mine_combat_room"]
+    }
+  ],
+  "portals": [
+    {"id": "home_to_main", "sourceMapId": "home_interior", "sourceAnchorId": "home_door_inside", "targetMapId": "hometown_main", "targetAnchorId": "main_home_door", "conditionId": "opening.elderConversationCompleted", "reciprocalPortalId": "main_to_home"},
+    {"id": "main_to_home", "sourceMapId": "hometown_main", "sourceAnchorId": "main_home_door", "targetMapId": "home_interior", "targetAnchorId": "home_door_inside", "conditionId": null, "reciprocalPortalId": "home_to_main"},
+    {"id": "main_to_boundary", "sourceMapId": "hometown_main", "sourceAnchorId": "main_boundary_path", "targetMapId": "boundary_pass", "targetAnchorId": "boundary_entry", "conditionId": "world.boundaryRouteAvailable", "reciprocalPortalId": "boundary_to_main"},
+    {"id": "boundary_to_main", "sourceMapId": "boundary_pass", "sourceAnchorId": "boundary_entry", "targetMapId": "hometown_main", "targetAnchorId": "main_boundary_path", "conditionId": null, "reciprocalPortalId": "main_to_boundary"},
+    {"id": "main_to_old_mine", "sourceMapId": "hometown_main", "sourceAnchorId": "main_old_mine_path", "targetMapId": "old_mine", "targetAnchorId": "mine_entry", "conditionId": "daily.farmingIntroCompleted", "reciprocalPortalId": "old_mine_to_main"},
+    {"id": "old_mine_to_main", "sourceMapId": "old_mine", "sourceAnchorId": "mine_exit", "targetMapId": "hometown_main", "targetAnchorId": "main_old_mine_return", "conditionId": null, "reciprocalPortalId": "main_to_old_mine"}
+  ]
+}

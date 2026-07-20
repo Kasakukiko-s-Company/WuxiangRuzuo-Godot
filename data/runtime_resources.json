@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {"id": "fallback.sprite.missing", "kind": "texture2d", "godotPath": null, "sourceStatus": "not-migrated"},
+    {"id": "world.ground.grass.default", "kind": "texture2d", "godotPath": null, "sourceStatus": "not-migrated", "fallbackId": "fallback.sprite.missing"},
+    {"id": "world.ground.soil.default", "kind": "texture2d", "godotPath": null, "sourceStatus": "not-migrated", "fallbackId": "fallback.sprite.missing"},
+    {"id": "character.player.placeholder", "kind": "texture2d", "godotPath": null, "sourceStatus": "not-migrated", "fallbackId": "fallback.sprite.missing"},
+    {"id": "crop.mistleaf.stage.seedling", "kind": "texture2d", "godotPath": null, "sourceStatus": "not-migrated", "fallbackId": "fallback.sprite.missing"}
+  ]
+}

@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/app/main.gd" id="1_main"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.055, 0.09, 0.105, 1)
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Center" type="CenterContainer" parent="Margin"]
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Margin/Center"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="Margin/Center/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.9, 0.79, 1)
+theme_override_font_sizes/font_size = 32
+text = "雾乡如昨"
+horizontal_alignment = 1
+
+[node name="Milestone" type="Label" parent="Margin/Center/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
+theme_override_font_sizes/font_size = 16
+text = "Godot migration · G1"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Margin/Center/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.78, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "Bootstrapping…"
+horizontal_alignment = 1
+
+[node name="Scope" type="Label" parent="Margin/Center/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.55, 0.54, 1)
+theme_override_font_sizes/font_size = 12
+text = "工程基础已就绪；玩法迁移尚未开始"
+horizontal_alignment = 1

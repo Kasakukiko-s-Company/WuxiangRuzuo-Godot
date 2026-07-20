@@ -1,0 +1,28 @@
+# Godot-generated import and editor state
+.godot/
+
+# Local/editor overrides
+override.cfg
+*.translation
+
+# Build products stay on D: and are never source-controlled
+builds/*
+!builds/.gdignore
+D:/lzq/AI游戏/WuxiangRuzuo-Godot-Builds/
+
+# Temporary and diagnostic output
+*.tmp
+*.temp
+*.log
+*.bak
+*.orig
+
+# OS/editor noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+.idea/
+.vscode/
+
+# Godot export credentials must never be committed
+export_credentials.cfg
