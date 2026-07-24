@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "audit_id": "estate_map_pack_h01_h08_cross_audit_20260724",
+  "pack_id": "206154e890aeee3e182ac022a76abee9",
+  "status": "passed_after_repairs",
+  "checklist": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\ESTATE_MAP_PACK_AUDIT_CHECKLIST.md",
+  "method": {
+    "production_and_audit_roles_separated": true,
+    "independent_subagent_cross_audits": true,
+    "root_automated_pack_verification": true,
+    "finding_levels": [
+      "MUST",
+      "SHOULD"
+    ]
+  },
+  "prior_benchmark_evidence": {
+    "estate_ids": [
+      "H01",
+      "H02",
+      "H03"
+    ],
+    "status": "previously_accepted_active_candidates",
+    "notes": [
+      "H01 and H02 active runtime candidates previously completed independent final audits with MUST 0 and SHOULD 0.",
+      "H03 is the user-approved estate pipeline benchmark; its two-stage development model remains an explicitly documented integration limitation.",
+      "The current unified root verification rechecked all three active candidates together with H04-H08."
+    ]
+  },
+  "cross_audits": [
+    {
+      "scope": [
+        "H04",
+        "H05"
+      ],
+      "auditor_role": "independent_h06_h07_subagent",
+      "final_result": "passed",
+      "must_findings": 0,
+      "should_findings": 0,
+      "evidence": {
+        "H04": {
+          "run_id": "5ee6b356a4a943b1a188cc7b5bad6d32",
+          "preflight": "69/69",
+          "godot": "31/31",
+          "state_combinations": 192,
+          "file_index_entries": 90
+        },
+        "H05": {
+          "run_id": "14b8a68a6af5465481fae006c3b87a07",
+          "preflight": "78/78",
+          "godot": "39/39",
+          "state_combinations": 384,
+          "file_index_entries": 90
+        },
+        "verified": [
+          "single authoritative TMX per estate",
+          "forward, reverse and deterministic-random state coverage",
+          "Physics2D debris and map-specific axis restoration",
+          "full-geometry portal and trigger authorities",
+          "is_portal_enabled and is_trigger_enabled runtime queries",
+          "per-axis raw performance samples and thresholds",
+          "continuous fishing and winter open-water policy",
+          "normal, light and medium anomaly readability",
+          "file dimensions, bytes, SHA-256, source, authorization and D-only paths",
+          "cache cleanup and candidate integration boundary"
+        ]
+      }
+    },
+    {
+      "scope": [
+        "H06",
+        "H07"
+      ],
+      "auditor_role": "independent_h08_subagent",
+      "final_result": "passed",
+      "must_findings": 0,
+      "should_findings": 0,
+      "repairs_before_final_audit": [
+        "Added real runtime portal and trigger authority queries for map-specific axes.",
+        "Replaced null non-spatial file dimensions with explicit line-count or byte-size not-applicable records."
+      ],
+      "evidence": {
+        "H06": {
+          "run_id": "24895276e205434e9394682d4d03add4",
+          "preflight": "65/65",
+          "godot": "540/540",
+          "state_combinations": 192,
+          "file_index_entries": 46
+        },
+        "H07": {
+          "run_id": "a4c876b05d2940f984cf84d854cf03e1",
+          "preflight": "66/66",
+          "godot": "540/540",
+          "state_combinations": 192,
+          "file_index_entries": 46
+        },
+        "verified": [
+          "192 forward, 192 reverse and 128 deterministic-random states per estate",
+          "Physics2D direct-space-state tests",
+          "portal and trigger runtime queries",
+          "buildable free, reserved and no-build authority partitions",
+          "per-axis raw performance samples and thresholds",
+          "continuous fishing and winter open water",
+          "visual topology and map-specific feature readability",
+          "index integrity, dimensions, source, authorization, D-only paths and cache cleanup"
+        ]
+      }
+    },
+    {
+      "scope": [
+        "H08"
+      ],
+      "auditor_role": "independent_h04_h05_subagent",
+      "initial_result": {
+        "must_findings": 2,
+        "should_findings": 1
+      },
+      "repairs": [
+        "Bound ruin_route to a real conditional portal runtime authority and query.",
+        "Generated ruin-route collision and memory-clue trigger geometry from authoritative TMX data and tested full interior, boundary and outside probe sets.",
+        "Recorded full-cartesian and every-axis raw performance samples, p95, maximum and thresholds.",
+        "Moved Godot user and editor roots to isolated D-drive locations and retained benign managed-Windows certificate diagnostics only as filtered build-run evidence.",
+        "Raised hard derelict debris collision to 276 cells across all 16 natural quadrants and strengthened anomaly readability to 67 light and 251 medium cells."
+      ],
+      "final_result": "passed",
+      "must_findings": 0,
+      "should_findings": 0,
+      "evidence": {
+        "run_id": "fc401c676c2948aab0b9ac66c6a0a73a",
+        "preflight": "85/85",
+        "godot": "574/574",
+        "forward_states": 192,
+        "reverse_states": 192,
+        "deterministic_random_states": 160,
+        "file_index_entries": 54,
+        "route_collision_cells": 15,
+        "conditional_portal_inside_and_boundary_probes": 37,
+        "conditional_portal_outside_probes": 4,
+        "memory_trigger_inside_and_boundary_probes": 54,
+        "memory_trigger_outside_probes": 4,
+        "node_count_before_after": [
+          720,
+          720
+        ]
+      }
+    }
+  ],
+  "root_verification": {
+    "pack_builder": "64/64",
+    "deep_integrity": "118/118",
+    "controlled_file_records": 582,
+    "estate_count": 8,
+    "all_processing_on_d_drive": true,
+    "candidate_caches_present": 0,
+    "formal_project_files_modified": false,
+    "git_commit_or_push_performed": false
+  },
+  "known_non_findings": [
+    "Managed Windows may emit a system CA root-certificate diagnostic while offline Godot map validation still completes all required commands with exit code 0.",
+    "H03 retains a two-stage development model and requires a formal integration adapter or a later candidate extension.",
+    "Reclaimed, expanded and mature facilities may still contain explicitly marked technical art placeholders."
+  ],
+  "outstanding_findings": {
+    "must": 0,
+    "should": 0
+  },
+  "integration": {
+    "runtime_integrated": false,
+    "shipping_approval": false,
+    "formal_integration_authorized_by_audit": false
+  }
+}

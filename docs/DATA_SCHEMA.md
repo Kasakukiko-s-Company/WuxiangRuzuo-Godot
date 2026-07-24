@@ -9,8 +9,11 @@
 - `data/localization.json`：zh-CN 文本键。
 - `data/demo_world.json`：四地图、稳定锚点和六条双向 portal。
 - `data/runtime_resources.json`：保留语义资源 ID；路径全部为 null，表示未迁移。
+- `data/estate_maps.json`：地产候选契约的正式运行投影，包含八图稳定身份、尺寸、安全出生点和状态轴；当前只有 H01 具有正式运行场景路径。
 
 G2 的 `GameCatalogCodec` 将七份文档作为一个事务解码；任一版本、结构、枚举、范围、重复 ID、本地化或交叉引用错误都会拒绝整个目录。成功结果是强类型 `GameCatalog`，玩法不直接读取 JSON Dictionary。关系快照中的 NPC ID 必须存在于 NPC 目录。
+
+`EstateMapCatalogCodec` 独立解码地产目录，拒绝重复 map/estate/candidate ID、非法稳定 ID、非 32px 格、空或重复状态值、缺失 season/development/anomaly、错误状态组合数和候选 staging 场景路径。它不修改 G2 `demo_world.json`，也不把八块候选地产写入存档 Schema。
 
 ## 稳定 ID
 

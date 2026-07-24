@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "batchId": "h01_open_meadow_layout_batch_001",
+  "mapId": "home_h01_open_meadow",
+  "status": "h01_layout_candidate_batch_001",
+  "createdAt": "2026-07-23",
+  "sourceAndAuthorization": {
+    "conceptReference": {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\concept-batch-001\\H01_open_meadow.png",
+      "source": "OpenAI built-in image generation from concept-batch-001",
+      "use": "late-game capacity and open-meadow direction only",
+      "pixelsCopiedIntoRuntimeAtlases": false,
+      "shippingApproval": false
+    },
+    "styleDonor": {
+      "approvalRecord": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\H03_PIPELINE_BENCHMARK_APPROVAL.json",
+      "source": "Project-owned H03 Batch 007 deterministic native-32px candidate atlases",
+      "use": "temporary shared estate visual language",
+      "thirdPartyOrCommercialGamePixels": false,
+      "shippingApproval": false
+    },
+    "layoutSpecificWork": {
+      "source": "Deterministic Python/Tiled generation in this batch",
+      "thirdPartyOrAiReferencePixelsCopied": false,
+      "authorization": "project-internal candidate production only"
+    },
+    "reviewLabels": {
+      "fontReadFrom": "C:\\Windows\\Fonts\\msyh.ttc",
+      "fontCopiedIntoProject": false,
+      "runtimeResource": false
+    }
+  },
+  "generatedResources": [
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_architecture.png",
+      "format": "PNG",
+      "bytes": 10990,
+      "sha256": "50923acbdc715b44eb827a99cc01e0bbddc11fc9a2acde8b2e8093b565e29462",
+      "dimensionsPixels": "1024x512",
+      "mode": "RGBA"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_architecture.tsx",
+      "format": "TSX",
+      "bytes": 64249,
+      "sha256": "7acc89b0cb101a9fc729c5d49bb3012d246079245fffe8472ba2f8bdd7573177"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_logic.png",
+      "format": "PNG",
+      "bytes": 1056,
+      "sha256": "f289044a5ea9dc29b62810cdb6e150e4e120485cc0bc9c1670fa9d15ccb0d64f",
+      "dimensionsPixels": "512x32",
+      "mode": "RGBA"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_logic.tsx",
+      "format": "TSX",
+      "bytes": 5608,
+      "sha256": "8dabee6430e8b2d3aca921ab97c6942119f591387f8d9a9853431b17162ae4d6"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_objects.png",
+      "format": "PNG",
+      "bytes": 10243,
+      "sha256": "212500183c849c3fc19436c25840ba8f58e97163b75be140e303a3c04ec5421d",
+      "dimensionsPixels": "512x512",
+      "mode": "RGBA"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_objects.tsx",
+      "format": "TSX",
+      "bytes": 24129,
+      "sha256": "f31621eef0a94085ab8e7c094d9e1a8c70170a5526ad92ac3b0aecfe2a1d9050"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_terrain.png",
+      "format": "PNG",
+      "bytes": 17033,
+      "sha256": "e4a7086f1e722cb416893c5081c35a5a46bf5d3a8e010ba35c676ef25006705e",
+      "dimensionsPixels": "512x512",
+      "mode": "RGBA"
+    },
+    {
+      "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_terrain.tsx",
+      "format": "TSX",
+      "bytes": 60324,
+      "sha256": "269d949f0cac42eac6475e5fbf0a90cdfa9af3aba2c0ac1a5a5a08567a588182"
+    }
+  ],
+  "runtimeIntegrated": false,
+  "shippingApproval": false
+}

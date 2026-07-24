@@ -1,0 +1,1637 @@
+{
+  "schemaVersion": 1,
+  "batchId": "h01_open_meadow_layout_batch_001",
+  "mapId": "home_h01_open_meadow",
+  "estateTypeId": "H01",
+  "displayNameZh": "开阔草甸",
+  "status": "h01_layout_candidate_batch_001",
+  "mapSize": {
+    "widthTiles": 128,
+    "heightTiles": 96,
+    "tileWidthPixels": 32,
+    "tileHeightPixels": 32,
+    "pixelWidth": 4096,
+    "pixelHeight": 3072
+  },
+  "authoritativeTmx": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\h01_open_meadow_authoritative.tmx",
+  "tilesets": [
+    {
+      "firstGid": 1,
+      "source": "tilesets/h01_layout_terrain.tsx"
+    },
+    {
+      "firstGid": 257,
+      "source": "tilesets/h01_layout_objects.tsx"
+    },
+    {
+      "firstGid": 513,
+      "source": "tilesets/h01_layout_architecture.tsx"
+    },
+    {
+      "firstGid": 1025,
+      "source": "tilesets/h01_layout_logic.tsx"
+    }
+  ],
+  "layers": [
+    {
+      "name": "Ground",
+      "visibleByDefault": true,
+      "nonzeroCells": 12288,
+      "properties": {
+        "role": "base_ground"
+      }
+    },
+    {
+      "name": "Ground_Detail",
+      "visibleByDefault": true,
+      "nonzeroCells": 671,
+      "properties": {
+        "role": "ground_detail"
+      }
+    },
+    {
+      "name": "Water",
+      "visibleByDefault": true,
+      "nonzeroCells": 889,
+      "properties": {
+        "role": "fishable_water_visual"
+      }
+    },
+    {
+      "name": "Path",
+      "visibleByDefault": true,
+      "nonzeroCells": 405,
+      "properties": {
+        "role": "base_path_and_permanent_crossings"
+      }
+    },
+    {
+      "name": "Development_Derelict_PathHint",
+      "visibleByDefault": true,
+      "nonzeroCells": 42,
+      "properties": {
+        "role": "broken_future_route_readability_hint",
+        "stateAxis": "development",
+        "stateValue": "derelict",
+        "activationRule": "exact_state",
+        "authority": "visual_only_no_gameplay_permission"
+      }
+    },
+    {
+      "name": "Objects_Back",
+      "visibleByDefault": true,
+      "nonzeroCells": 144,
+      "properties": {
+        "role": "fixed_objects_back"
+      }
+    },
+    {
+      "name": "Development_Derelict_Back",
+      "visibleByDefault": true,
+      "nonzeroCells": 219,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "derelict",
+        "activationRule": "exact_state"
+      }
+    },
+    {
+      "name": "Development_Derelict",
+      "visibleByDefault": true,
+      "nonzeroCells": 1746,
+      "properties": {
+        "stateAxis": "development",
+        "persistence": "per_cell_stable_seed",
+        "clearRule": "persist_removed_resource_by_cell_and_stable_resource_id",
+        "stateValue": "derelict",
+        "activationRule": "exact_state"
+      }
+    },
+    {
+      "name": "Development_Reclaimed_Back",
+      "visibleByDefault": false,
+      "nonzeroCells": 9,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "reclaimed",
+        "activationRule": "at_or_above_reclaimed"
+      }
+    },
+    {
+      "name": "Development_Reclaimed",
+      "visibleByDefault": false,
+      "nonzeroCells": 82,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "reclaimed",
+        "activationRule": "at_or_above_reclaimed"
+      }
+    },
+    {
+      "name": "Development_Expanded_Back",
+      "visibleByDefault": false,
+      "nonzeroCells": 35,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "expanded",
+        "activationRule": "at_or_above_expanded"
+      }
+    },
+    {
+      "name": "Development_Expanded",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "expanded",
+        "activationRule": "at_or_above_expanded"
+      }
+    },
+    {
+      "name": "Development_Mature",
+      "visibleByDefault": false,
+      "nonzeroCells": 269,
+      "properties": {
+        "stateAxis": "development",
+        "stateValue": "mature",
+        "activationRule": "at_or_above_mature"
+      }
+    },
+    {
+      "name": "Characters",
+      "visibleByDefault": true,
+      "nonzeroCells": 0,
+      "properties": {
+        "role": "character_runtime_slot"
+      }
+    },
+    {
+      "name": "Development_Derelict_Front",
+      "visibleByDefault": true,
+      "nonzeroCells": 403,
+      "properties": {
+        "stateAxis": "development",
+        "role": "front",
+        "stateValue": "derelict",
+        "activationRule": "exact_state"
+      }
+    },
+    {
+      "name": "Objects_Front",
+      "visibleByDefault": true,
+      "nonzeroCells": 264,
+      "properties": {
+        "role": "fixed_objects_front"
+      }
+    },
+    {
+      "name": "Development_Reclaimed_Front",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "development",
+        "role": "front",
+        "stateValue": "reclaimed",
+        "activationRule": "at_or_above_reclaimed"
+      }
+    },
+    {
+      "name": "Development_Expanded_Front",
+      "visibleByDefault": false,
+      "nonzeroCells": 35,
+      "properties": {
+        "stateAxis": "development",
+        "role": "front",
+        "stateValue": "expanded",
+        "activationRule": "at_or_above_expanded"
+      }
+    },
+    {
+      "name": "Effects",
+      "visibleByDefault": true,
+      "nonzeroCells": 0,
+      "properties": {
+        "role": "runtime_effect_slot"
+      }
+    },
+    {
+      "name": "Season_Spring",
+      "visibleByDefault": true,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "season",
+        "artStatus": "hook_only",
+        "stateValue": "spring"
+      }
+    },
+    {
+      "name": "Season_Summer",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "season",
+        "artStatus": "pending",
+        "stateValue": "summer"
+      }
+    },
+    {
+      "name": "Season_Autumn",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "season",
+        "artStatus": "pending",
+        "stateValue": "autumn"
+      }
+    },
+    {
+      "name": "Season_Winter",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "season",
+        "artStatus": "pending",
+        "stateValue": "winter"
+      }
+    },
+    {
+      "name": "Anomaly_Light",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "anomaly",
+        "artStatus": "pending",
+        "stateValue": "light"
+      }
+    },
+    {
+      "name": "Anomaly_Medium",
+      "visibleByDefault": false,
+      "nonzeroCells": 0,
+      "properties": {
+        "stateAxis": "anomaly",
+        "artStatus": "pending",
+        "stateValue": "medium"
+      }
+    },
+    {
+      "name": "Bridge_Mask",
+      "visibleByDefault": false,
+      "nonzeroCells": 16,
+      "properties": {
+        "authority": "permanent_crossing_exclusion"
+      }
+    },
+    {
+      "name": "Mask_Collision_Water",
+      "visibleByDefault": false,
+      "nonzeroCells": 873,
+      "properties": {
+        "authority": "base_water_collision"
+      }
+    },
+    {
+      "name": "Mask_Farmable",
+      "visibleByDefault": false,
+      "nonzeroCells": 10068,
+      "properties": {
+        "authority": "farmable"
+      }
+    },
+    {
+      "name": "Mask_Buildable_Free",
+      "visibleByDefault": false,
+      "nonzeroCells": 8818,
+      "properties": {
+        "authority": "buildable_free"
+      }
+    },
+    {
+      "name": "Mask_Buildable_Reserved",
+      "visibleByDefault": false,
+      "nonzeroCells": 921,
+      "properties": {
+        "authority": "buildable_reserved"
+      }
+    },
+    {
+      "name": "Mask_NoBuild",
+      "visibleByDefault": false,
+      "nonzeroCells": 1683,
+      "properties": {
+        "authority": "no_build"
+      }
+    },
+    {
+      "name": "Portal_Future_Region_Locked_Visual",
+      "visibleByDefault": true,
+      "nonzeroCells": 5,
+      "properties": {
+        "role": "conditional_portal_lock_visual",
+        "stateAxis": "story",
+        "stateValue": "locked",
+        "stableLockId": "collision.home.h01.future_region_lock",
+        "unlockCondition": "story.home.h01.future_region_unlocked",
+        "operation": "hide_when_unlocked"
+      }
+    },
+    {
+      "name": "Mask_Crossing_Development_Reclaimed",
+      "visibleByDefault": false,
+      "nonzeroCells": 4,
+      "properties": {
+        "authority": "development_crossing_override",
+        "stateAxis": "development",
+        "stateValue": "reclaimed",
+        "activationRule": "at_or_above_reclaimed",
+        "operation": "remove_water_collision_fishable_and_ecology_when_active",
+        "stableCrossingId": "crossing.home.h01.reclaimed_east_brook",
+        "ecologyMasksAffected": "Mask_Fishing_Ecology_PondBrook|Mask_Fishing_Ecology_SouthStream"
+      }
+    },
+    {
+      "name": "Mask_Fishing_Ecology_PondBrook",
+      "visibleByDefault": false,
+      "nonzeroCells": 237,
+      "properties": {
+        "authority": "fishing_ecology",
+        "ecologyZoneId": "fish_ecology.h01.pond_brook",
+        "operation": "set_profile"
+      }
+    },
+    {
+      "name": "Mask_Fishing_Ecology_SouthStream",
+      "visibleByDefault": false,
+      "nonzeroCells": 636,
+      "properties": {
+        "authority": "fishing_ecology",
+        "ecologyZoneId": "fish_ecology.h01.south_stream",
+        "operation": "set_profile"
+      }
+    }
+  ],
+  "objectGroups": [
+    {
+      "name": "Collision",
+      "objects": [
+        {
+          "id": 1,
+          "name": "boundary_north",
+          "class": "collision",
+          "x": 0.0,
+          "y": 0.0,
+          "width": 4096.0,
+          "height": 32.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 2,
+          "name": "boundary_south_west",
+          "class": "collision",
+          "x": 0.0,
+          "y": 3040.0,
+          "width": 1984.0,
+          "height": 32.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 3,
+          "name": "boundary_south_east",
+          "class": "collision",
+          "x": 2144.0,
+          "y": 3040.0,
+          "width": 1952.0,
+          "height": 32.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 4,
+          "name": "boundary_west_upper",
+          "class": "collision",
+          "x": 0.0,
+          "y": 32.0,
+          "width": 32.0,
+          "height": 1472.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 5,
+          "name": "boundary_west_lower",
+          "class": "collision",
+          "x": 0.0,
+          "y": 1664.0,
+          "width": 32.0,
+          "height": 1376.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 6,
+          "name": "boundary_east_upper",
+          "class": "collision",
+          "x": 4064.0,
+          "y": 32.0,
+          "width": 32.0,
+          "height": 1664.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 7,
+          "name": "boundary_east_lower",
+          "class": "collision",
+          "x": 4064.0,
+          "y": 1856.0,
+          "width": 32.0,
+          "height": 1184.0,
+          "properties": {
+            "kind": "map_boundary"
+          }
+        },
+        {
+          "id": 8,
+          "name": "house_footprint",
+          "class": "collision",
+          "x": 1920.0,
+          "y": 768.0,
+          "width": 224.0,
+          "height": 160.0,
+          "properties": {
+            "kind": "building_footprint"
+          }
+        },
+        {
+          "id": 9,
+          "name": "old_utility_footprint",
+          "class": "collision",
+          "x": 896.0,
+          "y": 2048.0,
+          "width": 128.0,
+          "height": 96.0,
+          "properties": {
+            "kind": "utility_remnant"
+          }
+        },
+        {
+          "id": 10,
+          "name": "pond_pump_footprint",
+          "class": "collision",
+          "x": 2912.0,
+          "y": 1248.0,
+          "width": 96.0,
+          "height": 96.0,
+          "properties": {
+            "kind": "fixed_facility"
+          }
+        },
+        {
+          "id": 11,
+          "name": "boundary_south_future_portal_lock",
+          "class": "collision",
+          "x": 1984.0,
+          "y": 3040.0,
+          "width": 160.0,
+          "height": 32.0,
+          "properties": {
+            "kind": "conditional_boundary_lock",
+            "stableId": "collision.home.h01.future_region_lock",
+            "lockedByDefault": true,
+            "unlockCondition": "story.home.h01.future_region_unlocked",
+            "operationWhenUnlocked": "remove_collision",
+            "lockedVisualLayer": "Portal_Future_Region_Locked_Visual",
+            "visualOperationWhenUnlocked": "hide_layer"
+          }
+        }
+      ],
+      "properties": {
+        "waterCollisionAuthority": "Mask_Collision_Water"
+      }
+    },
+    {
+      "name": "Farmable",
+      "objects": [
+        {
+          "id": 12,
+          "name": "farmable_central_meadow",
+          "class": "farmable_bounds",
+          "x": 800.0,
+          "y": 448.0,
+          "width": 2496.0,
+          "height": 1568.0,
+          "properties": {
+            "authoritativeMask": "Mask_Farmable",
+            "seasonCropProfile": "h01_open_meadow",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 13,
+          "name": "farmable_west_field",
+          "class": "farmable_bounds",
+          "x": 160.0,
+          "y": 896.0,
+          "width": 1344.0,
+          "height": 1632.0,
+          "properties": {
+            "authoritativeMask": "Mask_Farmable",
+            "seasonCropProfile": "h01_open_meadow",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 14,
+          "name": "farmable_south_field",
+          "class": "farmable_bounds",
+          "x": 1088.0,
+          "y": 1856.0,
+          "width": 2368.0,
+          "height": 960.0,
+          "properties": {
+            "authoritativeMask": "Mask_Farmable",
+            "seasonCropProfile": "h01_open_meadow",
+            "boundsOnly": true
+          }
+        }
+      ],
+      "properties": {
+        "maskLayer": "Mask_Farmable",
+        "boundsOnly": true,
+        "authorityPriority": "mask_over_bounds"
+      }
+    },
+    {
+      "name": "Buildable_Free",
+      "objects": [
+        {
+          "id": 15,
+          "name": "buildable_central_meadow",
+          "class": "buildable_free_bounds",
+          "x": 864.0,
+          "y": 512.0,
+          "width": 1792.0,
+          "height": 1376.0,
+          "properties": {
+            "authoritativeMask": "Mask_Buildable_Free",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 16,
+          "name": "buildable_west_field",
+          "class": "buildable_free_bounds",
+          "x": 224.0,
+          "y": 960.0,
+          "width": 1184.0,
+          "height": 1472.0,
+          "properties": {
+            "authoritativeMask": "Mask_Buildable_Free",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 17,
+          "name": "buildable_south_field",
+          "class": "buildable_free_bounds",
+          "x": 1152.0,
+          "y": 1920.0,
+          "width": 2240.0,
+          "height": 832.0,
+          "properties": {
+            "authoritativeMask": "Mask_Buildable_Free",
+            "boundsOnly": true
+          }
+        }
+      ],
+      "properties": {
+        "maskLayer": "Mask_Buildable_Free",
+        "boundsOnly": true,
+        "authorityPriority": "mask_over_bounds"
+      }
+    },
+    {
+      "name": "Buildable_Reserved",
+      "objects": [
+        {
+          "id": 18,
+          "name": "reserved_west_workyard",
+          "class": "buildable_reserved",
+          "x": 608.0,
+          "y": 640.0,
+          "width": 576.0,
+          "height": 384.0,
+          "properties": {
+            "plotId": "home.h01.plot.west_workyard",
+            "facilityOptions": "workyard_or_small_barn",
+            "authoritativeMask": "Mask_Buildable_Reserved",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 19,
+          "name": "reserved_east_orchard",
+          "class": "buildable_reserved",
+          "x": 2816.0,
+          "y": 512.0,
+          "width": 640.0,
+          "height": 416.0,
+          "properties": {
+            "plotId": "home.h01.plot.east_orchard",
+            "facilityOptions": "orchard_or_leisure_garden",
+            "authoritativeMask": "Mask_Buildable_Reserved",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 20,
+          "name": "reserved_south_large_facility",
+          "class": "buildable_reserved",
+          "x": 2336.0,
+          "y": 2112.0,
+          "width": 736.0,
+          "height": 448.0,
+          "properties": {
+            "plotId": "home.h01.plot.south_large_facility",
+            "facilityOptions": "barn_or_large_production",
+            "authoritativeMask": "Mask_Buildable_Reserved",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 21,
+          "name": "reserved_greenhouse",
+          "class": "buildable_reserved",
+          "x": 1248.0,
+          "y": 2112.0,
+          "width": 480.0,
+          "height": 352.0,
+          "properties": {
+            "plotId": "home.h01.plot.greenhouse",
+            "facilityOptions": "greenhouse_or_workshop",
+            "authoritativeMask": "Mask_Buildable_Reserved",
+            "boundsOnly": true
+          }
+        }
+      ],
+      "properties": {
+        "maskLayer": "Mask_Buildable_Reserved",
+        "boundsOnly": true,
+        "authorityPriority": "mask_over_bounds"
+      }
+    },
+    {
+      "name": "NoBuild",
+      "objects": [
+        {
+          "id": 22,
+          "name": "nobuild_house",
+          "class": "no_build",
+          "x": 1824.0,
+          "y": 672.0,
+          "width": 416.0,
+          "height": 448.0,
+          "properties": {
+            "reason": "fixed_home_and_safe_approach",
+            "authoritativeMask": "Mask_NoBuild",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 23,
+          "name": "nobuild_west_portal",
+          "class": "no_build",
+          "x": 0.0,
+          "y": 1440.0,
+          "width": 256.0,
+          "height": 288.0,
+          "properties": {
+            "reason": "portal_safety",
+            "authoritativeMask": "Mask_NoBuild",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 24,
+          "name": "nobuild_east_portal",
+          "class": "no_build",
+          "x": 3840.0,
+          "y": 1632.0,
+          "width": 256.0,
+          "height": 288.0,
+          "properties": {
+            "reason": "portal_safety",
+            "authoritativeMask": "Mask_NoBuild",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 25,
+          "name": "nobuild_south_portal",
+          "class": "no_build",
+          "x": 1888.0,
+          "y": 2880.0,
+          "width": 352.0,
+          "height": 192.0,
+          "properties": {
+            "reason": "portal_safety",
+            "authoritativeMask": "Mask_NoBuild",
+            "boundsOnly": true
+          }
+        },
+        {
+          "id": 26,
+          "name": "nobuild_pond_utility",
+          "class": "no_build",
+          "x": 2848.0,
+          "y": 1120.0,
+          "width": 256.0,
+          "height": 320.0,
+          "properties": {
+            "reason": "fixed_water_utility",
+            "authoritativeMask": "Mask_NoBuild",
+            "boundsOnly": true
+          }
+        }
+      ],
+      "properties": {
+        "maskLayer": "Mask_NoBuild",
+        "boundsOnly": true,
+        "authorityPriority": "mask_over_bounds",
+        "shoreBufferAuthority": "Mask_NoBuild"
+      }
+    },
+    {
+      "name": "Spawn",
+      "objects": [
+        {
+          "id": 27,
+          "name": "home_safe_spawn_meadow",
+          "class": "spawn",
+          "x": 2016.0,
+          "y": 992.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 63,
+            "cellY": 31,
+            "godotPixelX": 2032,
+            "godotPixelY": 1008,
+            "spawnId": "home.h01.safe",
+            "availableAtStart": true,
+            "facing": "south",
+            "safe": true
+          }
+        },
+        {
+          "id": 28,
+          "name": "home_door_outside",
+          "class": "spawn",
+          "x": 2016.0,
+          "y": 928.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 63,
+            "cellY": 29,
+            "godotPixelX": 2032,
+            "godotPixelY": 944,
+            "spawnId": "home.h01.door_outside",
+            "availableAtStart": true,
+            "facing": "south",
+            "safe": true
+          }
+        },
+        {
+          "id": 29,
+          "name": "visitor_arrival_west_track",
+          "class": "spawn",
+          "x": 1216.0,
+          "y": 1440.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 38,
+            "cellY": 45,
+            "godotPixelX": 1232,
+            "godotPixelY": 1456,
+            "spawnId": "home.h01.visitor_arrival",
+            "availableAtStart": true,
+            "facing": "east",
+            "safe": true
+          }
+        },
+        {
+          "id": 30,
+          "name": "return_from_village",
+          "class": "spawn",
+          "x": 96.0,
+          "y": 1568.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 3,
+            "cellY": 49,
+            "godotPixelX": 112,
+            "godotPixelY": 1584,
+            "spawnId": "home.h01.return_from_village",
+            "availableAtStart": true,
+            "facing": "east",
+            "safe": true
+          }
+        },
+        {
+          "id": 31,
+          "name": "return_from_wilderness",
+          "class": "spawn",
+          "x": 3968.0,
+          "y": 1760.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 124,
+            "cellY": 55,
+            "godotPixelX": 3984,
+            "godotPixelY": 1776,
+            "spawnId": "home.h01.return_from_wilderness",
+            "availableAtStart": true,
+            "facing": "west",
+            "safe": true
+          }
+        },
+        {
+          "id": 32,
+          "name": "return_from_future_region",
+          "class": "spawn",
+          "x": 2048.0,
+          "y": 2944.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 64,
+            "cellY": 92,
+            "godotPixelX": 2064,
+            "godotPixelY": 2960,
+            "spawnId": "home.h01.return_from_future_region",
+            "availableAtStart": true,
+            "facing": "north",
+            "safe": true
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "Portal",
+      "objects": [
+        {
+          "id": 33,
+          "name": "portal_village_west",
+          "class": "portal",
+          "x": 0.0,
+          "y": 1504.0,
+          "width": 64.0,
+          "height": 160.0,
+          "properties": {
+            "portalId": "home.h01.to_village",
+            "targetMapId": "village_large_a_candidate",
+            "targetPortalId": "village.large_a.to_home_h01",
+            "arrivalSpawnId": "village.large_a.arrival_from_home_h01",
+            "returnSpawnId": "home.h01.return_from_village",
+            "availableAtStart": true,
+            "unlockCondition": "always",
+            "lockedCollisionId": "",
+            "transitionConsumesGameTime": false
+          }
+        },
+        {
+          "id": 34,
+          "name": "portal_wilderness_east",
+          "class": "portal",
+          "x": 4032.0,
+          "y": 1696.0,
+          "width": 64.0,
+          "height": 160.0,
+          "properties": {
+            "portalId": "home.h01.to_wilderness",
+            "targetMapId": "wilderness_resource_region_candidate",
+            "targetPortalId": "wilderness.resource.to_home_h01",
+            "arrivalSpawnId": "wilderness.resource.arrival_from_home_h01",
+            "returnSpawnId": "home.h01.return_from_wilderness",
+            "availableAtStart": true,
+            "unlockCondition": "always",
+            "lockedCollisionId": "",
+            "transitionConsumesGameTime": false
+          }
+        },
+        {
+          "id": 35,
+          "name": "portal_future_region_south",
+          "class": "portal",
+          "x": 1984.0,
+          "y": 3008.0,
+          "width": 160.0,
+          "height": 64.0,
+          "properties": {
+            "portalId": "home.h01.to_future_region",
+            "targetMapId": "future_region_candidate",
+            "targetPortalId": "future.region.to_home_h01",
+            "arrivalSpawnId": "future.region.arrival_from_home_h01",
+            "returnSpawnId": "home.h01.return_from_future_region",
+            "availableAtStart": false,
+            "unlockCondition": "story.home.h01.future_region_unlocked",
+            "lockedCollisionId": "collision.home.h01.future_region_lock",
+            "transitionConsumesGameTime": false
+          }
+        }
+      ],
+      "properties": {
+        "transitionConsumesGameTime": false
+      }
+    },
+    {
+      "name": "NpcAnchor",
+      "objects": [
+        {
+          "id": 36,
+          "name": "npc_guest_arrival",
+          "class": "npc_anchor",
+          "x": 1216.0,
+          "y": 1440.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 38,
+            "cellY": 45,
+            "godotPixelX": 1232,
+            "godotPixelY": 1456,
+            "scheduleRole": "guest_arrival",
+            "roleDeprecatedAlias": "guest_arrival",
+            "travelMode": "walk"
+          }
+        },
+        {
+          "id": 37,
+          "name": "npc_building_consult",
+          "class": "npc_anchor",
+          "x": 2144.0,
+          "y": 1088.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 67,
+            "cellY": 34,
+            "godotPixelX": 2160,
+            "godotPixelY": 1104,
+            "scheduleRole": "construction_consult",
+            "roleDeprecatedAlias": "construction_consult",
+            "travelMode": "walk"
+          }
+        },
+        {
+          "id": 38,
+          "name": "npc_leisure_event",
+          "class": "npc_anchor",
+          "x": 2976.0,
+          "y": 1120.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 93,
+            "cellY": 35,
+            "godotPixelX": 2992,
+            "godotPixelY": 1136,
+            "scheduleRole": "pond_leisure_visit",
+            "roleDeprecatedAlias": "pond_leisure_visit",
+            "travelMode": "walk"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "Interaction",
+      "objects": [
+        {
+          "id": 39,
+          "name": "home_door",
+          "class": "interaction",
+          "x": 2016.0,
+          "y": 928.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 63,
+            "cellY": 29,
+            "godotPixelX": 2032,
+            "godotPixelY": 944,
+            "interactionId": "home.h01.interaction.home_door",
+            "action": "enter_home"
+          }
+        },
+        {
+          "id": 40,
+          "name": "build_board",
+          "class": "interaction",
+          "x": 2176.0,
+          "y": 1024.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 68,
+            "cellY": 32,
+            "godotPixelX": 2192,
+            "godotPixelY": 1040,
+            "interactionId": "home.h01.interaction.build_board",
+            "action": "open_estate_building"
+          }
+        },
+        {
+          "id": 41,
+          "name": "old_utility_remnant",
+          "class": "interaction",
+          "x": 960.0,
+          "y": 2112.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 30,
+            "cellY": 66,
+            "godotPixelX": 976,
+            "godotPixelY": 2128,
+            "interactionId": "home.h01.interaction.old_utility_remnant",
+            "action": "inspect_or_restore"
+          }
+        },
+        {
+          "id": 42,
+          "name": "pond_pump",
+          "class": "interaction",
+          "x": 2944.0,
+          "y": 1312.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 92,
+            "cellY": 41,
+            "godotPixelX": 2960,
+            "godotPixelY": 1328,
+            "interactionId": "home.h01.interaction.pond_pump",
+            "action": "inspect_or_restore"
+          }
+        },
+        {
+          "id": 43,
+          "name": "pond_edge",
+          "class": "interaction",
+          "x": 2944.0,
+          "y": 1376.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 92,
+            "cellY": 43,
+            "godotPixelX": 2960,
+            "godotPixelY": 1392,
+            "interactionId": "home.h01.interaction.pond_edge",
+            "action": "water_edge_interaction"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "StoryTrigger",
+      "objects": [
+        {
+          "id": 44,
+          "name": "trigger_first_build_zone",
+          "class": "story_trigger",
+          "x": 1760.0,
+          "y": 992.0,
+          "width": 576.0,
+          "height": 384.0,
+          "properties": {
+            "triggerId": "home.h01.first_build",
+            "eventIdDeprecatedAlias": "home.h01.first_build"
+          }
+        },
+        {
+          "id": 45,
+          "name": "trigger_home_social_visit",
+          "class": "story_trigger",
+          "x": 1184.0,
+          "y": 1312.0,
+          "width": 928.0,
+          "height": 416.0,
+          "properties": {
+            "triggerId": "home.h01.social_visit",
+            "eventIdDeprecatedAlias": "home.h01.social_visit"
+          }
+        },
+        {
+          "id": 46,
+          "name": "trigger_utility_restore",
+          "class": "story_trigger",
+          "x": 768.0,
+          "y": 1920.0,
+          "width": 416.0,
+          "height": 384.0,
+          "properties": {
+            "triggerId": "home.h01.utility_restore",
+            "eventIdDeprecatedAlias": "home.h01.utility_restore"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "ResourceSpawnZone",
+      "objects": [
+        {
+          "id": 47,
+          "name": "resource_west_meadow",
+          "class": "resource_spawn_zone",
+          "x": 224.0,
+          "y": 1792.0,
+          "width": 1024.0,
+          "height": 768.0,
+          "properties": {
+            "profile": "meadow_mixed",
+            "developmentState": "derelict"
+          }
+        },
+        {
+          "id": 48,
+          "name": "resource_north_meadow",
+          "class": "resource_spawn_zone",
+          "x": 928.0,
+          "y": 224.0,
+          "width": 2144.0,
+          "height": 480.0,
+          "properties": {
+            "profile": "meadow_light",
+            "developmentState": "derelict"
+          }
+        },
+        {
+          "id": 49,
+          "name": "resource_east_meadow",
+          "class": "resource_spawn_zone",
+          "x": 3296.0,
+          "y": 768.0,
+          "width": 608.0,
+          "height": 1536.0,
+          "properties": {
+            "profile": "meadow_mixed",
+            "developmentState": "derelict"
+          }
+        },
+        {
+          "id": 50,
+          "name": "resource_south_meadow",
+          "class": "resource_spawn_zone",
+          "x": 1120.0,
+          "y": 2144.0,
+          "width": 2080.0,
+          "height": 640.0,
+          "properties": {
+            "profile": "meadow_heavy",
+            "developmentState": "derelict"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "SeasonalResourceZone",
+      "objects": [
+        {
+          "id": 51,
+          "name": "seasonal_central_meadow",
+          "class": "seasonal_resource_zone",
+          "x": 896.0,
+          "y": 480.0,
+          "width": 1760.0,
+          "height": 1408.0,
+          "properties": {
+            "profile": "h01_meadow_crops_and_forage",
+            "seasons": "spring,summer,autumn,winter"
+          }
+        },
+        {
+          "id": 52,
+          "name": "seasonal_pond",
+          "class": "seasonal_resource_zone",
+          "x": 2912.0,
+          "y": 1024.0,
+          "width": 576.0,
+          "height": 576.0,
+          "properties": {
+            "profile": "h01_pond_fish_and_forage",
+            "seasons": "spring,summer,autumn,winter"
+          }
+        },
+        {
+          "id": 53,
+          "name": "seasonal_brook",
+          "class": "seasonal_resource_zone",
+          "x": 2624.0,
+          "y": 1632.0,
+          "width": 832.0,
+          "height": 1120.0,
+          "properties": {
+            "profile": "h01_brook_fish_and_forage",
+            "seasons": "spring,summer,autumn,winter"
+          }
+        },
+        {
+          "id": 54,
+          "name": "seasonal_west_field",
+          "class": "seasonal_resource_zone",
+          "x": 224.0,
+          "y": 992.0,
+          "width": 1184.0,
+          "height": 1440.0,
+          "properties": {
+            "profile": "h01_west_field_resources",
+            "seasons": "spring,summer,autumn,winter"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "FishingEcologyZone",
+      "objects": [
+        {
+          "id": 55,
+          "name": "fish_ecology_pond_brook",
+          "class": "fishing_ecology_zone",
+          "x": 2816.0,
+          "y": 992.0,
+          "width": 768.0,
+          "height": 1792.0,
+          "properties": {
+            "ecologyZoneId": "fish_ecology.h01.pond_brook",
+            "authoritativeMask": "Mask_Fishing_Ecology_PondBrook",
+            "boundsOnly": true,
+            "springProfile": "fish_table.h01.pond_brook.spring",
+            "summerProfile": "fish_table.h01.pond_brook.summer",
+            "autumnProfile": "fish_table.h01.pond_brook.autumn",
+            "winterProfile": "fish_table.h01.pond_brook.winter"
+          }
+        },
+        {
+          "id": 56,
+          "name": "fish_ecology_south_stream",
+          "class": "fishing_ecology_zone",
+          "x": 0.0,
+          "y": 2560.0,
+          "width": 4096.0,
+          "height": 512.0,
+          "properties": {
+            "ecologyZoneId": "fish_ecology.h01.south_stream",
+            "authoritativeMask": "Mask_Fishing_Ecology_SouthStream",
+            "boundsOnly": true,
+            "springProfile": "fish_table.h01.south_stream.spring",
+            "summerProfile": "fish_table.h01.south_stream.summer",
+            "autumnProfile": "fish_table.h01.south_stream.autumn",
+            "winterProfile": "fish_table.h01.south_stream.winter"
+          }
+        }
+      ],
+      "properties": {
+        "boundsOnly": true,
+        "authorityPriority": "mask_over_bounds",
+        "maskLayers": "Mask_Fishing_Ecology_PondBrook|Mask_Fishing_Ecology_SouthStream",
+        "operation": "set_profile"
+      }
+    },
+    {
+      "name": "FishingAccessQA",
+      "objects": [
+        {
+          "id": 57,
+          "name": "qa_pond_west_bank",
+          "class": "fishing_access_qa",
+          "x": 2944.0,
+          "y": 1376.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 92,
+            "cellY": 43,
+            "godotPixelX": 2960,
+            "godotPixelY": 1392,
+            "qaOnly": true,
+            "fixedFishingSpot": false,
+            "castRule": "endpoint_hits_fishable_water",
+            "ecologyZoneId": "fish_ecology.h01.pond_brook"
+          }
+        },
+        {
+          "id": 58,
+          "name": "qa_pond_south_bank",
+          "class": "fishing_access_qa",
+          "x": 3232.0,
+          "y": 1536.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 101,
+            "cellY": 48,
+            "godotPixelX": 3248,
+            "godotPixelY": 1552,
+            "qaOnly": true,
+            "fixedFishingSpot": false,
+            "castRule": "endpoint_hits_fishable_water",
+            "ecologyZoneId": "fish_ecology.h01.pond_brook"
+          }
+        },
+        {
+          "id": 59,
+          "name": "qa_brook_mid_bank",
+          "class": "fishing_access_qa",
+          "x": 3168.0,
+          "y": 2016.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 99,
+            "cellY": 63,
+            "godotPixelX": 3184,
+            "godotPixelY": 2032,
+            "qaOnly": true,
+            "fixedFishingSpot": false,
+            "castRule": "endpoint_hits_fishable_water",
+            "ecologyZoneId": "fish_ecology.h01.pond_brook"
+          }
+        },
+        {
+          "id": 60,
+          "name": "qa_stream_north_bank",
+          "class": "fishing_access_qa",
+          "x": 2464.0,
+          "y": 2656.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 77,
+            "cellY": 83,
+            "godotPixelX": 2480,
+            "godotPixelY": 2672,
+            "qaOnly": true,
+            "fixedFishingSpot": false,
+            "castRule": "endpoint_hits_fishable_water",
+            "ecologyZoneId": "fish_ecology.h01.south_stream"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "Occlusion",
+      "objects": [
+        {
+          "id": 61,
+          "name": "occlusion_northwest_treebelt",
+          "class": "occlusion",
+          "x": 0.0,
+          "y": 0.0,
+          "width": 832.0,
+          "height": 576.0,
+          "properties": {
+            "kind": "tree_canopy"
+          }
+        },
+        {
+          "id": 62,
+          "name": "occlusion_boundary_trees",
+          "class": "occlusion",
+          "x": 0.0,
+          "y": 0.0,
+          "width": 4096.0,
+          "height": 192.0,
+          "properties": {
+            "kind": "tree_canopy"
+          }
+        },
+        {
+          "id": 63,
+          "name": "occlusion_house_eave",
+          "class": "occlusion",
+          "x": 1920.0,
+          "y": 768.0,
+          "width": 224.0,
+          "height": 64.0,
+          "properties": {
+            "kind": "roof_eave"
+          }
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "AnomalyStateAnchor",
+      "objects": [
+        {
+          "id": 64,
+          "name": "anomaly_anchor_old_utility",
+          "class": "anomaly_state_anchor",
+          "x": 960.0,
+          "y": 2112.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 30,
+            "cellY": 66,
+            "godotPixelX": 976,
+            "godotPixelY": 2128,
+            "stableId": "home.h01.anomaly_anchor_old_utility",
+            "role": "subtle_repetition",
+            "target": "old_utility_remnant",
+            "targetCellX": 30,
+            "targetCellY": 66,
+            "waterPlacement": false,
+            "interactive": false,
+            "collisionChange": false,
+            "geometryChange": false,
+            "lightMediumUsesSameGeometry": true
+          }
+        },
+        {
+          "id": 65,
+          "name": "anomaly_anchor_pond_reflection",
+          "class": "anomaly_state_anchor",
+          "x": 2944.0,
+          "y": 1376.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 92,
+            "cellY": 43,
+            "godotPixelX": 2960,
+            "godotPixelY": 1392,
+            "stableId": "home.h01.anomaly_anchor_pond_reflection",
+            "role": "reflection_delay",
+            "target": "pond_reflection_surface",
+            "targetCellX": 100,
+            "targetCellY": 39,
+            "waterPlacement": false,
+            "interactive": false,
+            "collisionChange": false,
+            "geometryChange": false,
+            "lightMediumUsesSameGeometry": true
+          }
+        },
+        {
+          "id": 66,
+          "name": "anomaly_anchor_home_path",
+          "class": "anomaly_state_anchor",
+          "x": 1728.0,
+          "y": 1184.0,
+          "width": 0.0,
+          "height": 0.0,
+          "properties": {
+            "coordinateSemantics": "tmx_tile_cell_origin",
+            "godotPlacement": "cell_center",
+            "cellX": 54,
+            "cellY": 37,
+            "godotPixelX": 1744,
+            "godotPixelY": 1200,
+            "stableId": "home.h01.anomaly_anchor_home_path",
+            "role": "path_displacement_hint",
+            "target": "home_path_segment",
+            "targetCellX": 54,
+            "targetCellY": 37,
+            "waterPlacement": false,
+            "interactive": false,
+            "collisionChange": false,
+            "geometryChange": false,
+            "lightMediumUsesSameGeometry": true
+          }
+        }
+      ],
+      "properties": {}
+    }
+  ],
+  "functionalCounts": {
+    "waterCells": 889,
+    "permanentCrossingCells": 16,
+    "developmentCrossingCells": 4,
+    "fishableWaterCells": 873,
+    "pondBrookEcologyCells": 237,
+    "southStreamEcologyCells": 636,
+    "farmableCells": 10068,
+    "buildableFreeCells": 8818,
+    "buildableReservedCells": 921,
+    "noBuildCells": 1683,
+    "derelictDebrisCells": 1746,
+    "heavyDebrisCells": 318,
+    "fixedTreeAnchors": 66,
+    "derelictTreeAnchors": 92,
+    "futurePathHintCells": 42,
+    "southPortalLockVisualCells": 5
+  },
+  "stateAxes": {
+    "development": [
+      "derelict",
+      "reclaimed",
+      "expanded",
+      "mature"
+    ],
+    "season": [
+      "spring",
+      "summer",
+      "autumn",
+      "winter"
+    ],
+    "anomaly": [
+      "normal",
+      "light",
+      "medium"
+    ],
+    "construction": [
+      "fixed",
+      "free",
+      "reserved"
+    ]
+  },
+  "fishing": {
+    "rule": "any_walkable_origin_if_cast_endpoint_hits_fishable_water",
+    "fixedFishingSpots": false,
+    "bridgeCellsFishable": false,
+    "qaPointsOnly": true,
+    "ecologyCoverage": "all fishable cells have exactly one stable ecology zone",
+    "seasons": [
+      "spring",
+      "summer",
+      "autumn",
+      "winter"
+    ]
+  },
+  "semanticAuthority": {
+    "functionalMasksOverrideBoundsObjects": true,
+    "pointPlacement": "tmx_cell_origin_to_godot_cell_center",
+    "developmentComposition": "cumulative"
+  },
+  "independentReview": "postfix_audit_passed_no_must_or_should",
+  "outstandingBeforeRuntime": [
+    "User layout approval",
+    "H01-specific meadow vegetation/wind-grass/wildflower/shore-detail and four-season art",
+    "H01 anomaly overlays",
+    "Godot importer/runtime wiring",
+    "Commercial shipping authorization"
+  ],
+  "runtimeIntegrated": false,
+  "shippingApproval": false
+}

@@ -1,0 +1,1114 @@
+{
+  "schema_version": 1,
+  "pack_id": "206154e890aeee3e182ac022a76abee9",
+  "result": "passed",
+  "checks_passed": 118,
+  "checks_total": 118,
+  "checks": [
+    {
+      "id": "pack_has_expected_estates",
+      "passed": true,
+      "detail": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ]
+    },
+    {
+      "id": "pack_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "all_processing_on_d_drive": true,
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_project_godot_modified": false,
+        "formal_scenes_modified": false,
+        "core_code_modified": false,
+        "save_schema_modified": false,
+        "git_commit_or_push_performed": false
+      }
+    },
+    {
+      "id": "controlled_file_inventory_present",
+      "passed": true,
+      "detail": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\handoff\\estate-map-pack-v1\\ESTATE_MAP_PACK_CONTROLLED_FILES.json"
+    },
+    {
+      "id": "controlled_file_inventory_complete",
+      "passed": true,
+      "detail": {
+        "declared_file_count": 582,
+        "actual_record_count": 582,
+        "estate_ids": [
+          "H01",
+          "H02",
+          "H03",
+          "H04",
+          "H05",
+          "H06",
+          "H07",
+          "H08"
+        ],
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h01_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h01_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3
+      }
+    },
+    {
+      "id": "h01_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h01_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 48,
+        "expected": 48
+      }
+    },
+    {
+      "id": "h01_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 2
+      }
+    },
+    {
+      "id": "h01_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 78,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h01_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h01_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h02_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h02_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "hydrology": 2,
+        "east_bridge": 2,
+        "north_bridge": 2
+      }
+    },
+    {
+      "id": "h02_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h02_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 384,
+        "expected": 384
+      }
+    },
+    {
+      "id": "h02_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 1
+      }
+    },
+    {
+      "id": "h02_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 72,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h02_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h02_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h03_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h03_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 2,
+        "anomaly": 3
+      }
+    },
+    {
+      "id": "h03_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h03_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 24,
+        "expected": 24
+      }
+    },
+    {
+      "id": "h03_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 2
+      }
+    },
+    {
+      "id": "h03_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 72,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h03_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h03_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h04_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h04_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "irrigation": 2,
+        "ridge_shortcut": 2
+      }
+    },
+    {
+      "id": "h04_map_specific_axes",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "present": [
+          "anomaly",
+          "development",
+          "irrigation",
+          "ridge_shortcut",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h04_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h04_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h04_reverse_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h04_deterministic_random_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 100,
+        "minimum": 100
+      }
+    },
+    {
+      "id": "h04_physics2d_direct_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\validation\\H04_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h04_growth_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\validation\\H04_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h04_runtime_portal_trigger_queries",
+      "passed": true,
+      "detail": {
+        "portal_query_evidence": true,
+        "trigger_query_evidence": true
+      }
+    },
+    {
+      "id": "h04_per_axis_raw_performance",
+      "passed": true,
+      "detail": {
+        "valid_profile_count": 6,
+        "required_axis_count": 5,
+        "performance_keys": [
+          "anomaly",
+          "development",
+          "full_cartesian",
+          "irrigation",
+          "ridge_shortcut",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h04_continuous_fishing_policy",
+      "passed": true,
+      "detail": {
+        "fixed_fishing_spots": false
+      }
+    },
+    {
+      "id": "h04_winter_open_water_policy",
+      "passed": true,
+      "detail": {
+        "winter_full_freeze": false
+      }
+    },
+    {
+      "id": "h04_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 3
+      }
+    },
+    {
+      "id": "h04_required_visual_review_set",
+      "passed": true,
+      "detail": {
+        "full_map_review": true,
+        "anomaly_closeup": true,
+        "feature_closeup": true,
+        "files": [
+          "h04_anomaly_closeup_contact_sheet.png",
+          "h04_feature_axis_closeup_contact_sheet.png",
+          "h04_runtime_state_contact_sheet.png"
+        ]
+      }
+    },
+    {
+      "id": "h04_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 90,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h04_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h04_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h05_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h05_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "hydrology": 2,
+        "backwater_gate": 2,
+        "causeway_gate": 2
+      }
+    },
+    {
+      "id": "h05_map_specific_axes",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "present": [
+          "anomaly",
+          "backwater_gate",
+          "causeway_gate",
+          "development",
+          "hydrology",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h05_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h05_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 384,
+        "expected": 384
+      }
+    },
+    {
+      "id": "h05_reverse_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 384,
+        "expected": 384
+      }
+    },
+    {
+      "id": "h05_deterministic_random_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 100,
+        "minimum": 100
+      }
+    },
+    {
+      "id": "h05_physics2d_direct_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\validation\\H05_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h05_growth_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\validation\\H05_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h05_runtime_portal_trigger_queries",
+      "passed": true,
+      "detail": {
+        "portal_query_evidence": true,
+        "trigger_query_evidence": true
+      }
+    },
+    {
+      "id": "h05_per_axis_raw_performance",
+      "passed": true,
+      "detail": {
+        "valid_profile_count": 7,
+        "required_axis_count": 6,
+        "performance_keys": [
+          "anomaly",
+          "backwater_gate",
+          "causeway_gate",
+          "development",
+          "full_cartesian",
+          "hydrology",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h05_continuous_fishing_policy",
+      "passed": true,
+      "detail": {
+        "fixed_fishing_spots": false
+      }
+    },
+    {
+      "id": "h05_winter_open_water_policy",
+      "passed": true,
+      "detail": {
+        "winter_full_freeze": false
+      }
+    },
+    {
+      "id": "h05_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 3
+      }
+    },
+    {
+      "id": "h05_required_visual_review_set",
+      "passed": true,
+      "detail": {
+        "full_map_review": true,
+        "anomaly_closeup": true,
+        "feature_closeup": true,
+        "files": [
+          "h05_anomaly_closeup_contact_sheet.png",
+          "h05_feature_axis_closeup_contact_sheet.png",
+          "h05_runtime_state_contact_sheet.png"
+        ]
+      }
+    },
+    {
+      "id": "h05_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 90,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h05_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h05_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h06_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h06_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "cistern": 2,
+        "quarry_route": 2
+      }
+    },
+    {
+      "id": "h06_map_specific_axes",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "present": [
+          "anomaly",
+          "cistern",
+          "development",
+          "quarry_route",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h06_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h06_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h06_reverse_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h06_deterministic_random_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 128,
+        "minimum": 100
+      }
+    },
+    {
+      "id": "h06_physics2d_direct_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\validation\\H06_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h06_growth_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\validation\\H06_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h06_runtime_portal_trigger_queries",
+      "passed": true,
+      "detail": {
+        "portal_query_evidence": true,
+        "trigger_query_evidence": true
+      }
+    },
+    {
+      "id": "h06_per_axis_raw_performance",
+      "passed": true,
+      "detail": {
+        "valid_profile_count": 5,
+        "required_axis_count": 5,
+        "performance_keys": [
+          "anomaly",
+          "axis_a",
+          "axis_b",
+          "development",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h06_continuous_fishing_policy",
+      "passed": true,
+      "detail": {
+        "fixed_fishing_spots": false
+      }
+    },
+    {
+      "id": "h06_winter_open_water_policy",
+      "passed": true,
+      "detail": {
+        "winter_full_freeze": false
+      }
+    },
+    {
+      "id": "h06_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 3
+      }
+    },
+    {
+      "id": "h06_required_visual_review_set",
+      "passed": true,
+      "detail": {
+        "full_map_review": true,
+        "anomaly_closeup": true,
+        "feature_closeup": true,
+        "files": [
+          "h06_anomaly_closeup_contact_sheet.png",
+          "h06_feature_axis_closeup_contact_sheet.png",
+          "h06_runtime_state_contact_sheet.png"
+        ]
+      }
+    },
+    {
+      "id": "h06_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 46,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h06_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h06_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h07_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h07_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "water_route": 2,
+        "shore_platform": 2
+      }
+    },
+    {
+      "id": "h07_map_specific_axes",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "present": [
+          "anomaly",
+          "development",
+          "season",
+          "shore_platform",
+          "water_route"
+        ]
+      }
+    },
+    {
+      "id": "h07_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h07_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h07_reverse_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h07_deterministic_random_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 128,
+        "minimum": 100
+      }
+    },
+    {
+      "id": "h07_physics2d_direct_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\validation\\H07_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h07_growth_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\validation\\H07_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h07_runtime_portal_trigger_queries",
+      "passed": true,
+      "detail": {
+        "portal_query_evidence": true,
+        "trigger_query_evidence": true
+      }
+    },
+    {
+      "id": "h07_per_axis_raw_performance",
+      "passed": true,
+      "detail": {
+        "valid_profile_count": 5,
+        "required_axis_count": 5,
+        "performance_keys": [
+          "anomaly",
+          "axis_a",
+          "axis_b",
+          "development",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h07_continuous_fishing_policy",
+      "passed": true,
+      "detail": {
+        "fixed_fishing_spots": false
+      }
+    },
+    {
+      "id": "h07_winter_open_water_policy",
+      "passed": true,
+      "detail": {
+        "winter_full_freeze": false
+      }
+    },
+    {
+      "id": "h07_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 3
+      }
+    },
+    {
+      "id": "h07_required_visual_review_set",
+      "passed": true,
+      "detail": {
+        "full_map_review": true,
+        "anomaly_closeup": true,
+        "feature_closeup": true,
+        "files": [
+          "h07_anomaly_closeup_contact_sheet.png",
+          "h07_feature_axis_closeup_contact_sheet.png",
+          "h07_runtime_state_contact_sheet.png"
+        ]
+      }
+    },
+    {
+      "id": "h07_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 46,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h07_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h07_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h08_candidate_cache_clean",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h08_core_state_axes",
+      "passed": true,
+      "detail": {
+        "season": 4,
+        "development": 4,
+        "anomaly": 3,
+        "ruin_route": 2,
+        "memory_clue": 2
+      }
+    },
+    {
+      "id": "h08_map_specific_axes",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "present": [
+          "anomaly",
+          "development",
+          "memory_clue",
+          "ruin_route",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h08_required_semantic_authorities",
+      "passed": true,
+      "detail": {
+        "missing": [],
+        "authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      }
+    },
+    {
+      "id": "h08_forward_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h08_reverse_state_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 192,
+        "expected": 192
+      }
+    },
+    {
+      "id": "h08_deterministic_random_coverage",
+      "passed": true,
+      "detail": {
+        "verified": 160,
+        "minimum": 100
+      }
+    },
+    {
+      "id": "h08_physics2d_direct_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\validation\\H08_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h08_growth_evidence",
+      "passed": true,
+      "detail": {
+        "validation": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\validation\\H08_GODOT_HEADLESS_VALIDATION.json"
+      }
+    },
+    {
+      "id": "h08_runtime_portal_trigger_queries",
+      "passed": true,
+      "detail": {
+        "portal_query_evidence": true,
+        "trigger_query_evidence": true
+      }
+    },
+    {
+      "id": "h08_per_axis_raw_performance",
+      "passed": true,
+      "detail": {
+        "valid_profile_count": 6,
+        "required_axis_count": 5,
+        "performance_keys": [
+          "anomaly",
+          "development",
+          "full_cartesian",
+          "memory_clue",
+          "ruin_route",
+          "season"
+        ]
+      }
+    },
+    {
+      "id": "h08_continuous_fishing_policy",
+      "passed": true,
+      "detail": {
+        "fixed_fishing_spots": false
+      }
+    },
+    {
+      "id": "h08_winter_open_water_policy",
+      "passed": true,
+      "detail": {
+        "winter_full_freeze": false
+      }
+    },
+    {
+      "id": "h08_review_images_hashed",
+      "passed": true,
+      "detail": {
+        "review_count": 2
+      }
+    },
+    {
+      "id": "h08_required_visual_review_set",
+      "passed": true,
+      "detail": {
+        "full_map_review": true,
+        "anomaly_closeup": true,
+        "feature_closeup": true,
+        "files": [
+          "h08_ruin_anomaly_closeup_contact_sheet.png",
+          "h08_runtime_state_contact_sheet.png"
+        ]
+      }
+    },
+    {
+      "id": "h08_file_index_integrity",
+      "passed": true,
+      "detail": {
+        "entry_count": 54,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "h08_indexed_text_has_no_c_drive_paths",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "id": "h08_indexed_source_or_authorization_present",
+      "passed": true,
+      "detail": []
+    }
+  ]
+}

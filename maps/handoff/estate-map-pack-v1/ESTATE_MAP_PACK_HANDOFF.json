@@ -1,0 +1,2636 @@
+{
+  "schema_version": 1,
+  "pack_id": "206154e890aeee3e182ac022a76abee9",
+  "status": "candidate_pack_ready_for_main_production_handoff",
+  "estate_ids": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08"
+  ],
+  "map_count": 8,
+  "tile_size_pixels": 32,
+  "logical_viewport": {
+    "width_pixels": 640,
+    "height_pixels": 360,
+    "output_scaling_pending_formal_integration": true
+  },
+  "maps": [
+    {
+      "estate_id": "H01",
+      "map_id": "home_h01_open_meadow",
+      "expected_map_id": "home_h01_open_meadow",
+      "display_name_zh": "开阔草甸",
+      "candidate_id": "h01_runtime_staging_v2",
+      "candidate_status": "godot_4_7_1_headless_verified_candidate",
+      "run_id": "940c740ec29148378aa5cd9c5654e480",
+      "map_size": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ]
+      },
+      "state_combination_count": 48,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn_meadow",
+        "spawn_ids": [
+          "home_safe_spawn_meadow",
+          "home_door_outside",
+          "visitor_arrival_west_track",
+          "return_from_village",
+          "return_from_wilderness",
+          "return_from_future_region"
+        ],
+        "portal_ids": [
+          "portal_village_west",
+          "portal_wilderness_east",
+          "portal_future_region_south"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival",
+          "npc_building_consult",
+          "npc_leisure_event"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "build_board",
+          "old_utility_remnant",
+          "pond_pump",
+          "pond_edge"
+        ],
+        "story_trigger_ids": [
+          "trigger_first_build_zone",
+          "trigger_home_social_visit",
+          "trigger_utility_restore"
+        ],
+        "object_group_counts": {
+          "Collision": 11,
+          "Farmable": 3,
+          "Buildable_Free": 3,
+          "Buildable_Reserved": 4,
+          "NoBuild": 5,
+          "Spawn": 6,
+          "Portal": 3,
+          "NpcAnchor": 3,
+          "Interaction": 5,
+          "StoryTrigger": 3,
+          "ResourceSpawnZone": 4,
+          "SeasonalResourceZone": 4,
+          "FishingEcologyZone": 2,
+          "Occlusion": 3,
+          "AnomalyStateAnchor": 3
+        },
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 17,
+        "preflight_checks_total": 17,
+        "headless_result": "passed",
+        "headless_checks_passed": 243,
+        "headless_checks_total": 243,
+        "state_combinations_verified": 48,
+        "reverse_state_combinations_verified": "0 mismatches",
+        "random_sequence_steps_verified": null,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\h01_open_meadow_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 1022380,
+          "sha256": "c2bae2108c89e6731d505f8bf1e9775553aa4357439cd948ac758c7fccfb77df",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 128,
+            "height_tiles": 96,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\runtime\\h01_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 741697,
+          "sha256": "64e832215def015ee1ff3d3edc31d57f0592a96bedd9997404d852eb61099cbd",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 2191,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\H01_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 35788,
+          "sha256": "b4f85ea19fa2c147a9fa36a63b4ca5ef8e97273f3c97edcbcb07aab724a64369",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 920,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\H01_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 4489,
+          "sha256": "5af0f481744c5b41fcff4bfb8896002cbd08f86fb5fc7ff952efed02eb915865",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 42,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\H01_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 40229,
+          "sha256": "aeb4ea77d6a3684f4dabae333d88ef6c024bda711c81e0018e348a103e0e10de",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 829,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\H01_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 40484,
+          "sha256": "8a82b682ee8fdd7442c9fc326351aaf32efb2faa49a79f36299d08ec5604507a",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 712,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\validation\\H01_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 30369,
+          "sha256": "18a4311a70cd972e94893992288ce2f328512f7eb499789781fbce9de8d3967f",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1314,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\data\\h01_base.map.json",
+          "format": "JSON",
+          "bytes": 5262832,
+          "sha256": "b0da0816495141514ab12aa6877b6f272f9e92e0f358be8bb697fe2369f4cb46",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 366358,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\data\\h01_state_catalog.json",
+          "format": "JSON",
+          "bytes": 5891,
+          "sha256": "792e13ec23403fc97c5f0f808c8970535c05588952ea085c3e63bafe082d4bf1",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 298,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H01_open_meadow_fullstate.profile.json",
+          "format": "JSON",
+          "bytes": 4445,
+          "sha256": "c2f8e0d53ecbf80f579d3f50958d6198ff0b228b8dedd7624e23ba3322e3048c",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 118,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h01_runtime_staging_v2.py",
+          "format": "PY",
+          "bytes": 147333,
+          "sha256": "78bd98fea7bdb14121bbc04513ea1de544418dd20e5e1a6ce52e300ac63f7295",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 147333
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\validation\\visual-review\\H01_ANOMALY_ANCHOR_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 168919,
+            "sha256": "8947fb20d5310ca4bdbe19b76d5267b9a2f282a5267d5b9e91d60aff79a81c30",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1440,
+              "height_pixels": 1182
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\validation\\visual-review\\H01_VISUAL_REVIEW_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 536736,
+            "sha256": "29cfb3d84e13119cf36a555890cb493d7da8031b28c8d229498b488eeca89270",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2048,
+              "height_pixels": 1236
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H02",
+      "map_id": "home_h02_braided_river",
+      "expected_map_id": "home_h02_braided_river",
+      "display_name_zh": "辫河洲地",
+      "candidate_id": "h02_runtime_staging_v2",
+      "candidate_status": "verified_candidate",
+      "run_id": "8b8c4c6dfaba466ebcbf214aefaedd34",
+      "map_size": {
+        "width_tiles": 144,
+        "height_tiles": 104,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3328
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "hydrology": [
+          "normal",
+          "high_water_story_state"
+        ],
+        "east_bridge": [
+          "closed",
+          "open"
+        ],
+        "north_bridge": [
+          "closed",
+          "open"
+        ]
+      },
+      "state_combination_count": 384,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn_high_island",
+        "spawn_ids": [
+          "home_safe_spawn_high_island",
+          "home_door_outside",
+          "visitor_arrival_old_bridge"
+        ],
+        "portal_ids": [
+          "portal_village_west",
+          "portal_wilderness_east",
+          "portal_water_route_southwest"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival_old_bridge",
+          "npc_waterworks_consult",
+          "npc_fishing_visit"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "old_bridge_marker",
+          "south_ford_marker",
+          "east_shortcut_bridge_site",
+          "north_field_bridge_site",
+          "old_waterworks",
+          "water_gauge",
+          "southwest_dock"
+        ],
+        "story_trigger_ids": [
+          "trigger_first_bridge_unlock",
+          "trigger_high_water_story_state",
+          "trigger_home_social_visit",
+          "trigger_water_reflection_anomaly"
+        ],
+        "object_group_counts": {
+          "Collision": 9,
+          "Farmable": 4,
+          "Buildable_Free": 4,
+          "Buildable_Reserved": 4,
+          "NoBuild": 4,
+          "Spawn": 3,
+          "Portal": 3,
+          "NpcAnchor": 3,
+          "Interaction": 8,
+          "StoryTrigger": 4,
+          "ResourceSpawnZone": 4,
+          "SeasonalResourceZone": 3,
+          "FishingAccessQA": 8,
+          "Occlusion": 5,
+          "AnomalyStateAnchor": 7,
+          "CrossingState": 5,
+          "HydrologyState": 1
+        },
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 66,
+        "preflight_checks_total": 66,
+        "headless_result": "passed",
+        "headless_checks_passed": 816,
+        "headless_checks_total": 816,
+        "state_combinations_verified": 384,
+        "reverse_state_combinations_verified": 384,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h02-braided-river\\candidates\\batch-001-layout\\source\\h02_braided_river_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 1425938,
+          "sha256": "a84fe6a565117da56ca48687cbcad057a937e6c9cc607e40d60c222f42de81a5",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 144,
+            "height_tiles": 104,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\runtime\\h02_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 920772,
+          "sha256": "0d132dd4cfe455efbad7c4384c70fe6bc6c03707152d3e5bba75282ae2657399",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1883,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\H02_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 343252,
+          "sha256": "83652f308854d07726f6203abc801d480928efc86fc775d699fa51d6ea6ae00b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 11837,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\H02_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 4203,
+          "sha256": "0576a01c2b4e80a6f30b6476071491deeb276b07c5e9c30874ca6f8f92ecb2e5",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 60,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\H02_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 35148,
+          "sha256": "6af075a1b7cf678c42bc738d9cf668fa282a361e888e584ee3b113c4052350cc",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 768,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\H02_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 53464,
+          "sha256": "969415ef6c5b041e041760810fb7d27426f4913afa8c73798c8ab865bbadc6a6",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1099,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\validation\\H02_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 258579,
+          "sha256": "974ec0ff443eebfd104c8171014a4670495f0c30b52d1b0bd54f87211b025689",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 11241,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\data\\h02_base.map.json",
+          "format": "JSON",
+          "bytes": 6520111,
+          "sha256": "04d9c06062fe0509a5d583bd7398c44d6d88c8ac8bb61e5da86ee0092327bdd3",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 470713,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\data\\h02_state_catalog.json",
+          "format": "JSON",
+          "bytes": 112082,
+          "sha256": "0ed83338fe9cdc2ceef01a4f3eda6494a0650e20a63eed77e601963b39423bbc",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 3624,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H02_braided_river_batch001_runtime_v2.profile.json",
+          "format": "JSON",
+          "bytes": 8000,
+          "sha256": "94fb71682152a33e5adcac36ea4738ec88f4373c0910e5297212eb6950180b00",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 255,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h02_runtime_staging_v2.py",
+          "format": "PY",
+          "bytes": 163016,
+          "sha256": "6560392777252ea914c2460f731e228b71086e100734e19fdc8dee2dcf1375df",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 163016
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\review\\H02_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 375318,
+            "sha256": "8b161ef2ee31808dd94ce94ff9095a9f792fecd86d27aa7ff11a9602af656368",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1368,
+              "height_pixels": 2212
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H03",
+      "map_id": "home_h03_forest_hollow",
+      "expected_map_id": "home_h03_forest_hollow",
+      "display_name_zh": "林间洼地",
+      "candidate_id": "h03_runtime_staging_v2",
+      "candidate_status": "godot_4_7_1_headless_verified_candidate",
+      "run_id": "37e6cd5bb3ee43a79fc0f74794e0118b",
+      "map_size": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "built"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ]
+      },
+      "state_combination_count": 24,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn_dry_shelf",
+        "spawn_ids": [
+          "home_safe_spawn_dry_shelf",
+          "home_door_outside",
+          "visitor_arrival_logging_trail",
+          "spawn_from_primary_village",
+          "spawn_from_wilderness",
+          "spawn_from_hidden_forest_route"
+        ],
+        "portal_ids": [
+          "exit_to_primary_village",
+          "exit_to_wilderness",
+          "exit_to_hidden_forest_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival_logging_trail",
+          "npc_forestry_consult",
+          "npc_gathering_visit",
+          "npc_building_consult",
+          "npc_home_social_event",
+          "npc_upper_landmark_investigation"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "old_logging_rig",
+          "unlockable_tree_belt_west",
+          "spring_pool",
+          "gathering_stumps",
+          "upper_landmark_springhead"
+        ],
+        "story_trigger_ids": [
+          "trigger_first_land_reclamation_progress",
+          "trigger_forest_resource_event",
+          "trigger_home_social_visit",
+          "trigger_light_anomaly_boundary",
+          "trigger_upper_landmark_discovery"
+        ],
+        "object_group_counts": {
+          "Collision": 18,
+          "Farmable": 1,
+          "Buildable_Free": 3,
+          "Buildable_Reserved": 3,
+          "NoBuild": 8,
+          "Spawn": 6,
+          "Portal": 3,
+          "NpcAnchor": 6,
+          "Interaction": 6,
+          "StoryTrigger": 5,
+          "ResourceSpawnZone": 4,
+          "SeasonalResourceZone": 3,
+          "FishingAccessQA": 5,
+          "Occlusion": 6,
+          "AnomalyStateAnchor": 7
+        },
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 28,
+        "preflight_checks_total": 28,
+        "headless_result": "passed",
+        "headless_checks_passed": 354,
+        "headless_checks_total": 354,
+        "state_combinations_verified": 24,
+        "reverse_state_combinations_verified": "0 mismatches",
+        "random_sequence_steps_verified": null,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\candidates\\batch-007-winter-polish\\full-map\\source\\h03_forest_hollow_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 919813,
+          "sha256": "3e8036e7a68f7b3d592def9ca9c154f85118c099f00015ac7a062e27df2218ab",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 128,
+            "height_tiles": 96,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\runtime\\h03_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 1253997,
+          "sha256": "c95acc6b2d18097d1ceb2cec3ab7ed97b8ac2a245f946923d8262ad662081df8",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 2263,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\H03_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 30396,
+          "sha256": "041817d10692491e455f0bd4935b7ea7306f526d340f3d6354595fe027de87eb",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 619,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\H03_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 4995,
+          "sha256": "79d489531bec6558c61e4e52e406f74cee038d7ad117e02cc28defe6d447258f",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 43,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\H03_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 40884,
+          "sha256": "d29eb934bae70fc1dfca20fafddbfe0e5134fbccb995666f6c952417d27711cc",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 764,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\H03_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 37062,
+          "sha256": "8c2c33dd19d81e689e3268f047c73cb7b9f8293c699c8c71bde29682907cfb40",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 643,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\validation\\H03_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 50110,
+          "sha256": "ade5cbab0579f1e0f1af812493cbc78d54a35f9b7de8cb3ea9b03e0c2ba3b741",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1967,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\data\\h03_base.map.json",
+          "format": "JSON",
+          "bytes": 8277276,
+          "sha256": "e359148088e591bf709c9ac7f0f3b38f2cd2a051d6ee8065ffcc418f8de38ed6",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 615730,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h03-runtime-staging-v2\\data\\h03_state_catalog.json",
+          "format": "JSON",
+          "bytes": 5329,
+          "sha256": "371de052f8c02da2d593e0166c5bf0267a0ae10b1a86d4b4b821d0748adbebfc",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 242,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H03_forest_hollow_legacy.profile.json",
+          "format": "JSON",
+          "bytes": 13634,
+          "sha256": "8b0d04f238f6fcd815906432a8dcbab9b870beeb67bc937967924b39da39a7d9",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 445,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h03_runtime_staging_v2.py",
+          "format": "PY",
+          "bytes": 197039,
+          "sha256": "e854816c593992b8d7306d0b31ae22cef50971173766af2596ab0f345453c96a",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 197039
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\candidates\\batch-005-seasons-anomaly\\full-map\\previews\\h03_seasons_full_review_contact_2560x960.png",
+            "format": "PNG",
+            "bytes": 574576,
+            "sha256": "6dc368de50ebe2bd785251cc301be3073f5d36f01dd7d35e73d9b633890e0daa",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2560,
+              "height_pixels": 960
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\candidates\\batch-007-winter-polish\\full-map\\previews\\h03_review_winter_derelict_medium_1280x960.png",
+            "format": "PNG",
+            "bytes": 283508,
+            "sha256": "4116a664879a8c4600d9adba7fa6afe4ceae4133866a0ab1b296b38d29968b27",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1280,
+              "height_pixels": 960
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H04",
+      "map_id": "home_h04_hillside_terraces",
+      "expected_map_id": "home_h04_hillside_terraces",
+      "display_name_zh": "山地梯田",
+      "candidate_id": "h04_runtime_staging_v1",
+      "candidate_status": "isolated_runtime_candidate_verified",
+      "run_id": "5ee6b356a4a943b1a188cc7b5bad6d32",
+      "map_size": {
+        "width_tiles": 128,
+        "height_tiles": 112,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3584
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "irrigation": [
+          "dry",
+          "restored"
+        ],
+        "ridge_shortcut": [
+          "closed",
+          "open"
+        ]
+      },
+      "state_combination_count": 192,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn_middle_terrace",
+        "spawn_ids": [
+          "home_safe_spawn_middle_terrace",
+          "home_door_outside",
+          "visitor_arrival"
+        ],
+        "portal_ids": [
+          "exit_to_primary_village_lower",
+          "exit_to_wilderness_upper",
+          "exit_to_ridge_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_anchor_1",
+          "npc_anchor_2",
+          "npc_anchor_3"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "upper_spring_control",
+          "irrigation_headgate",
+          "ridge_shortcut_site",
+          "terrace_overlook",
+          "lower_ramp_marker",
+          "build_board",
+          "old_lift_foundation"
+        ],
+        "story_trigger_ids": [
+          "trigger_irrigation_restore",
+          "trigger_shortcut_unlock",
+          "trigger_home_social_visit",
+          "trigger_upper_spring_story"
+        ],
+        "object_group_counts": {
+          "Spawn": 3,
+          "Portal": 3,
+          "NpcAnchor": 3,
+          "Interaction": 8,
+          "StoryTrigger": 4,
+          "Farmable": 4,
+          "Buildable_Free": 4,
+          "Buildable_Reserved": 4,
+          "NoBuild": 4,
+          "ResourceSpawnZone": 4,
+          "SeasonalResourceZone": 4,
+          "Occlusion": 5,
+          "EstateState": 2,
+          "FishingAccessQA": 6,
+          "Collision": 4
+        },
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 69,
+        "preflight_checks_total": 69,
+        "headless_result": "passed",
+        "headless_checks_passed": 31,
+        "headless_checks_total": 31,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h04-hillside-terraces\\source\\h04_hillside_terraces_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 913865,
+          "sha256": "90b5b6def53f2f7d9af4f1a263ce73b466e111867b241bc8edfa188879e62b31",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 128,
+            "height_tiles": 112,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\runtime\\h04_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 836988,
+          "sha256": "54f9d09c90e36ccac1b5b7f85928556869d14e6255a079ccbdc8e3af4ed4947e",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1719,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\H04_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 16598,
+          "sha256": "962be2686d376792f87865d2fedc9975afeed8b1fcbe9daf92448ced299f981f",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 457,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\H04_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 4266,
+          "sha256": "c3ff49064c2d962e20518269ee7a9ecce212b4a9709ad8c216270fe2ccbe3641",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 57,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\H04_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 66049,
+          "sha256": "8d588f9634991a715a957778de251253c87e41a91b0a03cedcc0046cae0c939c",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1451,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\H04_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 62389,
+          "sha256": "a6a9b6d8d867b9bcc0bda0d582afa37529620c68aabbc214052b4aff0b80a075",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1379,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\validation\\H04_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 14540,
+          "sha256": "b912d95811887f46b827fff09c52dc07e4020bd97a4db42a96cc0115c51c4a39",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1117,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\data\\h04_base.map.json",
+          "format": "JSON",
+          "bytes": 4943344,
+          "sha256": "1c013c3e47608d7d0acecfc570cd8f3fbd7caca86e49099c00494f381f9ccdf4",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 389766,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\data\\h04_state_catalog.json",
+          "format": "JSON",
+          "bytes": 47508,
+          "sha256": "c499274eca36a6ac4e1099c0aa87685e6ccab579d9cb84155ac4af98d616fc30",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 2091,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H04_hillside_terraces_runtime_v1.profile.json",
+          "format": "JSON",
+          "bytes": 1396,
+          "sha256": "de3a493a56f7d80f4d509037aaf04dbc913b1df6ccedb31bb9750c06defe42b9",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 41,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h04_runtime_staging_v1.py",
+          "format": "PY",
+          "bytes": 183,
+          "sha256": "a3a1871d718593c700e528c15444cec682c673dfac03085ae80d045da43f304f",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 183
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 40697,
+            "sha256": "e82dcd5bd687af98bc63c86111da35e4c5a6ae4a20b46feb3468ec7ae5bf1b74",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1416,
+              "height_pixels": 442
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 57469,
+            "sha256": "83e53224d2402a9b21ac01605d37f4d5beb18cafefb412a9937b963a7364279c",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 950,
+              "height_pixels": 786
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 356519,
+            "sha256": "1780a32a966fde0d21a40ee4b4dfa8fea45a92b7f0ae9f40d9f1dcc9237b30f9",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1608,
+              "height_pixels": 2144
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H05",
+      "map_id": "home_h05_reed_wetland",
+      "expected_map_id": "home_h05_reed_wetland",
+      "display_name_zh": "芦苇湿地",
+      "candidate_id": "h05_runtime_staging_v1",
+      "candidate_status": "isolated_runtime_candidate_verified",
+      "run_id": "14b8a68a6af5465481fae006c3b87a07",
+      "map_size": {
+        "width_tiles": 144,
+        "height_tiles": 104,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3328
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "hydrology": [
+          "normal",
+          "high_water"
+        ],
+        "backwater_gate": [
+          "closed",
+          "open"
+        ],
+        "causeway_gate": [
+          "closed",
+          "open"
+        ]
+      },
+      "state_combination_count": 384,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn_central_island",
+        "spawn_ids": [
+          "home_safe_spawn_central_island",
+          "home_door_outside",
+          "visitor_arrival"
+        ],
+        "portal_ids": [
+          "exit_to_primary_village_high_ground",
+          "exit_to_wilderness_causeway",
+          "exit_to_water_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_anchor_1",
+          "npc_anchor_2",
+          "npc_anchor_3"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "water_level_gauge",
+          "backwater_gate_control",
+          "causeway_gate_control",
+          "fishing_edge",
+          "hidden_backwater",
+          "build_board",
+          "wildlife_observation_post"
+        ],
+        "story_trigger_ids": [
+          "trigger_water_level_tutorial",
+          "trigger_backwater_unlock",
+          "trigger_causeway_gate_unlock",
+          "trigger_home_social_visit",
+          "trigger_wetland_wildlife_story"
+        ],
+        "object_group_counts": {
+          "Spawn": 3,
+          "Portal": 3,
+          "NpcAnchor": 3,
+          "Interaction": 8,
+          "StoryTrigger": 5,
+          "Farmable": 4,
+          "Buildable_Free": 4,
+          "Buildable_Reserved": 4,
+          "NoBuild": 4,
+          "ResourceSpawnZone": 4,
+          "SeasonalResourceZone": 4,
+          "Occlusion": 5,
+          "EstateState": 3,
+          "FishingAccessQA": 8,
+          "Collision": 4
+        },
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 78,
+        "preflight_checks_total": 78,
+        "headless_result": "passed",
+        "headless_checks_passed": 39,
+        "headless_checks_total": 39,
+        "state_combinations_verified": 384,
+        "reverse_state_combinations_verified": 384,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h05-reed-wetland\\source\\h05_reed_wetland_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 1001362,
+          "sha256": "e55c8389a55a629f45a1dc746fb52e954c6f71159d9364c99f8b0ce3eb711924",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 144,
+            "height_tiles": 104,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\runtime\\h05_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 1045932,
+          "sha256": "047387031a1992834f3dc9dffeb19010e34102438e830a2a048c730b94e2b2c3",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1772,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\H05_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 16869,
+          "sha256": "91aaed0815cb40c6cbd47c0d115c7b183cd9ec8c9b4ea799e37d3e63c944fa81",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 467,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\H05_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 4333,
+          "sha256": "f96495e75a063a845deb309bc21f365aa42a4e1168e98e789a3b1ef0633e1e6d",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 58,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\H05_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 65729,
+          "sha256": "8e6b44becd11157f68a3b185cd3b03183b38aaa31c9f07f2eb85e61156dcf7f0",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1451,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\H05_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 61969,
+          "sha256": "6c55711fbef5899b3fbc7890d0fb049a09ca295ca549723a91a4fcc0b9e9a7c7",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1379,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\validation\\H05_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 21383,
+          "sha256": "ef4d6bee1495b2991cc5d596901f2b673eea03afcdfc08dc1a9ed06d3a6348ea",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1672,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\data\\h05_base.map.json",
+          "format": "JSON",
+          "bytes": 6244431,
+          "sha256": "87fe59f818c4e61f822fb40851a3750124514097d68b21f1f7d4af7dfb314dd5",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 493269,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\data\\h05_state_catalog.json",
+          "format": "JSON",
+          "bytes": 94521,
+          "sha256": "4e83b4ae02ec03257e4c68d1713b12e8691fbc5d0cf73956613eed5030e32ba6",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 3924,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H05_reed_wetland_runtime_v1.profile.json",
+          "format": "JSON",
+          "bytes": 1430,
+          "sha256": "8d457b3b557fe899e46a7500017fec78191b059f99731065b49890bb17913892",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 42,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h05_runtime_staging_v1.py",
+          "format": "PY",
+          "bytes": 183,
+          "sha256": "227fa368c4c392450461ce5906e13b8cf2c860075101e84182460e266d67f6a5",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 183
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 44731,
+            "sha256": "71b7506449f01dbf031b53eea74f37b96fb2fe341c99a3bba8fa54e5d6c31138",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1416,
+              "height_pixels": 442
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 84852,
+            "sha256": "e436f7634c67e5e4f909af54211d8d291c4dad671021d2c85d31b1be5c0ad452",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 950,
+              "height_pixels": 1130
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 340407,
+            "sha256": "ed00e29bfd10297ae11902db078fef4747dd87b5e44497f8b1d7b0175aa058e8",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1800,
+              "height_pixels": 2016
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H06",
+      "map_id": "home_h06_stone_upland",
+      "expected_map_id": "home_h06_stone_upland",
+      "display_name_zh": "石质高地",
+      "candidate_id": "h06_runtime_staging_v1",
+      "candidate_status": "isolated-runtime-candidate-passed",
+      "run_id": "h06_runtime_staging_manifest",
+      "map_size": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "cistern": [
+          "dry",
+          "restored"
+        ],
+        "quarry_route": [
+          "closed",
+          "open"
+        ]
+      },
+      "state_combination_count": 192,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn",
+        "spawn_ids": [
+          "home_safe_spawn"
+        ],
+        "portal_ids": [
+          "exit_to_primary_village",
+          "exit_to_quarry_region",
+          "exit_to_ridge_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival_ridge",
+          "npc_stonework_consult",
+          "npc_orchard_visit"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "small_quarry_face",
+          "rain_cistern",
+          "windbreak_sites",
+          "ridge_overlook"
+        ],
+        "story_trigger_ids": [
+          "trigger_cistern_restore",
+          "trigger_quarry_access",
+          "trigger_home_social_visit"
+        ],
+        "object_group_counts": {},
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 65,
+        "preflight_checks_total": 65,
+        "headless_result": "passed",
+        "headless_checks_passed": 540,
+        "headless_checks_total": 540,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 128,
+        "godot_version": {
+          "build": "official",
+          "hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+          "hex": 263937,
+          "major": 4,
+          "minor": 7,
+          "patch": 1,
+          "status": "stable",
+          "string": "4.7.1-stable (official)",
+          "timestamp": 0
+        }
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h06-stone-upland\\source\\home_h06_stone_upland_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 902486,
+          "sha256": "ac30335baf3702fa7495b63df8c755597365992a36917897c7a4f7a501cccc41",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 128,
+            "height_tiles": 96,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\runtime\\h06_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 181,
+          "sha256": "94faaa73b086db21cf9b29f9c9a369d7f5ae3d2af177a4fad1cff1dacef9c2b8",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 6,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\H06_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 36928,
+          "sha256": "46f3fa0151a41e4c5c2988c0b789fc8349eb516a38bf688c59a545e2064cafd0",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1391,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\H06_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 3194,
+          "sha256": "7385d78168d5fd94738b538eb4eb4f493d6bd59865f19fe1f77ffb690a66174c",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 49,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\H06_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 35195,
+          "sha256": "710e24cb8009b46fa5f3168136a1db18160b7286c82a0bcdf46cac3d9fd7625b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 742,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\H06_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 14198,
+          "sha256": "80e73769ad6d7a060cbd33c46a26ff799340788cc0e3f9a316a9f2e8463f1d1d",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 329,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\validation\\H06_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 10738,
+          "sha256": "5ae5aeed2384c078c51323081f67bf29fbfd8c6c809041b1438a35d7d2f44a46",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 788,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\data\\h06_base.map.json",
+          "format": "JSON",
+          "bytes": 1427126,
+          "sha256": "e905dabd4e6316f1518a36ecfc2412c713ff5e7de90383c57d112fa1ed0cb6e8",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 145505,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\data\\h06_state_catalog.json",
+          "format": "JSON",
+          "bytes": 30337,
+          "sha256": "9162f048dd99edcc939895c3f628a6ab3f3fed9c291bfe4ecb58be89686fbe4b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1380,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H06_stone_upland_runtime_v1.profile.json",
+          "format": "JSON",
+          "bytes": 1367,
+          "sha256": "b219c7a76b67a9858029c1d23bb6da8eff1b15b0660ac51008e23dc7b416b408",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 38,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h06_runtime_staging_v1.py",
+          "format": "PY",
+          "bytes": 226,
+          "sha256": "53127cc091bff1af75eed6a24aa3f2d579f7a76a22ac64cad7895ac7e4656ec2",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 226
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 31651,
+            "sha256": "0c4f56831d5464dbed329f8adb827485dbaf6efc751d679a1fb4a06b4ade9b77",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2200,
+              "height_pixels": 610
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 36794,
+            "sha256": "5aee7fe8e4c10b8b8ee2271ec06be5b11b8695b89dee1731f8247d489f3553ef",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2040,
+              "height_pixels": 1160
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 215461,
+            "sha256": "a5f91d6a4c25ca3cef7c1c224412b91a661ca649364b78de46d6dedb9f10a652",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2376,
+              "height_pixels": 2670
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H07",
+      "map_id": "home_h07_lake_peninsula",
+      "expected_map_id": "home_h07_lake_peninsula",
+      "display_name_zh": "湖畔半岛",
+      "candidate_id": "h07_runtime_staging_v1",
+      "candidate_status": "isolated-runtime-candidate-passed",
+      "run_id": "h07_runtime_staging_manifest",
+      "map_size": {
+        "width_tiles": 144,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3072
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "water_route": [
+          "closed",
+          "open"
+        ],
+        "shore_platform": [
+          "derelict",
+          "restored"
+        ]
+      },
+      "state_combination_count": 192,
+      "object_contract": {
+        "safe_spawn_id": "home_safe_spawn",
+        "spawn_ids": [
+          "home_safe_spawn"
+        ],
+        "portal_ids": [
+          "exit_to_primary_village_landward",
+          "exit_to_wilderness_shore",
+          "exit_to_water_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival_land_bridge",
+          "npc_fishing_visit",
+          "npc_leisure_gathering"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "fishing_platform",
+          "future_boat_route",
+          "leisure_promontory",
+          "cove_edge"
+        ],
+        "story_trigger_ids": [
+          "trigger_first_water_route",
+          "trigger_lakeside_social_event",
+          "trigger_home_social_visit"
+        ],
+        "object_group_counts": {},
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 66,
+        "preflight_checks_total": 66,
+        "headless_result": "passed",
+        "headless_checks_passed": 540,
+        "headless_checks_total": 540,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 128,
+        "godot_version": {
+          "build": "official",
+          "hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+          "hex": 263937,
+          "major": 4,
+          "minor": 7,
+          "patch": 1,
+          "status": "stable",
+          "string": "4.7.1-stable (official)",
+          "timestamp": 0
+        }
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h07-lake-peninsula\\source\\home_h07_lake_peninsula_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 1031759,
+          "sha256": "af0222eac900f330cf635b5e17d5c9a898c1504a4f735217e2eea6e9051b95c9",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 144,
+            "height_tiles": 96,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\runtime\\h07_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 181,
+          "sha256": "fa90fc25ea0876a361da3482646fb344608ef1a72c0e07208d70483296a90a15",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 6,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\H07_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 37340,
+          "sha256": "7c8b851fe68c19e72a269626f8b0a2d1229a63fd44f3492f8afbc05df26d9e48",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1392,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\H07_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 3224,
+          "sha256": "d1b8fdb6dab3785031db436efd23ebcf2fb87200de38b9df7b095182631dd99b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 49,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\H07_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 35197,
+          "sha256": "c97982b143bf91ce4ac1c0a8f706477d2db1558e8d67d57cc0ff216aefe92aab",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 742,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\H07_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 14327,
+          "sha256": "f9db54714338e37b6c86076f3767be7acd7b219a5cbf283972926af812b46424",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 329,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\validation\\H07_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 10824,
+          "sha256": "cc0fa5b60cd2d902f0f50f070df29c11cb1d349fc53a95682df84fe823f75d88",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 788,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\data\\h07_base.map.json",
+          "format": "JSON",
+          "bytes": 2534552,
+          "sha256": "c289121d2ba056ed0c22528a6c8449175a9e3d6549a967050e26322fab8341f1",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 260594,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\data\\h07_state_catalog.json",
+          "format": "JSON",
+          "bytes": 31982,
+          "sha256": "0cbf8ed38db26a1cd5dcd61dd01a377350569e9d9027ba748718f3246897f567",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 1380,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H07_lake_peninsula_runtime_v1.profile.json",
+          "format": "JSON",
+          "bytes": 1388,
+          "sha256": "16ac1cbf61b4cdaf2fe3ec0751f50e666f9f340c48859942d08cf4a764cfd703",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 38,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h07_runtime_staging_v1.py",
+          "format": "PY",
+          "bytes": 226,
+          "sha256": "8cb24300fe3b053add609a25baef8d7a288457bf1ad4f5a040725cdd299cc3d0",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 226
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 28527,
+            "sha256": "308b07becafad9007549a3996df2b80e904717a998be252bf4ac88aa1f45aab9",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2200,
+              "height_pixels": 610
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 35869,
+            "sha256": "1d0ff92c72b15a8f37f247d582c692350e8610dafce0f1bd2c16756dfcab6a30",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2040,
+              "height_pixels": 1160
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 211473,
+            "sha256": "16c9d170be2d419fd11b2bb8329a09183b1e155f95e0321b38343c33ffdb3177",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 2664,
+              "height_pixels": 2670
+            }
+          }
+        ]
+      }
+    },
+    {
+      "estate_id": "H08",
+      "map_id": "home_h08_old_orchard_ruins",
+      "expected_map_id": "home_h08_old_orchard_ruins",
+      "display_name_zh": "旧果园遗址",
+      "candidate_id": "h08_runtime_staging_v1",
+      "candidate_status": "candidate",
+      "run_id": "fc401c676c2948aab0b9ac66c6a0a73a",
+      "map_size": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      },
+      "state_axes": {
+        "season": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter"
+        ],
+        "development": [
+          "derelict",
+          "reclaimed",
+          "expanded",
+          "mature"
+        ],
+        "anomaly": [
+          "normal",
+          "light",
+          "medium"
+        ],
+        "ruin_route": [
+          "closed",
+          "open"
+        ],
+        "memory_clue": [
+          "hidden",
+          "revealed"
+        ]
+      },
+      "state_combination_count": 192,
+      "object_contract": {
+        "safe_spawn_id": "home_h08_safe_spawn_old_courtyard",
+        "spawn_ids": [
+          "home_h08_safe_spawn_old_courtyard",
+          "home_h08_home_door_outside",
+          "home_h08_visitor_arrival_old_road"
+        ],
+        "portal_ids": [
+          "home_h08_exit_primary_village_old_road",
+          "home_h08_exit_wilderness_orchard_path",
+          "home_h08_exit_ruin_route_conditional"
+        ],
+        "npc_anchor_ids": [
+          "npc_guest_arrival_old_road",
+          "npc_restoration_consult",
+          "npc_memory_event_visit",
+          "npc_orchard_visit"
+        ],
+        "interaction_ids": [
+          "home_door",
+          "collapsed_foundations",
+          "spring_house",
+          "old_orchard_tree_north",
+          "old_orchard_tree_south",
+          "communal_courtyard",
+          "ruin_arch",
+          "orchard_pond_edge"
+        ],
+        "story_trigger_ids": [
+          "trigger_orchard_restoration",
+          "trigger_ruin_route_unlock",
+          "trigger_memory_clue",
+          "trigger_home_social_visit",
+          "trigger_spring_house_restore"
+        ],
+        "object_group_counts": {},
+        "semantic_authorities": {
+          "collision": true,
+          "farmable": true,
+          "buildable_free": true,
+          "buildable_reserved": true,
+          "no_build": true,
+          "water": true,
+          "fishable": true,
+          "spawn": true,
+          "portal": true,
+          "npc_anchor": true,
+          "interaction": true,
+          "story_trigger": true,
+          "occlusion": true,
+          "anomaly_anchor": true
+        }
+      },
+      "validation_summary": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 85,
+        "preflight_checks_total": 85,
+        "headless_result": "passed",
+        "headless_checks_passed": 574,
+        "headless_checks_total": 574,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 160,
+        "godot_version": "4.7.1-stable (official)"
+      },
+      "integration": {
+        "runtime_integrated": false,
+        "shipping_approval": false,
+        "formal_scene_path": null,
+        "candidate_scene_only": true
+      },
+      "artifacts": {
+        "candidate_root": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1",
+        "authoritative_tmx": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h08-old-orchard-ruins\\candidates\\batch-001-layout\\source\\h08_old_orchard_ruins_authoritative.tmx",
+          "format": "TMX",
+          "bytes": 740096,
+          "sha256": "2bd0a5b4ca733422e8f0ffdfa8394e7e8ba018e893ff8fc03027cb18f8c3185b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "width_tiles": 128,
+            "height_tiles": 96,
+            "tile_width_pixels": 32,
+            "tile_height_pixels": 32
+          }
+        },
+        "runtime_scene": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\runtime\\h08_state_ready.tscn",
+          "format": "TSCN",
+          "bytes": 425,
+          "sha256": "03d9dfde4c6eddbae70f945726d5d30ec30f367c4bc5499f61685a0957e87850",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 11,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "manifest": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\H08_RUNTIME_STAGING_MANIFEST.json",
+          "format": "JSON",
+          "bytes": 11937,
+          "sha256": "c0006406f44858fc988204b7487b54a0280eb9d57d776dee688026ce2816e057",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 617,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "delivery": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\H08_RUNTIME_STAGING_DELIVERY.md",
+          "format": "MD",
+          "bytes": 2095,
+          "sha256": "52adebcfaf9dabdf7d75bcb34fdcabee3f5312e1d942629070d160aaf7987ce5",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 24,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "file_index": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\H08_RUNTIME_STAGING_FILE_INDEX.json",
+          "format": "JSON",
+          "bytes": 32776,
+          "sha256": "d10598378924b78bcd506fbe34b577263854a927b65cc72b6b86d0cbb3955796",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 751,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "asset_record": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\H08_RUNTIME_STAGING_ASSET_RECORD.json",
+          "format": "JSON",
+          "bytes": 16134,
+          "sha256": "d019e03cd36806586549045749b9edccc7d65c6c21bc54a8cfc5b56e4b4d96e8",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 374,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "validation": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\validation\\H08_GODOT_HEADLESS_VALIDATION.json",
+          "format": "JSON",
+          "bytes": 93402,
+          "sha256": "e5da4468cbb27baf4753184e533f46860619f0fa080b776c6da0dc3745fee49b",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 7148,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "semantic_base_map": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\data\\h08_map_contract.json",
+          "format": "JSON",
+          "bytes": 957,
+          "sha256": "c5d91cb019959bc65ab460baa1f48eab4027972e3fd3ef91f0204e6f0bc06183",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 29,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "state_catalog": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\data\\h08_state_catalog.json",
+          "format": "JSON",
+          "bytes": 904,
+          "sha256": "fdf71ab130cb374d6449fc02b4f54d5aff589ecd0671568acf16367da3bc9391",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 37,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "profile": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\profiles\\H08_old_orchard_ruins_runtime_v1.profile.json",
+          "format": "JSON",
+          "bytes": 1672,
+          "sha256": "5d41a30cc588429c6a7438d20cc040d9f6040118962b40eb809f51132dfe5d7f",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "text",
+            "line_count": 48,
+            "spatial_dimensions": "not_applicable"
+          }
+        },
+        "reproducible_builder": {
+          "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\tools\\build_h08_runtime_staging_v1.py",
+          "format": "PY",
+          "bytes": 117851,
+          "sha256": "eefc89636574472a228bf057e3696cb3f8d8b462aba379cbf796e90fbfec4414",
+          "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+          "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+          "dimensions": {
+            "kind": "non_spatial_binary",
+            "spatial_dimensions": "not_applicable",
+            "byte_size": 117851
+          }
+        },
+        "visual_reviews": [
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\review\\H08_RUIN_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 170433,
+            "sha256": "38b2a4b3f2acae6c62ab06c075224eb84bcd8ca2e5df1743bab2ed3eb11c9a77",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1440,
+              "height_pixels": 1348
+            }
+          },
+          {
+            "absolute_path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\review\\H08_RUNTIME_STATE_CONTACT_SHEET.png",
+            "format": "PNG",
+            "bytes": 227215,
+            "sha256": "c048fdf8c405eb23fc8e8d2241a9f78881e111a7827de9b94567906f30e47a67",
+            "source": "project-local estate candidate pipeline artifact; see the corresponding per-map asset record for detailed lineage",
+            "authorization": "internal project candidate production and integration planning only; shippingApproval=false",
+            "dimensions": {
+              "width_pixels": 1536,
+              "height_pixels": 1066
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "independent_audit": {
+    "schema_version": 1,
+    "audit_id": "estate_map_pack_h01_h08_cross_audit_20260724",
+    "pack_id": "206154e890aeee3e182ac022a76abee9",
+    "status": "passed_after_repairs",
+    "checklist": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\ESTATE_MAP_PACK_AUDIT_CHECKLIST.md",
+    "method": {
+      "production_and_audit_roles_separated": true,
+      "independent_subagent_cross_audits": true,
+      "root_automated_pack_verification": true,
+      "finding_levels": [
+        "MUST",
+        "SHOULD"
+      ]
+    },
+    "prior_benchmark_evidence": {
+      "estate_ids": [
+        "H01",
+        "H02",
+        "H03"
+      ],
+      "status": "previously_accepted_active_candidates",
+      "notes": [
+        "H01 and H02 active runtime candidates previously completed independent final audits with MUST 0 and SHOULD 0.",
+        "H03 is the user-approved estate pipeline benchmark; its two-stage development model remains an explicitly documented integration limitation.",
+        "The current unified root verification rechecked all three active candidates together with H04-H08."
+      ]
+    },
+    "cross_audits": [
+      {
+        "scope": [
+          "H04",
+          "H05"
+        ],
+        "auditor_role": "independent_h06_h07_subagent",
+        "final_result": "passed",
+        "must_findings": 0,
+        "should_findings": 0,
+        "evidence": {
+          "H04": {
+            "run_id": "5ee6b356a4a943b1a188cc7b5bad6d32",
+            "preflight": "69/69",
+            "godot": "31/31",
+            "state_combinations": 192,
+            "file_index_entries": 90
+          },
+          "H05": {
+            "run_id": "14b8a68a6af5465481fae006c3b87a07",
+            "preflight": "78/78",
+            "godot": "39/39",
+            "state_combinations": 384,
+            "file_index_entries": 90
+          },
+          "verified": [
+            "single authoritative TMX per estate",
+            "forward, reverse and deterministic-random state coverage",
+            "Physics2D debris and map-specific axis restoration",
+            "full-geometry portal and trigger authorities",
+            "is_portal_enabled and is_trigger_enabled runtime queries",
+            "per-axis raw performance samples and thresholds",
+            "continuous fishing and winter open-water policy",
+            "normal, light and medium anomaly readability",
+            "file dimensions, bytes, SHA-256, source, authorization and D-only paths",
+            "cache cleanup and candidate integration boundary"
+          ]
+        }
+      },
+      {
+        "scope": [
+          "H06",
+          "H07"
+        ],
+        "auditor_role": "independent_h08_subagent",
+        "final_result": "passed",
+        "must_findings": 0,
+        "should_findings": 0,
+        "repairs_before_final_audit": [
+          "Added real runtime portal and trigger authority queries for map-specific axes.",
+          "Replaced null non-spatial file dimensions with explicit line-count or byte-size not-applicable records."
+        ],
+        "evidence": {
+          "H06": {
+            "run_id": "24895276e205434e9394682d4d03add4",
+            "preflight": "65/65",
+            "godot": "540/540",
+            "state_combinations": 192,
+            "file_index_entries": 46
+          },
+          "H07": {
+            "run_id": "a4c876b05d2940f984cf84d854cf03e1",
+            "preflight": "66/66",
+            "godot": "540/540",
+            "state_combinations": 192,
+            "file_index_entries": 46
+          },
+          "verified": [
+            "192 forward, 192 reverse and 128 deterministic-random states per estate",
+            "Physics2D direct-space-state tests",
+            "portal and trigger runtime queries",
+            "buildable free, reserved and no-build authority partitions",
+            "per-axis raw performance samples and thresholds",
+            "continuous fishing and winter open water",
+            "visual topology and map-specific feature readability",
+            "index integrity, dimensions, source, authorization, D-only paths and cache cleanup"
+          ]
+        }
+      },
+      {
+        "scope": [
+          "H08"
+        ],
+        "auditor_role": "independent_h04_h05_subagent",
+        "initial_result": {
+          "must_findings": 2,
+          "should_findings": 1
+        },
+        "repairs": [
+          "Bound ruin_route to a real conditional portal runtime authority and query.",
+          "Generated ruin-route collision and memory-clue trigger geometry from authoritative TMX data and tested full interior, boundary and outside probe sets.",
+          "Recorded full-cartesian and every-axis raw performance samples, p95, maximum and thresholds.",
+          "Moved Godot user and editor roots to isolated D-drive locations and retained benign managed-Windows certificate diagnostics only as filtered build-run evidence.",
+          "Raised hard derelict debris collision to 276 cells across all 16 natural quadrants and strengthened anomaly readability to 67 light and 251 medium cells."
+        ],
+        "final_result": "passed",
+        "must_findings": 0,
+        "should_findings": 0,
+        "evidence": {
+          "run_id": "fc401c676c2948aab0b9ac66c6a0a73a",
+          "preflight": "85/85",
+          "godot": "574/574",
+          "forward_states": 192,
+          "reverse_states": 192,
+          "deterministic_random_states": 160,
+          "file_index_entries": 54,
+          "route_collision_cells": 15,
+          "conditional_portal_inside_and_boundary_probes": 37,
+          "conditional_portal_outside_probes": 4,
+          "memory_trigger_inside_and_boundary_probes": 54,
+          "memory_trigger_outside_probes": 4,
+          "node_count_before_after": [
+            720,
+            720
+          ]
+        }
+      }
+    ],
+    "root_verification": {
+      "pack_builder": "64/64",
+      "deep_integrity": "118/118",
+      "controlled_file_records": 582,
+      "estate_count": 8,
+      "all_processing_on_d_drive": true,
+      "candidate_caches_present": 0,
+      "formal_project_files_modified": false,
+      "git_commit_or_push_performed": false
+    },
+    "known_non_findings": [
+      "Managed Windows may emit a system CA root-certificate diagnostic while offline Godot map validation still completes all required commands with exit code 0.",
+      "H03 retains a two-stage development model and requires a formal integration adapter or a later candidate extension.",
+      "Reclaimed, expanded and mature facilities may still contain explicitly marked technical art placeholders."
+    ],
+    "outstanding_findings": {
+      "must": 0,
+      "should": 0
+    },
+    "integration": {
+      "runtime_integrated": false,
+      "shipping_approval": false,
+      "formal_integration_authorized_by_audit": false
+    }
+  },
+  "main_production_authority": {
+    "may_read_and_plan_from_candidate_pack": true,
+    "formal_integration_authorized_by_this_pack": false,
+    "p2_start_authorized_by_this_pack": false,
+    "candidate_files_must_not_overwrite_formal_resources": true
+  },
+  "source_and_authorization": {
+    "source_summary": "project-authored deterministic estate pipeline output; detailed upstream lineage is retained by every map asset record",
+    "authorization": "internal project candidate production and integration planning only",
+    "third_party_runtime_pixels_introduced_by_this_pack": false,
+    "shipping_approval": false
+  },
+  "integration": {
+    "all_processing_on_d_drive": true,
+    "runtime_integrated": false,
+    "shipping_approval": false,
+    "formal_project_godot_modified": false,
+    "formal_scenes_modified": false,
+    "core_code_modified": false,
+    "save_schema_modified": false,
+    "git_commit_or_push_performed": false
+  }
+}

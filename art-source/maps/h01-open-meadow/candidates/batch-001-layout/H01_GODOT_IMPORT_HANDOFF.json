@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "handoffId": "h01_open_meadow_godot_import_handoff_v1",
+  "mapId": "home_h01_open_meadow",
+  "status": "tiled_layout_candidate_ready_for_project_owned_conversion",
+  "authoritativeTmx": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\h01_open_meadow_authoritative.tmx",
+  "dispositionContract": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\estate-pipeline-v1\\TILED_TO_GODOT_DISPOSITION_V1.json",
+  "logicTileset": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h01-open-meadow\\candidates\\batch-001-layout\\source\\tilesets\\h01_layout_logic.tsx",
+  "coordinateConversion": {
+    "pointSource": "tile_cell_origin",
+    "godotTarget": "cell_center",
+    "formula": "Vector2(cell_x * 32 + 16, cell_y * 32 + 16)"
+  },
+  "functionalAuthority": {
+    "farmable": "Mask_Farmable",
+    "buildableFree": "Mask_Buildable_Free",
+    "buildableReserved": "Mask_Buildable_Reserved",
+    "noBuild": "Mask_NoBuild",
+    "boundsObjects": "description_and_QA_only"
+  },
+  "development": {
+    "composition": "cumulative",
+    "order": [
+      "derelict",
+      "reclaimed",
+      "expanded",
+      "mature"
+    ],
+    "crossingMask": "Mask_Crossing_Development_Reclaimed",
+    "crossingOperation": "remove_water_collision_fishable_and_ecology_when_active",
+    "crossingActivation": "at_or_above_reclaimed"
+  },
+  "fishing": {
+    "continuousCastRule": true,
+    "ecologyMasks": [
+      "Mask_Fishing_Ecology_PondBrook",
+      "Mask_Fishing_Ecology_SouthStream"
+    ],
+    "fourSeasonProfileIdsRecorded": true,
+    "crossingStateRemovalPrecedence": "active crossing removes collision, fishable eligibility and ecology profile after base ecology assignment"
+  },
+  "conditionalPortal": {
+    "portalId": "home.h01.to_future_region",
+    "lockedCollisionId": "collision.home.h01.future_region_lock",
+    "lockedVisualLayer": "Portal_Future_Region_Locked_Visual",
+    "unlockCondition": "story.home.h01.future_region_unlocked",
+    "transitionConsumesGameTime": false
+  },
+  "artReadiness": {
+    "springDerelictLayout": "complete_candidate",
+    "summerAutumnWinter": "hook_only_art_pending",
+    "lightMediumAnomaly": "hook_only_art_pending",
+    "h01SpecificMeadowArt": "wind_grass_wildflower_shore_detail_pending_formal_art_batch"
+  },
+  "runtimeConversion": {
+    "officialTiledObjectExportAuthoritative": false,
+    "semanticPostprocessorRequired": true,
+    "godot471FixtureValidated": false,
+    "runtimeIntegrated": false
+  },
+  "shippingApproval": false
+}

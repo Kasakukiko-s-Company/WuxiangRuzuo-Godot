@@ -23,11 +23,17 @@ P1 没有需要用户重复执行的人工步骤。工程任务已用 Compatibil
 
 本机自动检查覆盖键盘物理键事件与手柄轴/按钮事件到同一 InputMap 动作的映射，但未连接实体手柄做品牌/驱动矩阵测试。该硬件兼容矩阵属于 P8 输入与兼容性 QA，不要求用户在 P1 手工代测，也不构成当前语义输入 seam 的完成声明之外的发布承诺。
 
+## P2 地产地图工程先导
+
+H01 正式接入没有需要用户重复执行的人工步骤。工程任务已通过 application composition root 装配 `p2_estate_pilot.tscn`，用 Godot 4.7.1 Compatibility Renderer 实际启动并自动捕获 D 盘 `builds/verification/h01_estate_pilot.png`，检查地图、角色、HUD、出生点和 2× 输出；headless 测试另行覆盖场景加载、移动、真实阻挡格撞墙、Camera2D 边界、锚点、格语义、状态切换和主入口。
+
+未连接实体手柄、未进行长时间性能采样、未进行不同 GPU/驱动矩阵和玩家审美验收；这些是后续 QA/产品判断，不要求用户在本轮代替自动测试。H01 当前资源仍是技术候选，自动截图通过只证明接入可读与可运行，不构成发行美术批准。
+
 ## 明确推迟
 
 - 导出模板：P9 正式 Windows 发行前使用与 4.7.1 stable 完全一致的模板并确认保存在 D 盘 `editor_data/export_templates`；若早期平台原型确有需要，可按同样规则提前安装。
 - Windows 导出 preset 和 `D:\lzq\AI游戏\WuxiangRuzuo-Godot-Builds`：最迟 P9 配置。
-- Tiled/TileMapLayer 转换和编辑器视觉验证：P1 代表灰盒。
-- 正式世界地图与 TileSet 编辑：P5 起按获确认内容结构持续生产，不限定四张。
+- Tiled/TileMapLayer 转换和编辑器视觉验证：H01 已完成正式工程先导；其余地图沿同一 seam 逐图接入。
+- 正式世界路由、跨图返回点和最终地图内容覆盖：后续阶段按获确认内容结构持续生产，不限定四张。
 - Web/微信导出与插件评估：独立可行性闸门；在验证前不安装来源不明插件。
 - Steamworks/native bridge：P9 发行准备。

@@ -1,0 +1,694 @@
+{
+  "schema_version": 1,
+  "pack_id": "206154e890aeee3e182ac022a76abee9",
+  "result": "passed",
+  "checks_passed": 64,
+  "checks_total": 64,
+  "checks": [
+    {
+      "id": "h01_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h01_open_meadow",
+        "expected": "home_h01_open_meadow"
+      }
+    },
+    {
+      "id": "h01_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      }
+    },
+    {
+      "id": "h01_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3
+        },
+        "combination_count": 48
+      }
+    },
+    {
+      "id": "h01_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 17,
+        "preflight_checks_total": 17,
+        "headless_result": "passed",
+        "headless_checks_passed": 243,
+        "headless_checks_total": 243,
+        "state_combinations_verified": 48,
+        "reverse_state_combinations_verified": "0 mismatches",
+        "random_sequence_steps_verified": null,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h01_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn_meadow",
+        "portal_ids": [
+          "portal_village_west",
+          "portal_wilderness_east",
+          "portal_future_region_south"
+        ]
+      }
+    },
+    {
+      "id": "h01_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h01_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h01_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\validation\\visual-review\\H01_ANOMALY_ANCHOR_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h01-runtime-staging-v2\\validation\\visual-review\\H01_VISUAL_REVIEW_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h02_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h02_braided_river",
+        "expected": "home_h02_braided_river"
+      }
+    },
+    {
+      "id": "h02_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 144,
+        "height_tiles": 104,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3328
+      }
+    },
+    {
+      "id": "h02_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "hydrology": 2,
+          "east_bridge": 2,
+          "north_bridge": 2
+        },
+        "combination_count": 384
+      }
+    },
+    {
+      "id": "h02_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 66,
+        "preflight_checks_total": 66,
+        "headless_result": "passed",
+        "headless_checks_passed": 816,
+        "headless_checks_total": 816,
+        "state_combinations_verified": 384,
+        "reverse_state_combinations_verified": 384,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h02_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn_high_island",
+        "portal_ids": [
+          "portal_village_west",
+          "portal_wilderness_east",
+          "portal_water_route_southwest"
+        ]
+      }
+    },
+    {
+      "id": "h02_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h02_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h02_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h02-runtime-staging-v2\\review\\H02_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h03_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h03_forest_hollow",
+        "expected": "home_h03_forest_hollow"
+      }
+    },
+    {
+      "id": "h03_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      }
+    },
+    {
+      "id": "h03_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 2,
+          "anomaly": 3
+        },
+        "combination_count": 24
+      }
+    },
+    {
+      "id": "h03_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 28,
+        "preflight_checks_total": 28,
+        "headless_result": "passed",
+        "headless_checks_passed": 354,
+        "headless_checks_total": 354,
+        "state_combinations_verified": 24,
+        "reverse_state_combinations_verified": "0 mismatches",
+        "random_sequence_steps_verified": null,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h03_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn_dry_shelf",
+        "portal_ids": [
+          "exit_to_primary_village",
+          "exit_to_wilderness",
+          "exit_to_hidden_forest_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h03_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h03_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h03_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\candidates\\batch-005-seasons-anomaly\\full-map\\previews\\h03_seasons_full_review_contact_2560x960.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\art-source\\maps\\h03-forest-hollow\\formal-tiles\\candidates\\batch-007-winter-polish\\full-map\\previews\\h03_review_winter_derelict_medium_1280x960.png"
+      ]
+    },
+    {
+      "id": "h04_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h04_hillside_terraces",
+        "expected": "home_h04_hillside_terraces"
+      }
+    },
+    {
+      "id": "h04_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 128,
+        "height_tiles": 112,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3584
+      }
+    },
+    {
+      "id": "h04_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "irrigation": 2,
+          "ridge_shortcut": 2
+        },
+        "combination_count": 192
+      }
+    },
+    {
+      "id": "h04_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 69,
+        "preflight_checks_total": 69,
+        "headless_result": "passed",
+        "headless_checks_passed": 31,
+        "headless_checks_total": 31,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h04_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn_middle_terrace",
+        "portal_ids": [
+          "exit_to_primary_village_lower",
+          "exit_to_wilderness_upper",
+          "exit_to_ridge_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h04_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h04_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h04_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h04-runtime-staging-v1\\review\\H04_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h05_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h05_reed_wetland",
+        "expected": "home_h05_reed_wetland"
+      }
+    },
+    {
+      "id": "h05_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 144,
+        "height_tiles": 104,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3328
+      }
+    },
+    {
+      "id": "h05_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "hydrology": 2,
+          "backwater_gate": 2,
+          "causeway_gate": 2
+        },
+        "combination_count": 384
+      }
+    },
+    {
+      "id": "h05_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 78,
+        "preflight_checks_total": 78,
+        "headless_result": "passed",
+        "headless_checks_passed": 39,
+        "headless_checks_total": 39,
+        "state_combinations_verified": 384,
+        "reverse_state_combinations_verified": 384,
+        "random_sequence_steps_verified": 100,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h05_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn_central_island",
+        "portal_ids": [
+          "exit_to_primary_village_high_ground",
+          "exit_to_wilderness_causeway",
+          "exit_to_water_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h05_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h05_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h05_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h05-runtime-staging-v1\\review\\H05_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h06_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h06_stone_upland",
+        "expected": "home_h06_stone_upland"
+      }
+    },
+    {
+      "id": "h06_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      }
+    },
+    {
+      "id": "h06_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "cistern": 2,
+          "quarry_route": 2
+        },
+        "combination_count": 192
+      }
+    },
+    {
+      "id": "h06_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 65,
+        "preflight_checks_total": 65,
+        "headless_result": "passed",
+        "headless_checks_passed": 540,
+        "headless_checks_total": 540,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 128,
+        "godot_version": {
+          "build": "official",
+          "hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+          "hex": 263937,
+          "major": 4,
+          "minor": 7,
+          "patch": 1,
+          "status": "stable",
+          "string": "4.7.1-stable (official)",
+          "timestamp": 0
+        }
+      }
+    },
+    {
+      "id": "h06_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn",
+        "portal_ids": [
+          "exit_to_primary_village",
+          "exit_to_quarry_region",
+          "exit_to_ridge_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h06_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h06_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h06_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h06-runtime-staging-v1\\review\\H06_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h07_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h07_lake_peninsula",
+        "expected": "home_h07_lake_peninsula"
+      }
+    },
+    {
+      "id": "h07_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 144,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4608,
+        "height_pixels": 3072
+      }
+    },
+    {
+      "id": "h07_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "water_route": 2,
+          "shore_platform": 2
+        },
+        "combination_count": 192
+      }
+    },
+    {
+      "id": "h07_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 66,
+        "preflight_checks_total": 66,
+        "headless_result": "passed",
+        "headless_checks_passed": 540,
+        "headless_checks_total": 540,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 128,
+        "godot_version": {
+          "build": "official",
+          "hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+          "hex": 263937,
+          "major": 4,
+          "minor": 7,
+          "patch": 1,
+          "status": "stable",
+          "string": "4.7.1-stable (official)",
+          "timestamp": 0
+        }
+      }
+    },
+    {
+      "id": "h07_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_safe_spawn",
+        "portal_ids": [
+          "exit_to_primary_village_landward",
+          "exit_to_wilderness_shore",
+          "exit_to_water_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h07_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h07_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h07_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_FEATURE_AXIS_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h07-runtime-staging-v1\\review\\H07_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    },
+    {
+      "id": "h08_map_id",
+      "passed": true,
+      "detail": {
+        "actual": "home_h08_old_orchard_ruins",
+        "expected": "home_h08_old_orchard_ruins"
+      }
+    },
+    {
+      "id": "h08_map_size",
+      "passed": true,
+      "detail": {
+        "width_tiles": 128,
+        "height_tiles": 96,
+        "tile_width_pixels": 32,
+        "tile_height_pixels": 32,
+        "width_pixels": 4096,
+        "height_pixels": 3072
+      }
+    },
+    {
+      "id": "h08_state_cardinality",
+      "passed": true,
+      "detail": {
+        "axes": {
+          "season": 4,
+          "development": 4,
+          "anomaly": 3,
+          "ruin_route": 2,
+          "memory_clue": 2
+        },
+        "combination_count": 192
+      }
+    },
+    {
+      "id": "h08_validation_passed",
+      "passed": true,
+      "detail": {
+        "preflight_result": "passed",
+        "preflight_checks_passed": 85,
+        "preflight_checks_total": 85,
+        "headless_result": "passed",
+        "headless_checks_passed": 574,
+        "headless_checks_total": 574,
+        "state_combinations_verified": 192,
+        "reverse_state_combinations_verified": 192,
+        "random_sequence_steps_verified": 160,
+        "godot_version": "4.7.1-stable (official)"
+      }
+    },
+    {
+      "id": "h08_spawn_and_portals",
+      "passed": true,
+      "detail": {
+        "safe_spawn_id": "home_h08_safe_spawn_old_courtyard",
+        "portal_ids": [
+          "home_h08_exit_primary_village_old_road",
+          "home_h08_exit_wilderness_orchard_path",
+          "home_h08_exit_ruin_route_conditional"
+        ]
+      }
+    },
+    {
+      "id": "h08_candidate_boundary",
+      "passed": true,
+      "detail": {
+        "runtime_integrated": false,
+        "shipping_approval": false
+      }
+    },
+    {
+      "id": "h08_d_drive_only",
+      "passed": true,
+      "detail": "all normalized artifacts resolve to D:"
+    },
+    {
+      "id": "h08_visual_review_present",
+      "passed": true,
+      "detail": [
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\review\\H08_RUIN_ANOMALY_CLOSEUP_CONTACT_SHEET.png",
+        "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\maps\\candidates\\h08-runtime-staging-v1\\review\\H08_RUNTIME_STATE_CONTACT_SHEET.png"
+      ]
+    }
+  ]
+}

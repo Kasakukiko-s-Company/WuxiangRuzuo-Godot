@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "packId": "206154e890aeee3e182ac022a76abee9",
+  "maps": [
+    {
+      "estateId": "H01",
+      "id": "home_h01_open_meadow",
+      "candidateId": "h01_runtime_staging_v2",
+      "widthTiles": 128,
+      "heightTiles": 96,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn_meadow",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"]
+      },
+      "stateCombinationCount": 48,
+      "runtimeScenePath": "res://scenes/world/estate/h01_open_meadow.tscn"
+    },
+    {
+      "estateId": "H02",
+      "id": "home_h02_braided_river",
+      "candidateId": "h02_runtime_staging_v2",
+      "widthTiles": 144,
+      "heightTiles": 104,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn_high_island",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "hydrology": ["normal", "high_water_story_state"],
+        "east_bridge": ["closed", "open"],
+        "north_bridge": ["closed", "open"]
+      },
+      "stateCombinationCount": 384,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H03",
+      "id": "home_h03_forest_hollow",
+      "candidateId": "h03_runtime_staging_v2",
+      "widthTiles": 128,
+      "heightTiles": 96,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn_dry_shelf",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "built"],
+        "anomaly": ["normal", "light", "medium"]
+      },
+      "stateCombinationCount": 24,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H04",
+      "id": "home_h04_hillside_terraces",
+      "candidateId": "h04_runtime_staging_v1",
+      "widthTiles": 128,
+      "heightTiles": 112,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn_middle_terrace",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "irrigation": ["dry", "restored"],
+        "ridge_shortcut": ["closed", "open"]
+      },
+      "stateCombinationCount": 192,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H05",
+      "id": "home_h05_reed_wetland",
+      "candidateId": "h05_runtime_staging_v1",
+      "widthTiles": 144,
+      "heightTiles": 104,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn_central_island",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "hydrology": ["normal", "high_water"],
+        "backwater_gate": ["closed", "open"],
+        "causeway_gate": ["closed", "open"]
+      },
+      "stateCombinationCount": 384,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H06",
+      "id": "home_h06_stone_upland",
+      "candidateId": "h06_runtime_staging_v1",
+      "widthTiles": 128,
+      "heightTiles": 96,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "cistern": ["dry", "restored"],
+        "quarry_route": ["closed", "open"]
+      },
+      "stateCombinationCount": 192,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H07",
+      "id": "home_h07_lake_peninsula",
+      "candidateId": "h07_runtime_staging_v1",
+      "widthTiles": 144,
+      "heightTiles": 96,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_safe_spawn",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "water_route": ["closed", "open"],
+        "shore_platform": ["derelict", "restored"]
+      },
+      "stateCombinationCount": 192,
+      "runtimeScenePath": null
+    },
+    {
+      "estateId": "H08",
+      "id": "home_h08_old_orchard_ruins",
+      "candidateId": "h08_runtime_staging_v1",
+      "widthTiles": 128,
+      "heightTiles": 96,
+      "tileSizePixels": 32,
+      "safeSpawnId": "home_h08_safe_spawn_old_courtyard",
+      "stateAxes": {
+        "season": ["spring", "summer", "autumn", "winter"],
+        "development": ["derelict", "reclaimed", "expanded", "mature"],
+        "anomaly": ["normal", "light", "medium"],
+        "ruin_route": ["closed", "open"],
+        "memory_clue": ["hidden", "revealed"]
+      },
+      "stateCombinationCount": 192,
+      "runtimeScenePath": null
+    }
+  ]
+}

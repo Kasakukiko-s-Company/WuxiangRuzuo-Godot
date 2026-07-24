@@ -1,8 +1,8 @@
 # Godot 架构基线
 
-## 当前事实（G2 技术底座 + P1 体验原型）
+## 当前事实（G2 技术底座 + P1 体验原型 + P2 地产地图工程先导）
 
-项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。P1 新增独立灰盒中的 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController`、`GodotInputService`、碰撞、Camera2D、交互与程序化表现 seam；这些是可复用技术决策，不是正式地图或正式资产。项目仍没有完整农耕闭环、存档 adapter、正式世界、NPC 日程/关系事件、战斗或正式 UI。
+项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。H01 仍是工程先导且资源 `shippingApproval=false`；项目仍没有完整农耕闭环、存档 adapter、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
 
 ## 目录与依赖方向
 
@@ -50,9 +50,13 @@ G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioSe
 
 ## 地图 seam
 
-地图定义提供稳定 map ID、场景路径、命名锚点、入口、功能层和安全回退。地图坐标转换集中在单一 adapter；领域瓦片坐标不得依赖 TMX 行号、Godot cell source ID 或世界像素。P1 用代表灰盒验证 seam；正式世界可以包含任意经产品设计确认的区域数量，不受 G2 四图 fixture 限制。
+地图定义提供稳定 map ID、场景路径、命名锚点、入口、功能层和安全回退。地图坐标转换集中在单一 adapter；领域瓦片坐标不得依赖 TMX 行号、Godot cell source ID 或世界像素。`EstateMapCatalog` 保存八地产候选契约，但只有已正式接入的 H01 具有运行场景路径；候选数量不等于最终玩家地产数量。正式世界可以包含任意经产品设计确认的区域数量，不受 G2 四图 fixture 限制。
 
 P1 的实际坐标约定为左上原点、Y 向下、32×32 基础格；`TileCoordinateMapper` 负责 world/cell/cell-center/facing-cell 转换。`prototype_mist_edge` 只是 40×28 的验证场，不登记进正式 `world.json`。
+
+P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类型状态切换、命名锚点和格语义查询。`EstateMapState` 的三个核心字段之外还可携带强类型 map-specific axes，使水文、桥梁、灌溉等地产专属状态无需修改公共方法签名；具体 runtime 必须验证自己支持的轴。H01 的正式实现不让玩法读取候选组名、TMX 对象序号或 TileSet source ID；未知锚点与状态关闭锚点是不同结果。`runtime_disabled_semantic_area` 只表示物理监测关闭，业务可用性读取正式属性/状态，二者不可混用。H01 状态切换当前只允许在工程预览和安全过渡边界使用，尚未绑定日历或存档。
+
+`AppCompositionRoot` 校验地产目录后根据 H01 `runtimeScenePath` 实例化正式地图，并把地图与 `InputService` adapter 注入 `P2EstatePilot`。玩法场景不直接构造平台 adapter，也不能在目录/H01 场景验证失败时绕过 composition root 启动。
 
 ## P1 场景 seam
 

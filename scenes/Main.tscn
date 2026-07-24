@@ -52,7 +52,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
 theme_override_font_sizes/font_size = 16
-text = "完整游戏制作 · P1"
+text = "完整游戏制作 · P2 地产地图工程先导"
 horizontal_alignment = 1
 
 [node name="StatusLabel" type="Label" parent="Margin/Center/Content"]
@@ -67,12 +67,19 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.48, 0.55, 0.54, 1)
 theme_override_font_sizes/font_size = 12
-text = "G2 技术底座已就绪 · P1 雾乡边缘体验原型可运行"
+text = "G2 技术底座与 P1 原型保持可运行 · H01 已进入正式工程先导"
 horizontal_alignment = 1
+
+[node name="LaunchP2Button" type="Button" parent="Margin/Center/Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(300, 42)
+theme_override_colors/font_color = Color(0.84, 0.91, 0.78, 1)
+theme_override_font_sizes/font_size = 16
+text = "进入 H01 地产地图工程先导"
 
 [node name="LaunchP1Button" type="Button" parent="Margin/Center/Content"]
 layout_mode = 2
-custom_minimum_size = Vector2(260, 42)
-theme_override_colors/font_color = Color(0.84, 0.91, 0.78, 1)
-theme_override_font_sizes/font_size = 16
-text = "进入 P1 体验原型"
+custom_minimum_size = Vector2(300, 36)
+theme_override_colors/font_color = Color(0.72, 0.82, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "回到 P1 雾岭边缘体验原型"

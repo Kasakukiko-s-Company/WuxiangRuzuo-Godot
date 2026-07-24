@@ -1,0 +1,1 @@
+# Keeps isolated runtime-staging projects out of the formal root project's res:// scan.
