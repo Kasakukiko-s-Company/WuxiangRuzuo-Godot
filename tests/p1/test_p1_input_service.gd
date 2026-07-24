@@ -16,11 +16,18 @@ func _run() -> void:
 		&"move_down",
 		&"interact",
 		&"primary_action",
+		&"secondary_action",
+		&"watering_action",
+		&"prototype_advance_day",
+		&"quickbar_previous",
+		&"quickbar_next",
 		&"pause",
 		&"prototype_debug",
 		&"prototype_reset",
 		&"prototype_reduce_motion",
 	]
+	for slot_index: int in InputSnapshot.QUICKBAR_SLOT_COUNT:
+		actions.append(StringName("quickbar_%d" % (slot_index + 1)))
 	var all_registered := true
 	for action in actions:
 		all_registered = all_registered and InputMap.has_action(action)
@@ -28,6 +35,14 @@ func _run() -> void:
 	_check(all_registered, "P1 semantic InputMap actions have default keyboard or controller bindings")
 	_check(_movement_actions_support_keyboard_and_controller(), "movement actions expose both keyboard and controller bindings")
 	_check(_button_action_supports_keyboard_and_controller(&"interact"), "interaction exposes both keyboard and controller bindings")
+	_check(
+		_button_action_supports_keyboard_and_controller(&"primary_action"),
+		"primary item use exposes both keyboard and controller bindings",
+	)
+	_check(
+		_button_action_supports_keyboard_and_controller(&"secondary_action"),
+		"secondary preview exposes both keyboard and controller bindings",
+	)
 	_check(service.snapshot() != null, "Godot input adapter returns a typed semantic snapshot")
 	_check(
 		InputMap.event_is_action(_key_event(KEY_D, true), &"move_right"),

@@ -3,7 +3,13 @@ extends RefCounted
 
 const DEFAULT_CAPACITY: int = 8
 
-var selected_slot_index: int = 0
+var selected_slot_index: int:
+	get:
+		return _selected_slot_index
+	set(_attempted_value):
+		push_error("InventoryState.selected_slot_index is read-only")
+
+var _selected_slot_index: int = 0
 var _slots: Array[ItemStack] = []
 
 
@@ -30,7 +36,7 @@ static func restore(
 			return null
 	var inventory := InventoryState.new()
 	inventory._slots = _copy_stacks(stacks)
-	inventory.selected_slot_index = selected_index
+	inventory._selected_slot_index = selected_index
 	return inventory
 
 
@@ -41,7 +47,8 @@ func capacity() -> int:
 func stack_at(slot_index: int) -> ItemStack:
 	if slot_index < 0 or slot_index >= _slots.size():
 		return null
-	return _slots[slot_index]
+	var stack: ItemStack = _slots[slot_index]
+	return null if stack == null else stack.copy()
 
 
 func selected_stack() -> ItemStack:
@@ -182,5 +189,5 @@ static func _copy_stacks(stacks: Array[ItemStack]) -> Array[ItemStack]:
 static func _with_slots(stacks: Array[ItemStack], selected_index: int) -> InventoryState:
 	var inventory := InventoryState.new()
 	inventory._slots = _copy_stacks(stacks)
-	inventory.selected_slot_index = selected_index
+	inventory._selected_slot_index = selected_index
 	return inventory

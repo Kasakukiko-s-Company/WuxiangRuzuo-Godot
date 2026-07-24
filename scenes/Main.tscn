@@ -52,7 +52,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
 theme_override_font_sizes/font_size = 16
-text = "完整游戏制作 · P2 地产地图工程先导"
+text = "完整游戏制作 · P2 核心生活循环垂直切片"
 horizontal_alignment = 1
 
 [node name="StatusLabel" type="Label" parent="Margin/Center/Content"]
@@ -67,7 +67,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.48, 0.55, 0.54, 1)
 theme_override_font_sizes/font_size = 12
-text = "G2 技术底座与 P1 原型保持可运行 · H01 已进入正式工程先导"
+text = "H01 农作闭环可玩 · 当前为内存状态，不写存档"
 horizontal_alignment = 1
 
 [node name="LaunchP2Button" type="Button" parent="Margin/Center/Content"]
@@ -75,7 +75,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(300, 42)
 theme_override_colors/font_color = Color(0.84, 0.91, 0.78, 1)
 theme_override_font_sizes/font_size = 16
-text = "进入 H01 地产地图工程先导"
+text = "进入 H01 地产农作闭环"
 
 [node name="LaunchP1Button" type="Button" parent="Margin/Center/Content"]
 layout_mode = 2

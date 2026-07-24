@@ -5,6 +5,8 @@ var crop_id: StringName
 var planted_on_day: int
 var growth_progress: int
 var stage_index: int
+## Historical field name: this is the latest day evaluated, even when dry soil
+## prevented growth. Recording every evaluation prevents late watering backfill.
 var last_growth_day: int
 
 

@@ -2,7 +2,7 @@
 
 《雾乡如昨》是一款正在正式制作的原创 2D 生活模拟与悬疑探索游戏。本仓库以 Godot 4 开发完整游戏；旧 Cocos Creator 工程只是早期雏形和可选参考，不是产品规格或内容上限。
 
-当前状态：**G2 技术底座已推送，P0 产品重基线与 P1 体验原型已在工作区完成验收，尚未提交或推送**。默认 Main 可进入全新 `prototype_mist_edge` 灰盒，验证移动、碰撞、相机、交互、语义输入、画质回退和基础视听反馈；它是可丢弃的体验证据，不是正式地图或内容完成声明。
+当前状态：**G0～G2、P0～P1 与 H01 地产地图先导均已有独立远端基线；P2 正在实现核心生活循环**。默认 Main 可进入 H01 地产农作闭环，在正式地图运行时上验证耕地、播种、浇水、跨日成长、成熟收获、背包和快捷栏。该切片目前只保存在运行内存，不写存档，也不代表 P2 已完成。
 
 ## 当前技术基线
 
@@ -30,8 +30,13 @@
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p1/test_p1_input_service.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p1/test_p1_scene.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p1/test_p1_main_entry.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_crop_planting.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_crop_day_cycle.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_crop_harvesting.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_h01_farming_loop.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_h01_input_route.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --quit-after 2
-& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --path . --script res://tools/capture_p1_visual.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --path . --resolution 1280x720 --script res://tools/capture_h01_estate_pilot.gd
 ```
 
-完整游戏方向见 `docs/FULL_GAME_VISION.md` 与 `docs/PRODUCT_BRIEF.md`，制作阶段见 `docs/FULL_GAME_ROADMAP.md`，内容预算和视听资源策略见 `docs/CONTENT_BUDGET.md`、`docs/CONTENT_AND_ASSET_STRATEGY.md`。当前决策状态见 `docs/P0_DECISION_LOG.md`，P1 规格与验收证据见 `docs/P1_EXPERIENCE_PROTOTYPE.md`、`docs/P1_VERIFICATION.md`。迁移审计与矩阵仅保留为历史参考。
+完整游戏方向见 `docs/FULL_GAME_VISION.md` 与 `docs/PRODUCT_BRIEF.md`，制作阶段见 `docs/FULL_GAME_ROADMAP.md`，内容预算和视听资源策略见 `docs/CONTENT_BUDGET.md`、`docs/CONTENT_AND_ASSET_STRATEGY.md`。P2 当前农作切片事实见 `docs/P2_FARMING_LOOP.md`；迁移审计与矩阵仅保留为历史参考。

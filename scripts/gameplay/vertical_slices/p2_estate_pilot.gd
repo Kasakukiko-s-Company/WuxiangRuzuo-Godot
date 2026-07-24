@@ -5,12 +5,18 @@ const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
 
 @onready var _player: P1PlayerController = $Player
 @onready var _camera: Camera2D = $Player/Camera2D
+@onready var _farm_overlay: FarmPlotOverlay = $FarmPlotOverlay
 @onready var _debug_panel: PanelContainer = $HUD/DebugPanel
 @onready var _debug_label: Label = $HUD/DebugPanel/Margin/DebugLabel
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
+@onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
+@onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
 
 var _input_service: InputService
 var _estate_runtime: EstateMapRuntime
+var _game_catalog: GameCatalog
+var _farming_session: FarmingSessionState
+var _rendered_farming_session: FarmingSessionState
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
 
@@ -18,34 +24,54 @@ var _reduce_motion: bool = false
 func _ready() -> void:
 	assert(_input_service != null, "P2 estate pilot requires an injected InputService")
 	assert(_estate_runtime != null, "P2 estate pilot requires an injected estate runtime")
-	_player.configure_input_service(_input_service)
+	assert(_game_catalog != null, "P2 estate pilot requires an injected GameCatalog")
+	_player.set_external_snapshot_mode(true)
 	_player.interaction_requested.connect(_on_interaction_requested)
+	_initialize_farming_session()
 	reset_to_safe_spawn()
 	_apply_camera_bounds()
+	_refresh_farming_view()
 	_update_debug()
 	print("[WuxiangRuzuo] H01 estate pilot started: %s" % _estate_runtime.get_map_id())
 
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if _input_service == null:
 		return
 	var snapshot: InputSnapshot = _input_service.snapshot()
+	_player.apply_input_snapshot(snapshot)
+	apply_input_snapshot(snapshot)
+
+
+func apply_input_snapshot(snapshot: InputSnapshot) -> void:
+	assert(snapshot != null, "P2 estate pilot input snapshot must be present")
 	if snapshot.reset:
 		reset_to_safe_spawn()
 	if snapshot.debug_toggle:
 		set_debug_visible(not _debug_panel.visible)
 	if snapshot.reduce_motion_toggle:
 		set_reduce_motion(not _reduce_motion)
-	if snapshot.primary_action:
+	if snapshot.quickbar_slot_index >= 0:
+		_select_quickbar_slot(snapshot.quickbar_slot_index)
+	if snapshot.select_previous:
+		_select_relative_slot(-1)
+	if snapshot.select_next:
+		_select_relative_slot(1)
+	if snapshot.secondary_action:
 		_cycle_anomaly_preview()
+	if snapshot.primary_action:
+		_use_selected_item()
+	if snapshot.watering_action:
+		_select_and_use_watering_can()
+	if snapshot.sleep_action:
+		_advance_day()
+	_refresh_farming_view()
 	_update_debug()
 
 
 func configure_input_service(service: InputService) -> void:
 	assert(service != null, "P2 estate pilot requires an InputService")
 	_input_service = service
-	if is_node_ready():
-		_player.configure_input_service(service)
 
 
 func configure_estate_runtime(runtime: EstateMapRuntime) -> void:
@@ -58,6 +84,12 @@ func configure_estate_runtime(runtime: EstateMapRuntime) -> void:
 	move_child(runtime, 0)
 
 
+func configure_game_catalog(catalog: GameCatalog) -> void:
+	assert(catalog != null, "P2 estate pilot requires a GameCatalog")
+	assert(not is_node_ready(), "game catalog must be injected before the pilot enters the tree")
+	_game_catalog = catalog
+
+
 func get_estate_runtime() -> EstateMapRuntime:
 	return _estate_runtime
 
@@ -68,6 +100,14 @@ func get_player() -> P1PlayerController:
 
 func get_camera() -> Camera2D:
 	return _camera
+
+
+func get_farming_session() -> FarmingSessionState:
+	return _farming_session.snapshot()
+
+
+func get_farm_overlay() -> FarmPlotOverlay:
+	return _farm_overlay
 
 
 func get_player_cell() -> Vector2i:
@@ -84,13 +124,15 @@ func reset_to_safe_spawn() -> void:
 	_player.facing = Vector2i.DOWN
 	_player.velocity = Vector2.ZERO
 	_player.set_input_locked(false)
-	_status_label.text = "H01 工程先导：已回到安全出生点"
+	_status_label.text = "已回到安全出生点 · 农作状态保留"
 	_camera.reset_smoothing()
 
 
 func apply_estate_state(state: EstateMapState) -> EstateMapApplyResult:
 	var result: EstateMapApplyResult = _estate_runtime.apply_state(state)
 	if result.is_success():
+		_rendered_farming_session = null
+		_refresh_farming_view()
 		_status_label.text = "地产状态：%s / %s / %s" % [
 			state.season,
 			state.development,
@@ -132,6 +174,208 @@ func _cycle_anomaly_preview() -> void:
 	)
 
 
+func _initialize_farming_session() -> void:
+	var inventory := InventoryState.create_empty()
+	inventory = _add_starter_item(inventory, &"hoe_basic", 1)
+	inventory = _add_starter_item(inventory, &"watering_can_basic", 1)
+	inventory = _add_starter_item(inventory, &"mistleaf_seed", 3)
+	_farming_session = FarmingSessionState.new(
+		FarmingTransactionState.new(
+			FarmState.create_empty(_estate_runtime.get_map_id()),
+			inventory,
+		),
+		1,
+	)
+
+
+func _add_starter_item(
+	inventory: InventoryState,
+	item_id: StringName,
+	quantity: int,
+) -> InventoryState:
+	var addition := inventory.with_added(item_id, quantity, _game_catalog)
+	assert(
+		addition.status == InventoryTransactionResult.Status.ADDED,
+		"P2 in-memory starter inventory must match the validated catalog",
+	)
+	return addition.inventory
+
+
+func _select_quickbar_slot(slot_index: int) -> void:
+	var selection := _farming_session.state.inventory.with_selected_slot(slot_index)
+	if selection.status == InventoryTransactionResult.Status.INVALID_SLOT:
+		return
+	_replace_inventory(selection.inventory)
+
+
+func _select_relative_slot(offset: int) -> void:
+	var inventory := _farming_session.state.inventory
+	var next_index := posmod(
+		inventory.selected_slot_index + offset,
+		inventory.capacity(),
+	)
+	_select_quickbar_slot(next_index)
+
+
+func _replace_inventory(inventory: InventoryState) -> void:
+	_farming_session = FarmingSessionState.new(
+		FarmingTransactionState.new(
+			_farming_session.state.farm,
+			inventory,
+		),
+		_farming_session.world_day,
+	)
+
+
+func _use_selected_item() -> void:
+	var stack: ItemStack = _farming_session.state.inventory.selected_stack()
+	if stack == null:
+		_status_label.text = "当前快捷栏为空"
+		return
+	var item: CatalogDefinitions.Item = _game_catalog.get_item(stack.item_id)
+	if item == null:
+		_status_label.text = "未知物品：%s" % stack.item_id
+		return
+	if item.kind == CatalogDefinitions.Item.Kind.SEED:
+		_plant_seed(item.id)
+		return
+	if item.kind != CatalogDefinitions.Item.Kind.TOOL:
+		_status_label.text = "该物品暂不能直接使用"
+		return
+	var tool: CatalogDefinitions.Tool = _game_catalog.get_tool(item.tool_id)
+	if tool == null:
+		_status_label.text = "工具定义缺失：%s" % item.tool_id
+		return
+	if tool.action == CatalogDefinitions.Tool.Action.TILL:
+		_till_target()
+	elif tool.action == CatalogDefinitions.Tool.Action.WATER:
+		_water_target()
+
+
+func _target_cell() -> Vector2i:
+	return _coordinate_mapper.facing_cell(
+		_player.global_position,
+		_player.facing,
+	)
+
+
+func _till_target() -> void:
+	var target := _target_cell()
+	var semantics: EstateCellSemantics = _estate_runtime.query_cell(target)
+	var is_farmable := (
+		semantics.is_in_bounds()
+		and semantics.farmable
+		and not semantics.colliding
+	)
+	var result: FarmTransactionResult = _farming_session.state.farm.try_till(
+		target,
+		is_farmable,
+	)
+	if result.status == FarmTransactionResult.Status.TILLED:
+		_farming_session = FarmingSessionState.new(
+			FarmingTransactionState.new(
+				result.farm,
+				_farming_session.state.inventory,
+			),
+			_farming_session.world_day,
+		)
+		_status_label.text = "已耕地：%s" % target
+	elif result.status == FarmTransactionResult.Status.ALREADY_TILLED:
+		_status_label.text = "这里已经耕过"
+	else:
+		_status_label.text = "这里不能耕作"
+
+
+func _plant_seed(seed_item_id: StringName) -> void:
+	var result := CropPlanting.attempt(
+		_farming_session,
+		CropPlantingCommand.new(
+			_estate_runtime.get_map_id(),
+			_target_cell(),
+			_farming_session.world_day,
+			_estate_runtime.get_current_state().season,
+			seed_item_id,
+		),
+		_game_catalog,
+	)
+	if result.is_success():
+		_farming_session = result.session
+		_status_label.text = "已播种雾叶草"
+	elif result.status == CropPlantingResult.Status.NOT_TILLED:
+		_status_label.text = "需要先耕地"
+	elif result.status == CropPlantingResult.Status.TILE_OCCUPIED:
+		_status_label.text = "这块地已有作物"
+	elif result.status == CropPlantingResult.Status.INSUFFICIENT_SEED:
+		_status_label.text = "种子不足"
+	else:
+		_status_label.text = "当前不能播种"
+
+
+func _water_target() -> void:
+	var result := FarmWatering.attempt(
+		_farming_session,
+		FarmWateringCommand.new(
+			_estate_runtime.get_map_id(),
+			_target_cell(),
+			_farming_session.world_day,
+		),
+	)
+	if result.is_success():
+		_farming_session = result.session
+		_status_label.text = "已浇水：%s" % _target_cell()
+	elif result.status == FarmWateringResult.Status.ALREADY_WATERED:
+		_status_label.text = "今天已经浇过水"
+	else:
+		_status_label.text = "只能给耕地浇水"
+
+
+func _select_and_use_watering_can() -> void:
+	for slot_index: int in _farming_session.state.inventory.capacity():
+		var stack: ItemStack = _farming_session.state.inventory.stack_at(slot_index)
+		if stack != null and stack.item_id == &"watering_can_basic":
+			_select_quickbar_slot(slot_index)
+			_water_target()
+			return
+
+
+func _advance_day() -> void:
+	var result := FarmDayCycle.advance_one_day(
+		_farming_session,
+		FarmDayAdvanceCommand.new(_farming_session.world_day),
+		_game_catalog,
+	)
+	if result.is_success():
+		_farming_session = result.session
+		_status_label.text = "天亮了 · 第 %d 天 · %d 株作物成长" % [
+			_farming_session.world_day,
+			result.grown_crop_count,
+		]
+	else:
+		_status_label.text = "跨天失败：农作状态不连续"
+
+
+func _attempt_harvest(target_cell: Vector2i) -> bool:
+	var result := CropHarvesting.attempt(
+		_farming_session,
+		CropHarvestingCommand.new(
+			_estate_runtime.get_map_id(),
+			target_cell,
+		),
+		_game_catalog,
+	)
+	if result.is_success():
+		_farming_session = result.session
+		_status_label.text = "收获雾叶草 ×%d" % result.harvested_quantity
+		return true
+	if result.status == CropHarvestingResult.Status.NOT_MATURE:
+		_status_label.text = "作物尚未成熟"
+		return true
+	if result.status == CropHarvestingResult.Status.INVENTORY_FULL:
+		_status_label.text = "背包已满，无法收获"
+		return true
+	return false
+
+
 func _on_interaction_requested(
 	world_position: Vector2,
 	facing_direction: Vector2i,
@@ -140,6 +384,9 @@ func _on_interaction_requested(
 		world_position,
 		facing_direction,
 	)
+	if _attempt_harvest(target_cell):
+		_refresh_farming_view()
+		return
 	var semantics: EstateCellSemantics = _estate_runtime.query_cell(target_cell)
 	if not semantics.is_in_bounds():
 		_status_label.text = "目标在地产边界外"
@@ -157,6 +404,63 @@ func _on_interaction_requested(
 	]
 
 
+func _refresh_farming_view() -> void:
+	if _farming_session == null:
+		return
+	if _rendered_farming_session == _farming_session:
+		return
+	_rendered_farming_session = _farming_session
+	_farm_overlay.show_state(
+		_farming_session.state.farm,
+		_farming_session.world_day,
+	)
+	_day_label.text = "第 %d 天 · %s · 内存原型" % [
+		_farming_session.world_day,
+		_season_display_name(_estate_runtime.get_current_state().season),
+	]
+	var inventory := _farming_session.state.inventory
+	var slot_labels: PackedStringArray = []
+	for slot_index: int in inventory.capacity():
+		var stack: ItemStack = inventory.stack_at(slot_index)
+		var marker := ">" if slot_index == inventory.selected_slot_index else " "
+		if stack == null:
+			slot_labels.append("%s%d:空" % [marker, slot_index + 1])
+		else:
+			slot_labels.append(
+				"%s%d:%s×%d" % [
+					marker,
+					slot_index + 1,
+					_short_item_name(stack.item_id),
+					stack.quantity,
+				]
+			)
+	_quickbar_label.text = "  ".join(slot_labels)
+
+
+func _short_item_name(item_id: StringName) -> String:
+	if item_id == &"hoe_basic":
+		return "锄"
+	if item_id == &"watering_can_basic":
+		return "壶"
+	if item_id == &"mistleaf_seed":
+		return "种"
+	if item_id == &"mistleaf":
+		return "雾叶"
+	return String(item_id)
+
+
+func _season_display_name(season: StringName) -> String:
+	if season == &"spring":
+		return "春季"
+	if season == &"summer":
+		return "夏季"
+	if season == &"autumn":
+		return "秋季"
+	if season == &"winter":
+		return "冬季"
+	return String(season)
+
+
 func _update_debug() -> void:
 	if not _debug_panel.visible:
 		return
@@ -171,5 +475,10 @@ func _update_debug() -> void:
 			state.development,
 			state.anomaly,
 		]
+		+ "day: %d\n" % _farming_session.world_day
+		+ "farm tiles: %d\n" % _farming_session.state.farm.tile_count()
+		+ "selected: %d\n" % (
+			_farming_session.state.inventory.selected_slot_index + 1
+		)
 		+ "reduce motion: %s" % _reduce_motion
 	)

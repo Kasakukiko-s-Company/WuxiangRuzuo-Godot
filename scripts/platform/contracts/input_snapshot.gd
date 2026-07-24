@@ -1,6 +1,8 @@
 class_name InputSnapshot
 extends RefCounted
 
+const QUICKBAR_SLOT_COUNT: int = 8
+
 var move: Vector2
 var interact: bool
 var primary_action: bool

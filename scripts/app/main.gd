@@ -67,6 +67,7 @@ func _on_launch_p2_pressed() -> void:
 		return
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(_composition_root.create_input_service())
+	pilot.configure_game_catalog(_composition_root.game_catalog)
 	_replace_current_scene(pilot)
 
 

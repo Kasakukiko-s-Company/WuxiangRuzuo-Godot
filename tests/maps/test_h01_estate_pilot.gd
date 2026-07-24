@@ -2,8 +2,10 @@ extends SceneTree
 
 class ScriptedInputService extends InputService:
 	var current_snapshot: InputSnapshot = InputSnapshot.neutral()
+	var snapshot_calls: int = 0
 
 	func snapshot() -> InputSnapshot:
+		snapshot_calls += 1
 		return current_snapshot
 
 
@@ -30,6 +32,11 @@ func _run() -> void:
 		return
 	var catalog_result := EstateMapCatalogFileLoader.load_catalog()
 	_check(catalog_result.is_valid(), "estate pilot test loads the validated map catalog")
+	var game_catalog_result := CatalogFileLoader.load_catalog()
+	_check(
+		game_catalog_result.is_valid(),
+		"estate pilot test loads the validated game catalog",
+	)
 	var definition: EstateMapDefinition = catalog_result.catalog.get_map(
 		&"home_h01_open_meadow"
 	)
@@ -38,6 +45,7 @@ func _run() -> void:
 	var scripted_input := ScriptedInputService.new()
 	pilot.configure_estate_runtime(injected_runtime)
 	pilot.configure_input_service(scripted_input)
+	pilot.configure_game_catalog(game_catalog_result.catalog)
 	root.add_child(pilot)
 	await process_frame
 	await physics_frame
@@ -67,6 +75,22 @@ func _run() -> void:
 		player.collision_layer == 1 and player.collision_mask == 1,
 		"pilot player participates in the H01 physical collision layer",
 	)
+	_check(
+		not player.is_physics_processing(),
+		"pilot makes the player an explicit external-snapshot physics consumer",
+	)
+	var pilot_was_processing := pilot.is_physics_processing()
+	var player_was_processing := player.is_physics_processing()
+	pilot.set_physics_process(false)
+	player.set_physics_process(false)
+	scripted_input.snapshot_calls = 0
+	pilot._physics_process(1.0 / 60.0)
+	_check(
+		scripted_input.snapshot_calls == 1,
+		"pilot samples its injected input adapter once per physics frame",
+	)
+	pilot.set_physics_process(pilot_was_processing)
+	player.set_physics_process(player_was_processing)
 
 	_check(
 		pilot.get_player_cell() == Vector2i(63, 31),
@@ -77,6 +101,10 @@ func _run() -> void:
 	for _frame in range(4):
 		await physics_frame
 	_check(player.global_position.x > before.x, "pilot accepts movement through the injected input service")
+	_check(
+		player.velocity.x > 0.0,
+		"external snapshot movement leaves velocity available to animation consumers",
+	)
 	pilot.reset_to_safe_spawn()
 	_check(player.global_position == before, "pilot reset returns to the authoritative H01 safe spawn")
 	player.interaction_requested.emit(player.global_position, player.facing)
@@ -118,6 +146,13 @@ func _run() -> void:
 		EstateMapState.new(&"summer", &"reclaimed", &"light")
 	)
 	_check(state_result.is_success(), "pilot forwards typed estate state changes through the runtime seam")
+	var day_label := pilot.get_node(
+		"HUD/FarmingPanel/Margin/Rows/DayLabel"
+	) as Label
+	_check(
+		day_label.text.contains("夏季"),
+		"pilot farming HUD derives season from the authoritative estate state",
+	)
 	var restored: EstateMapApplyResult = pilot.apply_estate_state(
 		EstateMapState.new(&"spring", &"derelict", &"normal")
 	)

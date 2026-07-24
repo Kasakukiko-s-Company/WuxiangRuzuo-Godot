@@ -1,7 +1,7 @@
 extends SceneTree
 
 const SCENE_PATH: String = "res://scenes/vertical_slices/p2_estate_pilot.tscn"
-const OUTPUT_PATH: String = "res://builds/verification/h01_estate_pilot.png"
+const OUTPUT_PATH: String = "res://builds/verification/p2_h01_farming_loop.png"
 
 
 func _initialize() -> void:
@@ -35,10 +35,24 @@ func _capture() -> void:
 		return
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(composition_root.create_input_service())
+	pilot.configure_game_catalog(composition_root.game_catalog)
 	root.add_child(scene)
 	current_scene = scene
 	for _frame in range(5):
 		await process_frame
+	var approach := _find_farmable_approach(runtime)
+	if approach.is_empty():
+		push_error("Unable to find a visible farmable H01 target")
+		quit(1)
+		return
+	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
+	var player := pilot.get_player()
+	player.global_position = mapper.cell_center(approach["source"])
+	player.facing = approach["direction"]
+	pilot.get_camera().reset_smoothing()
+	pilot.apply_input_snapshot(_action_snapshot(0))
+	pilot.apply_input_snapshot(_action_snapshot(2))
+	pilot.apply_input_snapshot(_action_snapshot(1))
 	await create_timer(0.2).timeout
 	var image: Image = root.get_texture().get_image()
 	var absolute_output := ProjectSettings.globalize_path(OUTPUT_PATH)
@@ -55,3 +69,38 @@ func _capture() -> void:
 		return
 	print("H01_ESTATE_PILOT_CAPTURE_OK: %s" % absolute_output)
 	quit(0)
+
+
+func _action_snapshot(slot_index: int) -> InputSnapshot:
+	var snapshot := InputSnapshot.neutral()
+	snapshot.quickbar_slot_index = slot_index
+	snapshot.primary_action = true
+	return snapshot
+
+
+func _find_farmable_approach(runtime: EstateMapRuntime) -> Dictionary:
+	var directions: Array[Vector2i] = [
+		Vector2i.RIGHT,
+		Vector2i.DOWN,
+		Vector2i.LEFT,
+		Vector2i.UP,
+	]
+	for y: int in range(20, 80):
+		for x: int in range(20, 108):
+			var source := Vector2i(x, y)
+			var source_semantics := runtime.query_cell(source)
+			if not source_semantics.is_in_bounds() or source_semantics.colliding:
+				continue
+			for direction: Vector2i in directions:
+				var target := source + direction
+				var target_semantics := runtime.query_cell(target)
+				if (
+					target_semantics.is_in_bounds()
+					and target_semantics.farmable
+					and not target_semantics.colliding
+				):
+					return {
+						"source": source,
+						"direction": direction,
+					}
+	return {}
