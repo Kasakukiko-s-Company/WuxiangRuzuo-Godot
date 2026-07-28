@@ -2,21 +2,35 @@ class_name P2EstatePilot
 extends Node2D
 
 const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
+const RESOURCE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
+const REST_POINT_ID: StringName = &"home.h01.rest.home_door"
+const RESOURCE_ITEM_ID: StringName = &"mistleaf_seed"
+const RESOURCE_QUANTITY: int = 3
 
 @onready var _player: P1PlayerController = $Player
 @onready var _camera: Camera2D = $Player/Camera2D
 @onready var _farm_overlay: FarmPlotOverlay = $FarmPlotOverlay
+@onready var _daily_overlay: EstateDailyInteractionOverlay = $DailyInteractionOverlay
 @onready var _debug_panel: PanelContainer = $HUD/DebugPanel
 @onready var _debug_label: Label = $HUD/DebugPanel/Margin/DebugLabel
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
 @onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
 @onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
+@onready var _sleep_fade: ColorRect = $HUD/SleepFade
 
 var _input_service: InputService
 var _estate_runtime: EstateMapRuntime
 var _game_catalog: GameCatalog
 var _farming_session: FarmingSessionState
 var _rendered_farming_session: FarmingSessionState
+var _daily_resource_claims: DailyResourceClaims
+var _daily_resource_sources: DailyResourceSourceCatalog
+var _daily_rest_points: DailyRestPointCatalog
+var _resource_source: DailyResourceSourceDefinition
+var _rest_point: DailyRestPointDefinition
+var _resource_anchor: EstateAnchorResult
+var _rest_anchor: EstateAnchorResult
+var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
 
@@ -28,6 +42,7 @@ func _ready() -> void:
 	_player.set_external_snapshot_mode(true)
 	_player.interaction_requested.connect(_on_interaction_requested)
 	_initialize_farming_session()
+	_initialize_daily_interactions()
 	reset_to_safe_spawn()
 	_apply_camera_bounds()
 	_refresh_farming_view()
@@ -63,8 +78,8 @@ func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 		_use_selected_item()
 	if snapshot.watering_action:
 		_select_and_use_watering_can()
-	if snapshot.sleep_action:
-		_advance_day()
+	if snapshot.move != Vector2.ZERO:
+		_clear_rest_confirmation()
 	_refresh_farming_view()
 	_update_debug()
 
@@ -110,6 +125,10 @@ func get_farm_overlay() -> FarmPlotOverlay:
 	return _farm_overlay
 
 
+func get_daily_interaction_overlay() -> EstateDailyInteractionOverlay:
+	return _daily_overlay
+
+
 func get_player_cell() -> Vector2i:
 	return _coordinate_mapper.world_to_cell(_player.global_position)
 
@@ -124,6 +143,7 @@ func reset_to_safe_spawn() -> void:
 	_player.facing = Vector2i.DOWN
 	_player.velocity = Vector2.ZERO
 	_player.set_input_locked(false)
+	_clear_rest_confirmation()
 	_status_label.text = "已回到安全出生点 · 农作状态保留"
 	_camera.reset_smoothing()
 
@@ -178,13 +198,69 @@ func _initialize_farming_session() -> void:
 	var inventory := InventoryState.create_empty()
 	inventory = _add_starter_item(inventory, &"hoe_basic", 1)
 	inventory = _add_starter_item(inventory, &"watering_can_basic", 1)
-	inventory = _add_starter_item(inventory, &"mistleaf_seed", 3)
 	_farming_session = FarmingSessionState.new(
 		FarmingTransactionState.new(
 			FarmState.create_empty(_estate_runtime.get_map_id()),
 			inventory,
 		),
 		1,
+	)
+
+
+func _initialize_daily_interactions() -> void:
+	_daily_resource_claims = DailyResourceClaims.create_empty()
+	var source_definitions: Array[DailyResourceSourceDefinition] = [
+		DailyResourceSourceDefinition.new(
+			RESOURCE_SOURCE_ID,
+			_estate_runtime.get_map_id(),
+			&"resource_spawn_zone",
+			&"resource_north_meadow",
+			RESOURCE_ITEM_ID,
+			RESOURCE_QUANTITY,
+		),
+	]
+	_daily_resource_sources = DailyResourceSourceCatalog.create(
+		source_definitions,
+		_game_catalog,
+	)
+	assert(
+		_daily_resource_sources != null,
+		"P2 resource source definitions must match the validated game catalog",
+	)
+	_resource_source = _daily_resource_sources.get_source(RESOURCE_SOURCE_ID)
+	var rest_definitions: Array[DailyRestPointDefinition] = [
+		DailyRestPointDefinition.new(
+			REST_POINT_ID,
+			_estate_runtime.get_map_id(),
+			&"interaction",
+			&"home_door",
+		),
+	]
+	_daily_rest_points = DailyRestPointCatalog.create(rest_definitions)
+	assert(
+		_daily_rest_points != null,
+		"P2 rest-point definitions must be valid and unique",
+	)
+	_rest_point = _daily_rest_points.get_point(REST_POINT_ID)
+	_resource_anchor = _estate_runtime.query_anchor(
+		_resource_source.anchor_kind,
+		_resource_source.anchor_id,
+	)
+	_rest_anchor = _estate_runtime.query_anchor(
+		_rest_point.anchor_kind,
+		_rest_point.anchor_id,
+	)
+	assert(
+		_resource_anchor.is_found(),
+		"H01 formal runtime must expose its resource placement zone",
+	)
+	assert(
+		_rest_anchor.is_found(),
+		"H01 formal runtime must expose its home-door rest point",
+	)
+	_daily_overlay.configure(
+		_resource_anchor.world_position,
+		_rest_anchor.world_position,
 	)
 
 
@@ -338,20 +414,78 @@ func _select_and_use_watering_can() -> void:
 			return
 
 
-func _advance_day() -> void:
-	var result := FarmDayCycle.advance_one_day(
+func _attempt_daily_resource_gathering() -> void:
+	var result := DailyResourceGathering.attempt(
 		_farming_session,
-		FarmDayAdvanceCommand.new(_farming_session.world_day),
+		_daily_resource_claims,
+		DailyResourceGatheringCommand.new(
+			RESOURCE_SOURCE_ID,
+			_farming_session.world_day,
+		),
+		_daily_resource_sources,
 		_game_catalog,
 	)
 	if result.is_success():
 		_farming_session = result.session
+		_daily_resource_claims = result.claims
+		_status_label.text = "在北草甸找到雾叶草种子 ×%d" % RESOURCE_QUANTITY
+	elif result.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED:
+		_status_label.text = "北草甸今天已经采集过了"
+	elif result.status == DailyResourceGatheringResult.Status.INVENTORY_FULL:
+		_status_label.text = "背包已满，资源仍留在原处"
+	else:
+		_status_label.text = "当前无法采集这处资源"
+
+
+func _request_or_complete_rest() -> void:
+	if _rest_confirmation_day != _farming_session.world_day:
+		_rest_confirmation_day = _farming_session.world_day
+		_status_label.text = "回屋休息并结束今天？再次交互确认"
+		_update_daily_overlay()
+		return
+	var result := DailyRestCycle.attempt(
+		_farming_session,
+		DailyRestCommand.new(
+			REST_POINT_ID,
+			_farming_session.world_day,
+		),
+		_daily_rest_points,
+		_game_catalog,
+	)
+	if result.is_success():
+		_farming_session = result.session
+		_clear_rest_confirmation()
 		_status_label.text = "天亮了 · 第 %d 天 · %d 株作物成长" % [
 			_farming_session.world_day,
 			result.grown_crop_count,
 		]
+		_play_rest_transition()
 	else:
-		_status_label.text = "跨天失败：农作状态不连续"
+		_clear_rest_confirmation()
+		_status_label.text = "休息失败：当天状态不连续"
+
+
+func _clear_rest_confirmation() -> void:
+	if _rest_confirmation_day == 0:
+		return
+	_rest_confirmation_day = 0
+	_update_daily_overlay()
+
+
+func _play_rest_transition() -> void:
+	if _reduce_motion:
+		_sleep_fade.visible = false
+		return
+	_sleep_fade.visible = true
+	_sleep_fade.color = Color(0.015, 0.035, 0.045, 0.82)
+	var tween := create_tween()
+	tween.tween_property(
+		_sleep_fade,
+		"color",
+		Color(0.015, 0.035, 0.045, 0.0),
+		0.45,
+	)
+	tween.tween_callback(func() -> void: _sleep_fade.visible = false)
 
 
 func _attempt_harvest(target_cell: Vector2i) -> bool:
@@ -384,6 +518,16 @@ func _on_interaction_requested(
 		world_position,
 		facing_direction,
 	)
+	if target_cell == _resource_anchor.cell:
+		_clear_rest_confirmation()
+		_attempt_daily_resource_gathering()
+		_refresh_farming_view()
+		return
+	if target_cell == _rest_anchor.cell:
+		_request_or_complete_rest()
+		_refresh_farming_view()
+		return
+	_clear_rest_confirmation()
 	if _attempt_harvest(target_cell):
 		_refresh_farming_view()
 		return
@@ -414,6 +558,7 @@ func _refresh_farming_view() -> void:
 		_farming_session.state.farm,
 		_farming_session.world_day,
 	)
+	_update_daily_overlay()
 	_day_label.text = "第 %d 天 · %s · 内存原型" % [
 		_farming_session.world_day,
 		_season_display_name(_estate_runtime.get_current_state().season),
@@ -435,6 +580,16 @@ func _refresh_farming_view() -> void:
 				]
 			)
 	_quickbar_label.text = "  ".join(slot_labels)
+
+
+func _update_daily_overlay() -> void:
+	if _daily_overlay == null or _daily_resource_claims == null:
+		return
+	_daily_overlay.show_state(
+		_daily_resource_claims.last_claimed_day(RESOURCE_SOURCE_ID)
+		!= _farming_session.world_day,
+		_rest_confirmation_day == _farming_session.world_day,
+	)
 
 
 func _short_item_name(item_id: StringName) -> String:

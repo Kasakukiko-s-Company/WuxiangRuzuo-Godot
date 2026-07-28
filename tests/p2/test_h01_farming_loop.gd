@@ -42,6 +42,53 @@ func _run() -> void:
 	await process_frame
 	await physics_frame
 
+	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
+	var player := pilot.get_player()
+	var initial_session: FarmingSessionState = pilot.get_farming_session()
+	_check(
+		_inventory_quantity(initial_session.state.inventory, &"mistleaf_seed") == 0,
+		"the playable loop starts without fixed prototype seed freebies",
+	)
+	var debug_sleep := InputSnapshot.neutral()
+	debug_sleep.sleep_action = true
+	_send_snapshot(pilot, debug_sleep)
+	_check(
+		pilot.get_farming_session().world_day == 1,
+		"the legacy N debug action cannot advance the playable calendar",
+	)
+
+	var resource_anchor: EstateAnchorResult = runtime.query_anchor(
+		&"resource_spawn_zone",
+		&"resource_north_meadow",
+	)
+	var resource_approach := _find_anchor_approach(runtime, resource_anchor)
+	_check(
+		resource_anchor.is_found() and not resource_approach.is_empty(),
+		"H01 exposes a walkable approach to its north-meadow resource source",
+	)
+	if resource_approach.is_empty():
+		pilot.queue_free()
+		await process_frame
+		_finish()
+		return
+	_place_for_interaction(player, mapper, resource_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	var gathered: FarmingSessionState = pilot.get_farming_session()
+	_check(
+		_inventory_quantity(gathered.state.inventory, &"mistleaf_seed") == 3,
+		"interacting with the resource source obtains the first seed supply",
+	)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		_inventory_quantity(
+			pilot.get_farming_session().state.inventory,
+			&"mistleaf_seed",
+		) == 3,
+		"the H01 source cannot be collected twice on the same day",
+	)
+
 	var approach := _find_farmable_approach(runtime)
 	_check(
 		not approach.is_empty(),
@@ -52,8 +99,6 @@ func _run() -> void:
 		await process_frame
 		_finish()
 		return
-	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
-	var player := pilot.get_player()
 	var source_cell: Vector2i = approach["source"]
 	var target_cell: Vector2i = approach["target"]
 	player.global_position = mapper.cell_center(source_cell)
@@ -81,7 +126,7 @@ func _run() -> void:
 	)
 	_check(
 		planted.state.inventory.stack_at(2).quantity == 2,
-		"planting consumes one of the three in-memory prototype seeds",
+		"planting consumes one seed obtained from the map resource source",
 	)
 
 	_send_snapshot(
@@ -94,16 +139,73 @@ func _run() -> void:
 		"selected watering can waters the planted tile on day one",
 	)
 
+	var rest_anchor: EstateAnchorResult = runtime.query_anchor(
+		&"interaction",
+		&"home_door",
+	)
+	var rest_approach := _find_anchor_approach(runtime, rest_anchor)
+	_check(
+		rest_anchor.is_found() and not rest_approach.is_empty(),
+		"H01 home door provides a walkable formal rest interaction",
+	)
+	_place_for_interaction(player, mapper, rest_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	var movement := InputSnapshot.neutral()
+	movement.move = Vector2.RIGHT
+	_send_snapshot(pilot, movement)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		pilot.get_farming_session().world_day == 1,
+		"movement cancels rest confirmation before the next interaction",
+	)
+	pilot.reset_to_safe_spawn()
+	_place_for_interaction(player, mapper, rest_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	pilot.reset_to_safe_spawn()
+	_place_for_interaction(player, mapper, rest_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		pilot.get_farming_session().world_day == 1,
+		"reset cancels rest confirmation before the next interaction",
+	)
+	pilot.reset_to_safe_spawn()
+	_place_for_interaction(player, mapper, rest_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_place_for_interaction(player, mapper, resource_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_place_for_interaction(player, mapper, rest_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		pilot.get_farming_session().world_day == 1,
+		"another target interaction cancels rest confirmation",
+	)
+	pilot.reset_to_safe_spawn()
 	for expected_day: int in [2, 3, 4]:
-		var sleep_snapshot := InputSnapshot.neutral()
-		sleep_snapshot.sleep_action = true
-		_send_snapshot(pilot, sleep_snapshot)
+		_place_for_interaction(player, mapper, rest_approach)
+		player.interaction_requested.emit(player.global_position, player.facing)
+		await process_frame
+		_check(
+			pilot.get_farming_session().world_day == expected_day - 1,
+			"first home-door interaction requests rest confirmation",
+		)
+		player.interaction_requested.emit(player.global_position, player.facing)
+		await process_frame
 		var advanced: FarmingSessionState = pilot.get_farming_session()
 		_check(
 			advanced.world_day == expected_day,
-			"prototype day advance reaches day %d" % expected_day,
+			"confirmed home-door rest reaches day %d" % expected_day,
 		)
 		if expected_day < 4:
+			player.global_position = mapper.cell_center(source_cell)
+			player.facing = approach["direction"]
+			player.velocity = Vector2.ZERO
 			_send_snapshot(
 				pilot,
 				_action_snapshot(1, true),
@@ -117,6 +219,9 @@ func _run() -> void:
 		mature_crop != null and mature_crop.stage_index == 3,
 		"three watered transitions produce a mature visible crop",
 	)
+	player.global_position = mapper.cell_center(source_cell)
+	player.facing = approach["direction"]
+	player.velocity = Vector2.ZERO
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	var harvested: FarmingSessionState = pilot.get_farming_session()
@@ -186,6 +291,40 @@ func _find_farmable_approach(runtime: EstateMapRuntime) -> Dictionary:
 						"direction": direction,
 					}
 	return {}
+
+
+func _find_anchor_approach(
+	runtime: EstateMapRuntime,
+	anchor: EstateAnchorResult,
+) -> Dictionary:
+	if not anchor.is_found():
+		return {}
+	var directions: Array[Vector2i] = [
+		Vector2i.RIGHT,
+		Vector2i.DOWN,
+		Vector2i.LEFT,
+		Vector2i.UP,
+	]
+	for direction: Vector2i in directions:
+		var source := anchor.cell - direction
+		var semantics: EstateCellSemantics = runtime.query_cell(source)
+		if semantics.is_in_bounds() and not semantics.colliding:
+			return {
+				"source": source,
+				"target": anchor.cell,
+				"direction": direction,
+			}
+	return {}
+
+
+func _place_for_interaction(
+	player: P1PlayerController,
+	mapper: TileCoordinateMapper,
+	approach: Dictionary,
+) -> void:
+	player.global_position = mapper.cell_center(approach["source"])
+	player.facing = approach["direction"]
+	player.velocity = Vector2.ZERO
 
 
 func _inventory_quantity(

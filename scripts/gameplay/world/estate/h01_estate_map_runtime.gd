@@ -120,6 +120,7 @@ const ANCHOR_LAYER_NAMES: Dictionary[StringName, StringName] = {
 	&"npc_anchor": &"NpcAnchor",
 	&"interaction": &"Interaction",
 	&"story_trigger": &"StoryTrigger",
+	&"resource_spawn_zone": &"ResourceSpawnZone",
 	&"occlusion": &"Occlusion",
 	&"anomaly_anchor": &"AnomalyStateAnchor",
 }
@@ -215,7 +216,13 @@ func query_anchor(
 			_coordinate_mapper.world_to_cell(world_position),
 			facing,
 		)
-		if not _semantic_node_enabled(child):
+		# Resource spawn areas are data envelopes. Their Area2D monitoring stays
+		# disabled until a resource system materializes an interactable inside,
+		# but the audited placement center must remain queryable.
+		if (
+			kind != &"resource_spawn_zone"
+			and not _semantic_node_enabled(child)
+		):
 			return EstateAnchorResult.disabled(
 				result.kind,
 				result.id,

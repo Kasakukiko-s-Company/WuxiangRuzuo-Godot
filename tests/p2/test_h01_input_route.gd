@@ -31,14 +31,62 @@ func _run() -> void:
 	await process_frame
 	await physics_frame
 
+	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
+	var player := pilot.get_player()
+	await _tap_key(KEY_N)
+	_check(
+		pilot.get_farming_session().world_day == 1,
+		"physical N no longer advances the playable calendar",
+	)
+
+	var resource_anchor: EstateAnchorResult = runtime.query_anchor(
+		&"resource_spawn_zone",
+		&"resource_north_meadow",
+	)
+	var resource_approach := _find_anchor_approach(runtime, resource_anchor)
+	_check(
+		not resource_approach.is_empty(),
+		"real-input route finds the H01 resource-source approach",
+	)
+	if not resource_approach.is_empty():
+		_place_for_interaction(player, mapper, resource_approach)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf_seed",
+			) == 3,
+			"physical E collects the H01 seed resource through the input service",
+		)
+
+	var rest_anchor: EstateAnchorResult = runtime.query_anchor(
+		&"interaction",
+		&"home_door",
+	)
+	var rest_approach := _find_anchor_approach(runtime, rest_anchor)
+	_check(
+		not rest_approach.is_empty(),
+		"real-input route finds the H01 home-door rest approach",
+	)
+	if not rest_approach.is_empty():
+		_place_for_interaction(player, mapper, rest_approach)
+		await _tap_key(KEY_E)
+		_check(
+			pilot.get_farming_session().world_day == 1,
+			"first physical E requests rest confirmation without advancing",
+		)
+		await _tap_key(KEY_E)
+		_check(
+			pilot.get_farming_session().world_day == 2,
+			"second physical E confirms home rest and advances one day",
+		)
+
 	var approach := _find_farmable_approach(runtime)
 	_check(
 		not approach.is_empty(),
 		"real-input route finds a legal H01 farming target",
 	)
 	if not approach.is_empty():
-		var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
-		var player := pilot.get_player()
 		var target_cell: Vector2i = approach["target"]
 		player.global_position = mapper.cell_center(approach["source"])
 		player.facing = approach["direction"]
@@ -63,6 +111,15 @@ func _run() -> void:
 	await process_frame
 	await physics_frame
 	_finish()
+
+
+func _tap_key(physical_keycode: int) -> void:
+	_parse_key(physical_keycode, true)
+	Input.flush_buffered_events()
+	await create_timer(0.1).timeout
+	_parse_key(physical_keycode, false)
+	Input.flush_buffered_events()
+	await create_timer(0.05).timeout
 
 
 func _parse_key(physical_keycode: int, pressed: bool) -> void:
@@ -100,6 +157,52 @@ func _find_farmable_approach(runtime: EstateMapRuntime) -> Dictionary:
 						"direction": direction,
 					}
 	return {}
+
+
+func _find_anchor_approach(
+	runtime: EstateMapRuntime,
+	anchor: EstateAnchorResult,
+) -> Dictionary:
+	if not anchor.is_found():
+		return {}
+	var directions: Array[Vector2i] = [
+		Vector2i.RIGHT,
+		Vector2i.DOWN,
+		Vector2i.LEFT,
+		Vector2i.UP,
+	]
+	for direction: Vector2i in directions:
+		var source := anchor.cell - direction
+		var semantics: EstateCellSemantics = runtime.query_cell(source)
+		if semantics.is_in_bounds() and not semantics.colliding:
+			return {
+				"source": source,
+				"target": anchor.cell,
+				"direction": direction,
+			}
+	return {}
+
+
+func _place_for_interaction(
+	player: P1PlayerController,
+	mapper: TileCoordinateMapper,
+	approach: Dictionary,
+) -> void:
+	player.global_position = mapper.cell_center(approach["source"])
+	player.facing = approach["direction"]
+	player.velocity = Vector2.ZERO
+
+
+func _inventory_quantity(
+	inventory: InventoryState,
+	item_id: StringName,
+) -> int:
+	var quantity: int = 0
+	for slot_index: int in inventory.capacity():
+		var stack: ItemStack = inventory.stack_at(slot_index)
+		if stack != null and stack.item_id == item_id:
+			quantity += stack.quantity
+	return quantity
 
 
 func _check(condition: bool, label: String) -> void:

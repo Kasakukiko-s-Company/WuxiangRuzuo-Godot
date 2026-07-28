@@ -79,6 +79,16 @@ func _run() -> void:
 		disabled_story_trigger.is_disabled(),
 		"story triggers stay explicit but disabled until a story service activates them",
 	)
+	var resource_zone: EstateAnchorResult = runtime.query_anchor(
+		&"resource_spawn_zone",
+		&"resource_north_meadow",
+	)
+	_check(
+		resource_zone.is_found()
+		and resource_zone.world_position == Vector2(2000.0, 464.0)
+		and resource_zone.cell == Vector2i(62, 14),
+		"resource systems can query the audited north-meadow placement zone",
+	)
 
 	var child_count_before := runtime.get_child_count()
 	var reclaimed_result: EstateMapApplyResult = runtime.apply_state(
