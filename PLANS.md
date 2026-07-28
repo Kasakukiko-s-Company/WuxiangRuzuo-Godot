@@ -142,6 +142,7 @@
 - 初始锄头、浇水壶和 3 粒雾叶草种子以及世界日均只存在运行内存；HUD 明确写明“不写存档”。本轮没有修改 `SaveSnapshot`、`SaveCodec` 或 schema。
 - 2026-07-24 Godot 4.7.1 headless import/parse 和 23 个测试文件全部 exit 0；Compatibility Renderer 在 Intel Iris Xe / OpenGL 3.3 上生成并检查 `builds/verification/p2_h01_farming_loop.png`。
 - 该切片尚缺资源获得方式、正式睡眠交互、文件存档/恢复、代表性动画与声音、玩家价值和平衡验证，因此不能作为 P2 出口。完整边界和验收记录见 `docs/P2_FARMING_LOOP.md`。
+- 2026-07-28 已把外部案例中的功能区域/环路、居民可发现性、居民日程与居民知识分离、资源家族和 AI 方向参考板准入经验保存到 `docs/DESIGN_REFERENCE_LESSONS.md`，并同步领域词汇、P3/P5 路线、NPC 候选边界、资源生产、来源台账和法律护栏。只吸收抽象方法，没有复制外部图片、地图、角色、物品、数值或文本；没有修改当前 P2 功能或存档 Schema。
 
 ## 后续制作阶段
 
