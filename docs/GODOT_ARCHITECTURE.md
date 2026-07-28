@@ -47,7 +47,9 @@ scenes / scripts/gameplay / scripts/ui
 
 ## 平台能力
 
-G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；具体 adapter 尚未实现，微信能力只能通过独立可行性闸门决定。
+G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；微信能力只能通过独立可行性闸门决定。
+
+当前已实现 `GodotInputService` 和 P2 `GodotAudioService`。音频 adapter 从版本化 `data/audio_catalog.json` 解析稳定 ID，拥有独立音乐播放器与 SFX 播放器池；`P2EstatePilot` 只调用 `AudioService.play_music/play_sound`，不依赖 ElevenLabs、文件路径或平台音频 API。其他平台、存档和分析 adapter 仍未实现。
 
 ## 场景与状态
 

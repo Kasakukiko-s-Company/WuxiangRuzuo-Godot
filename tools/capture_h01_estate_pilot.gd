@@ -38,6 +38,7 @@ func _capture() -> void:
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(composition_root.create_input_service())
 	pilot.configure_game_catalog(composition_root.game_catalog)
+	pilot.configure_audio_service(composition_root.create_audio_service(pilot))
 	root.add_child(scene)
 	current_scene = scene
 	for _frame in range(5):

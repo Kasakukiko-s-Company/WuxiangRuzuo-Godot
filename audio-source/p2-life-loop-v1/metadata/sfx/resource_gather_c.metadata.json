@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:35.872212+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.resource.gather.c",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "3e25d6daa61944acb05846b536e621c0",
+  "request": {
+    "text": "A small wild seed pod is gathered from meadow grass into a cloth pouch, brief grass brush, papery seeds and soft fabric rustle, calm natural foley, no voice, no music, no coin sound, clean one-shot for a cozy pixel farming RPG. Clearer gameplay-readable take, compact attack and short controlled tail.",
+    "loop": false,
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "5ecf55f68ba807e1461459f1bc3863f9d44c66490908298be5b1104f41941381",
+  "response": {
+    "requestId": null,
+    "traceId": "c750ca9f300c0de4af8d88fd4b54483a",
+    "characterCost": "13",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\resource_gather_c.pcm",
+    "bytes": 230400,
+    "sha256": "2d55a81754f0f58cdd061c95f8cf28d192c39307ceeb1d77209aae01a7477d86"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 115200,
+    "frameCount": 57600,
+    "durationSeconds": 1.2,
+    "peakLinear": 0.26266479,
+    "rmsLinear": 0.01720524,
+    "dcOffsetLinear": -5.228e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\resource_gather_c.wav",
+    "bytes": 230444,
+    "sha256": "1370d4be1a32edac30508527137cd5ffec4bc4e8856823f82ee751c674f4e8aa",
+    "sourcePcmSha256": "2d55a81754f0f58cdd061c95f8cf28d192c39307ceeb1d77209aae01a7477d86",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.357451+00:00"
+}

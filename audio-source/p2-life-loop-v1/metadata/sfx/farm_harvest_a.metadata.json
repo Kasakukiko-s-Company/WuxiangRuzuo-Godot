@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:20.577754+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.harvest.a",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "f8499bc56b9c45a68e45a43e3d0b9afd",
+  "request": {
+    "text": "A tender leafy herb is plucked by hand with a light stem snap and soft leaf rustle, satisfying but restrained natural foley, no voice, no music, no coin sound, clean one-shot for a cozy pixel farming RPG. Neutral studio take, balanced transients and body.",
+    "loop": false,
+    "duration_seconds": 1.0,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "0616796b4fe06086cb73ceb19c41243ca588813ce47a829c0253c60de5e3f83b",
+  "response": {
+    "requestId": null,
+    "traceId": "e47971b427fc7b187a2592940fb8f66f",
+    "characterCost": "11",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_harvest_a.pcm",
+    "bytes": 192000,
+    "sha256": "236397b5742ed7a3b67856b93dde357669d2314a48c9478b945108e5beed8db0"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 96000,
+    "frameCount": 48000,
+    "durationSeconds": 1.0,
+    "peakLinear": 0.60946655,
+    "rmsLinear": 0.0129607,
+    "dcOffsetLinear": -2.217e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_harvest_a.wav",
+    "bytes": 192044,
+    "sha256": "081ab0c908868b7b3b5aa1dcbdee2d57a46f997b7a106bf6120193aada0599cc",
+    "sourcePcmSha256": "236397b5742ed7a3b67856b93dde357669d2314a48c9478b945108e5beed8db0",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.234127+00:00"
+}

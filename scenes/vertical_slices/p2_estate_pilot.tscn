@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/vertical_slices/p2_estate_pilot.gd" id="1_pilot"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/farm_plot_overlay.gd" id="2_farm_overlay"]
 [ext_resource type="Script" path="res://scripts/gameplay/player/p1_player_controller.gd" id="3_player"]
 [ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_player_view.gd" id="4_player_view"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/estate_daily_interaction_overlay.gd" id="5_daily_overlay"]
+[ext_resource type="Script" path="res://scripts/gameplay/feedback/p2_interaction_feedback.gd" id="6_feedback"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(18, 20)
@@ -19,6 +20,10 @@ script = ExtResource("2_farm_overlay")
 [node name="DailyInteractionOverlay" type="Node2D" parent="."]
 z_index = 64
 script = ExtResource("5_daily_overlay")
+
+[node name="InteractionFeedback" type="Node2D" parent="."]
+z_index = 68
+script = ExtResource("6_feedback")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 z_index = 70

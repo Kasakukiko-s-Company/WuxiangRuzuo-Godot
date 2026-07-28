@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:43.149987+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.rest.confirm.b",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "ed8d82caee0d4ceba28a4314457364a1",
+  "request": {
+    "text": "A quiet warm wooden confirmation chime with two soft rounded notes, intimate and reassuring, very short decay, no voice, no melody phrase, no bright arcade beep, clean UI one-shot for a misty rural fantasy RPG. Softer intimate take, slightly less attack and less high-frequency brightness.",
+    "loop": false,
+    "duration_seconds": 0.8,
+    "prompt_influence": 0.78,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "53a7aec411084ae1af2ca4c1afc2dfb582ba179f8a614e6789bd68d4c308af23",
+  "response": {
+    "requestId": null,
+    "traceId": "0288c196d014c6a3ec8b707b141b025e",
+    "characterCost": "9",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\rest_confirm_b.pcm",
+    "bytes": 153600,
+    "sha256": "117bd37e88af8c31d71db3e0168681849d47f0cc8d29aac928654dae8f09c67a"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 76800,
+    "frameCount": 38400,
+    "durationSeconds": 0.8,
+    "peakLinear": 0.17828369,
+    "rmsLinear": 0.01889749,
+    "dcOffsetLinear": 3.228e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\rest_confirm_b.wav",
+    "bytes": 153644,
+    "sha256": "77d61a58c34a13edeaab3d2b616ae8e00800c183e7b917872d32c46d13182230",
+    "sourcePcmSha256": "117bd37e88af8c31d71db3e0168681849d47f0cc8d29aac928654dae8f09c67a",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.400251+00:00"
+}

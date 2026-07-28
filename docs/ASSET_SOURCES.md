@@ -132,7 +132,21 @@ H04 山地梯田、H05 芦苇湿地、H06 石质高地、H07 湖畔半岛和 H08
 
 ## 阻塞资源
 
-旧视觉候选约 298.57 MiB，来源/确认记录完整但现有 AI 图未完成商业清权、人工重构和运行时验收。任何文件都不允许直接导入 Godot `assets`。没有已确认音乐、音效或字体。
+旧视觉候选约 298.57 MiB，来源/确认记录完整但现有 AI 图未完成商业清权、人工重构和运行时验收。任何文件都不允许直接导入 Godot `assets`。没有最终发行已确认的音乐、音效或字体；P2 已有一组内部运行候选，边界见下节。
+
+## P2 ElevenLabs 代表性音频候选（2026-07-28）
+
+`audio-source/p2-life-loop-v1/` 保存项目专用 jobs、一次性授权、执行 grant、music_v2 composition plan、21 个 SFX 原始候选、21 个仅加容器头的审阅 WAV、1 个音乐候选、供应商详细响应、逐请求 ledger、SHA-256、技术 QA、运行选择与延迟用量核销。没有复制用户参考文件中另一个游戏的 cue、提示词或音频。
+
+- 供应商：ElevenLabs；生成时账户：Creator active；超额计费关闭。
+- SFX：`eleven_text_to_sound_v2`、`pcm_48000`、48 kHz、16-bit、stereo；7 cue × a/b/c。
+- 音乐：`music_v2`；先调用零 credit plan，再由 `/v1/music/detailed` 生成唯一 60 秒 `mp3_48000_192` 候选。
+- 实际延迟核销：全批 1116 credits，其中 SFX 291、music 825。
+- 运行时：7 个选中 WAV 与 1 个 MP3 复制到 `assets/audio/p2/`，总计 3,122,849 bytes，最大文件 1,440,621 bytes；不需要 Git LFS。
+- 来源证据：API request/trace/song ID、提示、参数、模型、时间、输出哈希和官方接口 URL 均已登记；API key 未写入仓库。
+- 授权状态：付费计划生成内容具备供应商所述商业使用基础，但本项目仍保守标记 `commercialReleaseAuthorized=false`、`shippingApproval=false`，等待最终听感、相似性、条款与发行混音复核。
+
+完整生产与接入事实见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`。
 
 ## H01 正式工程先导运行资源（2026-07-24）
 

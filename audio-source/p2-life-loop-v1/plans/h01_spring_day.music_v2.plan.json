@@ -1,0 +1,93 @@
+{
+  "chunks": [
+    {
+      "text": "[Village Morning]",
+      "duration_ms": 15000,
+      "positive_styles": [
+        "80 BPM",
+        "East Asian fantasy RPG",
+        "pastoral daily life",
+        "gentle guzheng-style plucked string melody",
+        "light bamboo flute-like breath tones",
+        "warm cello drone",
+        "subtle field air texture",
+        "calm looping intro",
+        "clear midrange mix for gameplay SFX",
+        "light dynamic range"
+      ],
+      "negative_styles": [
+        "no heavy drums",
+        "no vocals",
+        "no dramatic build"
+      ],
+      "context_adherence": "high",
+      "conditioning_ref": null,
+      "condition_strength": null
+    },
+    {
+      "text": "[Work and Wonder]",
+      "duration_ms": 15000,
+      "positive_styles": [
+        "80 BPM",
+        "restrained wood percussion enters (mokugyo-style taps)",
+        "plucked string melody continues with light variation",
+        "flute melody becomes slightly more inquisitive",
+        "cello drone provides subtle harmonic shifts",
+        "ambient background textures remain",
+        "developing theme",
+        "maintaining a calm, steady rhythm"
+      ],
+      "negative_styles": [
+        "no heavy drums",
+        "no abrupt changes",
+        "no loud dynamics"
+      ],
+      "context_adherence": "high",
+      "conditioning_ref": null,
+      "condition_strength": null
+    },
+    {
+      "text": "[Misty Curiosity]",
+      "duration_ms": 15000,
+      "positive_styles": [
+        "80 BPM",
+        "unresolved mist motif on flute",
+        "plucked strings shift to a more sparse, questioning pattern",
+        "percussion becomes intermittent and softer",
+        "cello sustains longer, slightly dissonant tones",
+        "subtle tension, curious but not threatening",
+        "thinning arrangement",
+        "sense of gentle mystery"
+      ],
+      "negative_styles": [
+        "no threat or danger",
+        "no percussion buildup"
+      ],
+      "context_adherence": "high",
+      "conditioning_ref": null,
+      "condition_strength": null
+    },
+    {
+      "text": "[Return to Morning]",
+      "duration_ms": 15000,
+      "positive_styles": [
+        "80 BPM",
+        "return to the opening guzheng melody",
+        "flute plays simple, resolved phrases",
+        "wood percussion fades out",
+        "warm cello drone resolves harmonically",
+        "loopable closing section",
+        "seamless transition to beginning",
+        "calm resolution",
+        "gentle decay of final notes"
+      ],
+      "negative_styles": [
+        "no abrupt ending",
+        "no long fade-out"
+      ],
+      "context_adherence": "high",
+      "conditioning_ref": null,
+      "condition_strength": null
+    }
+  ]
+}

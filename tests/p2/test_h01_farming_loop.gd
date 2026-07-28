@@ -7,6 +7,24 @@ class ScriptedInputService extends InputService:
 		return current_snapshot
 
 
+class RecordingAudioService extends AudioService:
+	var music_id: StringName = &""
+	var sound_ids: Array[StringName] = []
+	var muted: bool = false
+
+	func play_music(audio_id: StringName) -> void:
+		music_id = audio_id
+
+	func stop_music() -> void:
+		music_id = &""
+
+	func play_sound(audio_id: StringName) -> void:
+		sound_ids.append(audio_id)
+
+	func set_muted(is_muted: bool) -> void:
+		muted = is_muted
+
+
 var _failures: int = 0
 
 
@@ -35,12 +53,18 @@ func _run() -> void:
 	var pilot := pilot_scene.instantiate() as P2EstatePilot
 	var runtime := runtime_scene.instantiate() as EstateMapRuntime
 	var scripted_input := ScriptedInputService.new()
+	var recording_audio := RecordingAudioService.new()
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(scripted_input)
 	pilot.configure_game_catalog(game_catalog)
+	pilot.configure_audio_service(recording_audio)
 	root.add_child(pilot)
 	await process_frame
 	await physics_frame
+	_check(
+		recording_audio.music_id == &"music.h01.spring_day",
+		"P2 starts the H01 daytime music through the AudioService boundary",
+	)
 
 	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 	var player := pilot.get_player()
@@ -237,6 +261,29 @@ func _run() -> void:
 	_check(
 		overlay.get_rendered_tile_count() == harvested.state.farm.tile_count(),
 		"farm overlay mirrors every authoritative tilled tile",
+	)
+	var expected_sounds: Array[StringName] = [
+		&"sfx.resource.gather",
+		&"sfx.farm.till",
+		&"sfx.farm.plant",
+		&"sfx.farm.water",
+		&"sfx.rest.confirm",
+		&"sfx.rest.complete",
+		&"sfx.farm.harvest",
+	]
+	for expected_sound: StringName in expected_sounds:
+		_check(
+			recording_audio.sound_ids.has(expected_sound),
+			"P2 routes %s through the AudioService boundary" % expected_sound,
+		)
+	var interaction_feedback := pilot.get_interaction_feedback()
+	_check(
+		interaction_feedback.get_play_count() >= expected_sounds.size(),
+		"P2 produces visual feedback for successful life-loop actions",
+	)
+	_check(
+		interaction_feedback.get_last_action_id() == &"sfx.farm.harvest",
+		"harvest leaves a typed visual feedback cue",
 	)
 	var title := pilot.get_node("HUD/TitlePanel/Margin/Title") as Label
 	_check(

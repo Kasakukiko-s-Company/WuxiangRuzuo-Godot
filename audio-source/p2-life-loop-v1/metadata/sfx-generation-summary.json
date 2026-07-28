@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:57.808198+00:00",
+  "phase": "sound-effects",
+  "generatedCount": 21,
+  "subscriptionBefore": {
+    "capturedAt": "2026-07-28T13:00:48.915143+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10392,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "subscriptionAfter": {
+    "capturedAt": "2026-07-28T13:01:57.808179+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10545,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "observedCreditDelta": 153,
+  "allowUsageBasedOverage": false
+}

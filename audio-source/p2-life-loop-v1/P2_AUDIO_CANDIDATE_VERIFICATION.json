@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "verifiedAt": "2026-07-28T14:11:15.863029+00:00",
+  "result": "passed",
+  "expectedCandidateCount": 22,
+  "actualCandidateCount": 22,
+  "noPartialFiles": true,
+  "apiLedger": {
+    "expectedCompletedCalls": 23,
+    "actualCompletedCalls": 23,
+    "failedUnknownProviderStateCount": 0,
+    "providerIdentifiersPresentAndUnique": true,
+    "automaticRetries": 0,
+    "passed": true
+  },
+  "checks": [
+    {
+      "audioId": "sfx.farm.till.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.till.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.till.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.plant.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.plant.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.plant.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.water.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.water.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.water.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.harvest.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.harvest.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.farm.harvest.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.resource.gather.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.resource.gather.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.resource.gather.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.confirm.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.confirm.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.confirm.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.complete.a",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.complete.b",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "sfx.rest.complete.c",
+      "exists": true,
+      "hashMatches": true,
+      "pcmContractMatches": true,
+      "passed": true
+    },
+    {
+      "audioId": "music.h01.spring_day",
+      "exists": true,
+      "hashMatches": true,
+      "mp3Signature": true,
+      "passed": true
+    }
+  ],
+  "subjectiveListeningApproval": false,
+  "shippingApproval": false
+}

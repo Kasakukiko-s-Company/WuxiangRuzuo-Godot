@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "auditedAt": "2026-07-28",
+  "result": "passed_with_historical_grant_disclosure",
+  "authorizationSource": "用户明确要求继续生成动画、音效和音乐，并授权非重大决定由主任务自行实施、复核、提交与推送。",
+  "historicalGrantDisclosure": {
+    "originalGrantSnapshotsPreserved": false,
+    "reason": "早期脚本只维护 P2_AUDIO_EXECUTION_GRANT.json 单一指针；stereo 派生修正和验证增强后两次重新签发覆盖了此前指针。",
+    "impact": "当前 grant 只能证明当前脚本与 job/authorization 的绑定，不能单独作为 12:59–13:04 UTC 已发生调用的时间有效证据。",
+    "mitigation": "本审计使用当次控制台记录中的 issuedAt/hash、逐请求 ledger、供应商 trace/song ID、输出哈希、订阅前后快照与用量核销交叉重建；不把当前 grant 冒充历史原件。脚本现已改为保留 grants/ 版本快照，并为未来调用记录 grant SHA。"
+  },
+  "phases": [
+    {
+      "phase": "composition-plan",
+      "grantIssuedAt": "2026-07-28T12:58:16.109847+00:00",
+      "jobsSha256": "c449426aa02c5858cf99972aecff27977233ee93a05188a61c3571288fefdb70",
+      "authorizationSha256": "cd2e54bd3dfd7625d93e3f89e733981fd016dca9ae3eae50d4eedde3cba6aa46",
+      "scriptSha256": "7418deacd35bbaf2812038b26115f687fb1d34e71e3503f9be9fd68eef0ca701",
+      "localRequestId": "72d35effde554a2986f2a9e5dce69f0b",
+      "providerTraceId": "c1f3caaf8735d8898341b5f76a6d030a",
+      "completedAt": "2026-07-28T12:59:11.999476+00:00",
+      "creditDelta": 0,
+      "evidenceMetadataSha256": "601d5876ca2f54a1fa2772264add8cc7b32a6144acb3d7b6289bd8efc33d745c"
+    },
+    {
+      "phase": "sound-effects",
+      "grantIssuedAt": "2026-07-28T12:58:16.109847+00:00",
+      "jobsSha256": "c449426aa02c5858cf99972aecff27977233ee93a05188a61c3571288fefdb70",
+      "authorizationSha256": "cd2e54bd3dfd7625d93e3f89e733981fd016dca9ae3eae50d4eedde3cba6aa46",
+      "scriptSha256": "7418deacd35bbaf2812038b26115f687fb1d34e71e3503f9be9fd68eef0ca701",
+      "completedCallCount": 21,
+      "failedUnknownProviderStateCount": 0,
+      "completedWindow": {
+        "start": "2026-07-28T13:00:48.915143+00:00",
+        "end": "2026-07-28T13:01:57.808198+00:00"
+      },
+      "actualDelayedCreditDelta": 291,
+      "evidenceSummarySha256": "adef7975a6a4e33e0e6ba199aa4ec56d4ca68e4b70861cbad941d2086e7a556c"
+    },
+    {
+      "phase": "music",
+      "grantIssuedAt": "2026-07-28T13:03:50.690061+00:00",
+      "jobsSha256": "c449426aa02c5858cf99972aecff27977233ee93a05188a61c3571288fefdb70",
+      "authorizationSha256": "cd2e54bd3dfd7625d93e3f89e733981fd016dca9ae3eae50d4eedde3cba6aa46",
+      "scriptSha256": "d92ff0239408f7ab60f4a77888058377fa2293dc828ec0ea8b67c1245d777f01",
+      "localRequestId": "b3c1935a918d4f378ed11f8eb8421762",
+      "providerTraceId": "4e02b2b56756572752760017b0ed950e",
+      "providerSongId": "gP6j4uf9pjovz0oYgogS",
+      "completedAt": "2026-07-28T13:04:43.046165+00:00",
+      "actualDelayedCreditDelta": 825,
+      "evidenceMetadataSha256": "8dfc7e38dcd0e46b85568a1d41a97410c02c426010357a0fb9094f752dd7b8f6"
+    }
+  ],
+  "crossChecks": {
+    "ledgerPath": "metadata/API_CALL_LEDGER.json",
+    "ledgerSha256AtAudit": "8eaf37b836e426ca6cb0e2244035b4b84392974307edeb3152b206ff154b9359",
+    "completedCalls": 23,
+    "providerIdentifiersPresentAndUnique": true,
+    "failedUnknownProviderStateCount": 0,
+    "automaticRetries": 0,
+    "candidateVerification": "22/22 passed",
+    "actualBatchCreditDelta": 1116
+  },
+  "currentGrantDisposition": {
+    "issuedAt": "2026-07-28T14:11:43.308729+00:00",
+    "purpose": "current-script verification pointer; the completed batch has no remaining executable jobs",
+    "versionedSnapshotSha256": "dc5785553e758dc7e0342a8e30ced99714924a1cfcc9d931372425608eb6c9ee",
+    "authorizedCallsMadeUnderThisGrant": 0,
+    "mustNotBeRepresentedAsHistoricalCallEvidence": true
+  }
+}

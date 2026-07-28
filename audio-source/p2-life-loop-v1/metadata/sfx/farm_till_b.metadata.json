@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:00:56.072480+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.till.b",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "12eb77b1c3584bdd8807ef180cf4abd6",
+  "request": {
+    "text": "A single close-miked garden hoe strike breaking soft damp loam, compact earthy crumble, light wooden handle movement, warm natural farm foley, no voice, no music, no cinematic boom, clean one-shot for a cozy pixel farming RPG. Softer intimate take, slightly less attack and less high-frequency brightness.",
+    "loop": false,
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.72,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "5605e9d437a348246a391c6b7056cca54fd5f48fd24f1b8d4145bdee608ad33d",
+  "response": {
+    "requestId": null,
+    "traceId": "7e0d86516274ec8580c3033805319ac5",
+    "characterCost": "13",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_till_b.pcm",
+    "bytes": 230400,
+    "sha256": "6b1870b45082f98ec8da97c3ed7c4d34caee42183c8bb066023329b7ee22f61f"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 115200,
+    "frameCount": 57600,
+    "durationSeconds": 1.2,
+    "peakLinear": 1.0,
+    "rmsLinear": 0.02573187,
+    "dcOffsetLinear": -1.864e-05,
+    "clippedSampleCount": 18
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_till_b.wav",
+    "bytes": 230444,
+    "sha256": "0e2392ac633bf2de6d39f3383f42b7007b001102b88a418811a9d8e69573becf",
+    "sourcePcmSha256": "6b1870b45082f98ec8da97c3ed7c4d34caee42183c8bb066023329b7ee22f61f",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.034177+00:00"
+}

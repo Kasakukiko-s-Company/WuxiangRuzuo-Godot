@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "authorizationSource": "用户于 2026-07-28 要求继续制作，并明确要求动画、音效、音乐生成参考所提供对话中的 API；此前已授权非重大决定由主任务自行实施、复核、提交与推送。",
+  "authorizedProvider": "ElevenLabs",
+  "authorizedOperations": [
+    "read-subscription",
+    "create-music-composition-plan",
+    "generate-sound-effect-candidates",
+    "generate-one-music-candidate"
+  ],
+  "limits": {
+    "soundEffectCueCount": 7,
+    "soundEffectVariantsPerCue": 3,
+    "soundEffectCandidateCount": 21,
+    "musicCandidateCount": 1,
+    "maximumObservedCreditDelta": 3000,
+    "allowUsageBasedOverage": false,
+    "allowAdditionalRegeneration": false
+  },
+  "executionTokens": {
+    "plan": "P2-AUDIO-PLAN-1",
+    "soundEffects": "P2-AUDIO-SFX-21",
+    "music": "P2-AUDIO-MUSIC-1"
+  },
+  "storageRoot": "D:/lzq/AI游戏/WuxiangRuzuo-Godot/audio-source/p2-life-loop-v1",
+  "runtimeIntegrationRequiresValidation": true,
+  "saveSchemaChangeAuthorized": false,
+  "shippingApproval": false
+}

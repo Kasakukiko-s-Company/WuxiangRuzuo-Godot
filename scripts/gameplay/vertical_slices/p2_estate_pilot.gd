@@ -11,6 +11,7 @@ const RESOURCE_QUANTITY: int = 3
 @onready var _camera: Camera2D = $Player/Camera2D
 @onready var _farm_overlay: FarmPlotOverlay = $FarmPlotOverlay
 @onready var _daily_overlay: EstateDailyInteractionOverlay = $DailyInteractionOverlay
+@onready var _interaction_feedback: P2InteractionFeedback = $InteractionFeedback
 @onready var _debug_panel: PanelContainer = $HUD/DebugPanel
 @onready var _debug_label: Label = $HUD/DebugPanel/Margin/DebugLabel
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
@@ -19,6 +20,7 @@ const RESOURCE_QUANTITY: int = 3
 @onready var _sleep_fade: ColorRect = $HUD/SleepFade
 
 var _input_service: InputService
+var _audio_service: AudioService
 var _estate_runtime: EstateMapRuntime
 var _game_catalog: GameCatalog
 var _farming_session: FarmingSessionState
@@ -47,7 +49,14 @@ func _ready() -> void:
 	_apply_camera_bounds()
 	_refresh_farming_view()
 	_update_debug()
+	if _audio_service != null:
+		_audio_service.play_music(&"music.h01.spring_day")
 	print("[WuxiangRuzuo] H01 estate pilot started: %s" % _estate_runtime.get_map_id())
+
+
+func _exit_tree() -> void:
+	if _audio_service != null:
+		_audio_service.stop_music()
 
 
 func _physics_process(_delta: float) -> void:
@@ -89,6 +98,12 @@ func configure_input_service(service: InputService) -> void:
 	_input_service = service
 
 
+func configure_audio_service(service: AudioService) -> void:
+	assert(service != null, "P2 estate pilot requires a valid AudioService")
+	assert(not is_node_ready(), "audio service must be injected before the pilot enters the tree")
+	_audio_service = service
+
+
 func configure_estate_runtime(runtime: EstateMapRuntime) -> void:
 	assert(runtime != null, "P2 estate pilot requires an EstateMapRuntime")
 	assert(not is_node_ready(), "estate runtime must be injected before the pilot enters the tree")
@@ -127,6 +142,10 @@ func get_farm_overlay() -> FarmPlotOverlay:
 
 func get_daily_interaction_overlay() -> EstateDailyInteractionOverlay:
 	return _daily_overlay
+
+
+func get_interaction_feedback() -> P2InteractionFeedback:
+	return _interaction_feedback
 
 
 func get_player_cell() -> Vector2i:
@@ -356,6 +375,7 @@ func _till_target() -> void:
 			_farming_session.world_day,
 		)
 		_status_label.text = "已耕地：%s" % target
+		_play_interaction_feedback(&"sfx.farm.till", target)
 	elif result.status == FarmTransactionResult.Status.ALREADY_TILLED:
 		_status_label.text = "这里已经耕过"
 	else:
@@ -377,6 +397,7 @@ func _plant_seed(seed_item_id: StringName) -> void:
 	if result.is_success():
 		_farming_session = result.session
 		_status_label.text = "已播种雾叶草"
+		_play_interaction_feedback(&"sfx.farm.plant", _target_cell())
 	elif result.status == CropPlantingResult.Status.NOT_TILLED:
 		_status_label.text = "需要先耕地"
 	elif result.status == CropPlantingResult.Status.TILE_OCCUPIED:
@@ -399,6 +420,7 @@ func _water_target() -> void:
 	if result.is_success():
 		_farming_session = result.session
 		_status_label.text = "已浇水：%s" % _target_cell()
+		_play_interaction_feedback(&"sfx.farm.water", _target_cell())
 	elif result.status == FarmWateringResult.Status.ALREADY_WATERED:
 		_status_label.text = "今天已经浇过水"
 	else:
@@ -429,6 +451,10 @@ func _attempt_daily_resource_gathering() -> void:
 		_farming_session = result.session
 		_daily_resource_claims = result.claims
 		_status_label.text = "在北草甸找到雾叶草种子 ×%d" % RESOURCE_QUANTITY
+		_play_interaction_feedback(
+			&"sfx.resource.gather",
+			_resource_anchor.cell,
+		)
 	elif result.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED:
 		_status_label.text = "北草甸今天已经采集过了"
 	elif result.status == DailyResourceGatheringResult.Status.INVENTORY_FULL:
@@ -442,6 +468,7 @@ func _request_or_complete_rest() -> void:
 		_rest_confirmation_day = _farming_session.world_day
 		_status_label.text = "回屋休息并结束今天？再次交互确认"
 		_update_daily_overlay()
+		_play_interaction_feedback(&"sfx.rest.confirm", _rest_anchor.cell)
 		return
 	var result := DailyRestCycle.attempt(
 		_farming_session,
@@ -459,6 +486,7 @@ func _request_or_complete_rest() -> void:
 			_farming_session.world_day,
 			result.grown_crop_count,
 		]
+		_play_interaction_feedback(&"sfx.rest.complete", _rest_anchor.cell)
 		_play_rest_transition()
 	else:
 		_clear_rest_confirmation()
@@ -500,6 +528,7 @@ func _attempt_harvest(target_cell: Vector2i) -> bool:
 	if result.is_success():
 		_farming_session = result.session
 		_status_label.text = "收获雾叶草 ×%d" % result.harvested_quantity
+		_play_interaction_feedback(&"sfx.farm.harvest", target_cell)
 		return true
 	if result.status == CropHarvestingResult.Status.NOT_MATURE:
 		_status_label.text = "作物尚未成熟"
@@ -589,6 +618,19 @@ func _update_daily_overlay() -> void:
 		_daily_resource_claims.last_claimed_day(RESOURCE_SOURCE_ID)
 		!= _farming_session.world_day,
 		_rest_confirmation_day == _farming_session.world_day,
+	)
+
+
+func _play_interaction_feedback(
+	audio_id: StringName,
+	target_cell: Vector2i,
+) -> void:
+	if _audio_service != null:
+		_audio_service.play_sound(audio_id)
+	_interaction_feedback.play(
+		audio_id,
+		_coordinate_mapper.cell_center(target_cell),
+		_reduce_motion,
 	)
 
 

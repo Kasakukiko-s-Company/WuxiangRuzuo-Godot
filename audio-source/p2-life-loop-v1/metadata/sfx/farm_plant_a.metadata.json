@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:03.881105+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.plant.a",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "8f8aaa172e5c4eea828fafcaf06730d1",
+  "request": {
+    "text": "A tiny handful of dry seeds sprinkled into freshly tilled soil followed by one soft fingertip pat, delicate organic foley, close and readable, no voice, no music, no magical sparkle, clean one-shot for a cozy pixel farming RPG. Neutral studio take, balanced transients and body.",
+    "loop": false,
+    "duration_seconds": 0.9,
+    "prompt_influence": 0.76,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "c7e9b6373e1858d2a460415dd7545393f719c2d1ec454112d33aebc4e1b48870",
+  "response": {
+    "requestId": null,
+    "traceId": "2761824ba3e5e9261875ca91bdfa8b35",
+    "characterCost": "10",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_plant_a.pcm",
+    "bytes": 168960,
+    "sha256": "af8709499105ffe54b71809f67324f4fbded18522894f7b3967e8e6173ae13a2"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 84480,
+    "frameCount": 42240,
+    "durationSeconds": 0.88,
+    "peakLinear": 1.0,
+    "rmsLinear": 0.08936606,
+    "dcOffsetLinear": -0.00037894,
+    "clippedSampleCount": 1
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_plant_a.wav",
+    "bytes": 169004,
+    "sha256": "051d47a55ec564d447a2deaf7e0f2cc2bc371e4d934aefd801755eda7b19755f",
+    "sourcePcmSha256": "af8709499105ffe54b71809f67324f4fbded18522894f7b3967e8e6173ae13a2",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.082259+00:00"
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:06.687846+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.plant.b",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "40b620e41f364184b0013558aee64171",
+  "request": {
+    "text": "A tiny handful of dry seeds sprinkled into freshly tilled soil followed by one soft fingertip pat, delicate organic foley, close and readable, no voice, no music, no magical sparkle, clean one-shot for a cozy pixel farming RPG. Softer intimate take, slightly less attack and less high-frequency brightness.",
+    "loop": false,
+    "duration_seconds": 0.9,
+    "prompt_influence": 0.76,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "aafa89ec7fb0c287f781f8de4011d65daa5c6416b73ed12c019054946e2acc0f",
+  "response": {
+    "requestId": null,
+    "traceId": "7d0bd7305604ba3747ea333a7afd9ba2",
+    "characterCost": "10",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_plant_b.pcm",
+    "bytes": 168960,
+    "sha256": "1b90c0cfc0b459ac3c2b3b24004d71a37a6163661497ce368cb8c2cc3618d652"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 84480,
+    "frameCount": 42240,
+    "durationSeconds": 0.88,
+    "peakLinear": 0.99996948,
+    "rmsLinear": 0.0800737,
+    "dcOffsetLinear": 2.817e-05,
+    "clippedSampleCount": 2
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_plant_b.wav",
+    "bytes": 169004,
+    "sha256": "c5c32170c5bc2a7b0df8afad7aec4d6ac53966982841cfedfa3d95ca9d532ba1",
+    "sourcePcmSha256": "1b90c0cfc0b459ac3c2b3b24004d71a37a6163661497ce368cb8c2cc3618d652",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.103987+00:00"
+}

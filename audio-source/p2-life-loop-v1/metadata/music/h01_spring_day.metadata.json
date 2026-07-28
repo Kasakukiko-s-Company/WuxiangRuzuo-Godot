@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:04:43.094186+00:00",
+  "kind": "music",
+  "audioId": "music.h01.spring_day",
+  "provider": "ElevenLabs",
+  "capability": "music",
+  "endpoint": "/v1/music/detailed",
+  "model": "music_v2",
+  "localRequestId": "b3c1935a918d4f378ed11f8eb8421762",
+  "request": {
+    "compositionPlanSha256": "5f4d0bc69511e2c75da8eb03f4ee90d7adc1882070b0020a62a5e1446ae44d9d"
+  },
+  "promptSha256": null,
+  "response": {
+    "requestId": null,
+    "traceId": "4e02b2b56756572752760017b0ed950e",
+    "characterCost": null,
+    "songId": "gP6j4uf9pjovz0oYgogS",
+    "contentType": "multipart/mixed; boundary=----boundary28debef912084ae189bbc23561cc5ed3"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\music\\h01_spring_day.mp3",
+    "bytes": 1440621,
+    "sha256": "7c726a9315771d298758b859acb57c65510c5fb92bdfbb27178e073c15f9d706"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "providerDetails": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\metadata\\music\\h01_spring_day.provider.json",
+    "bytes": 3107,
+    "sha256": "e84d4ece0d8056bb1d57a4da84fe3cd149353aaec3b73e757a70d9f06e464303"
+  },
+  "subscriptionBefore": {
+    "capturedAt": "2026-07-28T13:04:31.510259+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10683,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "subscriptionAfter": {
+    "capturedAt": "2026-07-28T13:04:44.967768+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10683,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "observedCreditDelta": 0
+}

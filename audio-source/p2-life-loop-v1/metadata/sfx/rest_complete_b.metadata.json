@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:53.562928+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.rest.complete.b",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "bdd3d58c28dc44878619fcf073d95fdb",
+  "request": {
+    "text": "A very short peaceful dawn transition: soft room hush, one gentle wooden tone and faint morning air opening, warm and hopeful with a trace of misty mystery, no voice, no full music, no alarm clock, clean game transition one-shot. Softer intimate take, slightly less attack and less high-frequency brightness.",
+    "loop": false,
+    "duration_seconds": 2.2,
+    "prompt_influence": 0.72,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "acef96c53e18b0dffd459f51a4983d8900ae8389005fcf0acf787e9a1edf651d",
+  "response": {
+    "requestId": null,
+    "traceId": "50ce165b611ef16278a12852d52d4efd",
+    "characterCost": "24",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\rest_complete_b.pcm",
+    "bytes": 422400,
+    "sha256": "c16b6ea18ed0575b75460bd4ed580cedb01f28f648faf0f47eb51f7fdfbbf548"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 211200,
+    "frameCount": 105600,
+    "durationSeconds": 2.2,
+    "peakLinear": 0.59481812,
+    "rmsLinear": 0.0556385,
+    "dcOffsetLinear": -0.00013658,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\rest_complete_b.wav",
+    "bytes": 422444,
+    "sha256": "f50de1d92dab248915a4bc26c65294cce14612db8e5b1b0de6b2778d2c074489",
+    "sourcePcmSha256": "c16b6ea18ed0575b75460bd4ed580cedb01f28f648faf0f47eb51f7fdfbbf548",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.491251+00:00"
+}

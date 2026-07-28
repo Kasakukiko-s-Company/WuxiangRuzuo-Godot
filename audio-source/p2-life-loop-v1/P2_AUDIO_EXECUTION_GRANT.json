@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "issuedAt": "2026-07-28T14:11:43.308729+00:00",
+  "expiresAt": "2026-07-29T14:11:43.308751+00:00",
+  "contractHashes": {
+    "jobsSha256": "c449426aa02c5858cf99972aecff27977233ee93a05188a61c3571288fefdb70",
+    "authorizationSha256": "cd2e54bd3dfd7625d93e3f89e733981fd016dca9ae3eae50d4eedde3cba6aa46",
+    "scriptSha256": "338e05fe723b55255290ec47e8108bb949eda3b8121b80003eb82f4278152a0e"
+  },
+  "operations": [
+    "read-subscription",
+    "create-music-composition-plan",
+    "generate-sound-effect-candidates",
+    "generate-one-music-candidate"
+  ],
+  "limits": {
+    "soundEffectCueCount": 7,
+    "soundEffectVariantsPerCue": 3,
+    "soundEffectCandidateCount": 21,
+    "musicCandidateCount": 1,
+    "maximumObservedCreditDelta": 3000,
+    "allowUsageBasedOverage": false,
+    "allowAdditionalRegeneration": false
+  },
+  "executionTokens": {
+    "plan": "P2-AUDIO-PLAN-1",
+    "soundEffects": "P2-AUDIO-SFX-21",
+    "music": "P2-AUDIO-MUSIC-1"
+  },
+  "automaticRetries": 0,
+  "shippingApproval": false,
+  "remainingExecutionBudget": {
+    "music-composition-plan": 0,
+    "sound-effect": 0,
+    "music": 0
+  },
+  "completedBatchHasNoRemainingExecutableJobs": true,
+  "versionedSnapshotPath": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\grants\\20260728T141143_308729_0000-338e05fe723b.json",
+  "versionedSnapshotSha256": "dc5785553e758dc7e0342a8e30ced99714924a1cfcc9d931372425608eb6c9ee"
+}

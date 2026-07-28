@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:46.848835+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.rest.confirm.c",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "552442637da34012bb3eb1efdccad487",
+  "request": {
+    "text": "A quiet warm wooden confirmation chime with two soft rounded notes, intimate and reassuring, very short decay, no voice, no melody phrase, no bright arcade beep, clean UI one-shot for a misty rural fantasy RPG. Clearer gameplay-readable take, compact attack and short controlled tail.",
+    "loop": false,
+    "duration_seconds": 0.8,
+    "prompt_influence": 0.78,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "d232ad10f11c80df98194dfcd67894ae62b21e7237535ae13d4b7ded88ebf377",
+  "response": {
+    "requestId": null,
+    "traceId": "91c78e681660bca73a72ae51ef183380",
+    "characterCost": "9",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\rest_confirm_c.pcm",
+    "bytes": 153600,
+    "sha256": "608b40ccaa56d0eb4a78ed61af9febb96a6f69edb79eef9e9c089c61bff88140"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 76800,
+    "frameCount": 38400,
+    "durationSeconds": 0.8,
+    "peakLinear": 0.18621826,
+    "rmsLinear": 0.02056838,
+    "dcOffsetLinear": 1.33e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\rest_confirm_c.wav",
+    "bytes": 153644,
+    "sha256": "db42b84aad59b36b01dd9468f4b85e86d7300324eebed95b5b685a89815540d7",
+    "sourcePcmSha256": "608b40ccaa56d0eb4a78ed61af9febb96a6f69edb79eef9e9c089c61bff88140",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.421116+00:00"
+}

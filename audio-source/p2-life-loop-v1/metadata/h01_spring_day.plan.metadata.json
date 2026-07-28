@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T12:59:12.006267+00:00",
+  "kind": "music-composition-plan",
+  "audioId": "music.h01.spring_day",
+  "provider": "ElevenLabs",
+  "endpoint": "/v1/music/plan",
+  "model": "music_v2",
+  "localRequestId": "72d35effde554a2986f2a9e5dce69f0b",
+  "request": {
+    "prompt": "Create a 60-second instrumental, loop-friendly daytime exploration cue for an original HD-pixel rural fantasy RPG set in a misty East Asian village. Gentle plucked strings, soft bamboo-flute-like breath tones, restrained wood percussion, warm low strings and subtle field-air texture. Calm pastoral daily work is primary; a very faint unresolved mist motif adds curiosity without threat. 76-84 BPM, light dynamic range, clear midrange for gameplay sound effects, no vocals, no lyrics, no artist imitation, no recognizable existing melody, no dramatic trailer build, no heavy drums, no abrupt ending and no long fade. Make the final harmony and texture compatible with returning to the opening.",
+    "music_length_ms": 60000,
+    "model_id": "music_v2"
+  },
+  "response": {
+    "requestId": null,
+    "traceId": "c1f3caaf8735d8898341b5f76a6d030a",
+    "contentType": "application/json"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\plans\\h01_spring_day.music_v2.plan.json",
+    "bytes": 2736,
+    "sha256": "5f4d0bc69511e2c75da8eb03f4ee90d7adc1882070b0020a62a5e1446ae44d9d"
+  },
+  "subscriptionBefore": {
+    "capturedAt": "2026-07-28T12:59:03.063193+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10392,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "subscriptionAfter": {
+    "capturedAt": "2026-07-28T12:59:13.791226+00:00",
+    "tier": "creator",
+    "status": "active",
+    "creditUsed": 10392,
+    "creditLimit": 131000,
+    "maximumOverage": 0,
+    "canExtend": false,
+    "nextResetUnix": 1787416636
+  },
+  "creditsExpected": 0,
+  "candidateOnly": true,
+  "shippingApproval": false
+}

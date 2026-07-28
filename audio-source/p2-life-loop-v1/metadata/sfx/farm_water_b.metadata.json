@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:14.914545+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.water.b",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "90791ff1f29947f2aba0f24233b6553d",
+  "request": {
+    "text": "A small metal watering can pours a short controlled stream onto loose garden soil, gentle water patter and damp absorption, close natural foley, no voice, no music, no oversized splash, clean one-shot for a cozy pixel farming RPG. Softer intimate take, slightly less attack and less high-frequency brightness.",
+    "loop": false,
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.74,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "8f3dfed3a390f002751612b4ee2dcc8dba397881602481ca207bc08a42984f7a",
+  "response": {
+    "requestId": null,
+    "traceId": "d82d5ac9abb6d8a570fe6f4dff9556d0",
+    "characterCost": "17",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_water_b.pcm",
+    "bytes": 284160,
+    "sha256": "53dded7c05ad0fe3fbc49ea4f73bd31e9ec56d79d4d68a960451a656d51f9994"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 142080,
+    "frameCount": 71040,
+    "durationSeconds": 1.48,
+    "peakLinear": 0.96664429,
+    "rmsLinear": 0.06771376,
+    "dcOffsetLinear": -4.278e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_water_b.wav",
+    "bytes": 284204,
+    "sha256": "2bff09bbc27d50b711704fc0854ea4fed7b9de1430500560eacf080674157bf7",
+    "sourcePcmSha256": "53dded7c05ad0fe3fbc49ea4f73bd31e9ec56d79d4d68a960451a656d51f9994",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.181825+00:00"
+}

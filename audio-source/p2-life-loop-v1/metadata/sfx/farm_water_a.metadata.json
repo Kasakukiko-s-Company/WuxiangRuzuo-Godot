@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:12.406773+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.water.a",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "e36dfd5ff7174f4d8599f40d7986814d",
+  "request": {
+    "text": "A small metal watering can pours a short controlled stream onto loose garden soil, gentle water patter and damp absorption, close natural foley, no voice, no music, no oversized splash, clean one-shot for a cozy pixel farming RPG. Neutral studio take, balanced transients and body.",
+    "loop": false,
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.74,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "21cde1f799c659aa635b71716d769d268161deaff9e4cb02decffdf4fde1865a",
+  "response": {
+    "requestId": null,
+    "traceId": "a0b2ea9688982da8ad6d3d0e04c0b188",
+    "characterCost": "17",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_water_a.pcm",
+    "bytes": 284160,
+    "sha256": "f9b3817ebc123fd3b082279926e2dd1b59718c000bdc9695a211e22e18decc57"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 142080,
+    "frameCount": 71040,
+    "durationSeconds": 1.48,
+    "peakLinear": 0.43048096,
+    "rmsLinear": 0.05491026,
+    "dcOffsetLinear": -7.891e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_water_a.wav",
+    "bytes": 284204,
+    "sha256": "f8d0921bab8c809b26303de8ef99825d9b8cb1e31cf5f072248521c4ff718eca",
+    "sourcePcmSha256": "f9b3817ebc123fd3b082279926e2dd1b59718c000bdc9695a211e22e18decc57",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.153591+00:00"
+}

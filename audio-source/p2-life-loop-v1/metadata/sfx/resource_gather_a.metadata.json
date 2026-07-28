@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:01:30.377185+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.resource.gather.a",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "ff1d4ea9b03c44b984aefe6e0b02e063",
+  "request": {
+    "text": "A small wild seed pod is gathered from meadow grass into a cloth pouch, brief grass brush, papery seeds and soft fabric rustle, calm natural foley, no voice, no music, no coin sound, clean one-shot for a cozy pixel farming RPG. Neutral studio take, balanced transients and body.",
+    "loop": false,
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "e9906fb7181c0fa8b8794e28085e4aa22e021fe630a81066023b85c65d07ae04",
+  "response": {
+    "requestId": null,
+    "traceId": "316cc8b249545d266dbbd8915d00799b",
+    "characterCost": "13",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\resource_gather_a.pcm",
+    "bytes": 230400,
+    "sha256": "ea5a67212432f218ad87960525c735430a6d1a46c76ceaa9073a0920bf3237ae"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 115200,
+    "frameCount": 57600,
+    "durationSeconds": 1.2,
+    "peakLinear": 0.18566895,
+    "rmsLinear": 0.0176517,
+    "dcOffsetLinear": -7.446e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\resource_gather_a.wav",
+    "bytes": 230444,
+    "sha256": "70fc52d52cac261d9bd1357508a2a00d52076ab76c235b24ec3787950a293d04",
+    "sourcePcmSha256": "ea5a67212432f218ad87960525c735430a6d1a46c76ceaa9073a0920bf3237ae",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.305174+00:00"
+}

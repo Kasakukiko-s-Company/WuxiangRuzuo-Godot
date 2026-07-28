@@ -75,6 +75,15 @@ func create_input_service() -> InputService:
 	return GodotInputService.new()
 
 
+func create_audio_service(host: Node) -> AudioService:
+	var service := GodotAudioService.new(host)
+	if not service.is_ready():
+		push_error(
+			"Audio catalog validation failed; continuing with silent audio fallback"
+		)
+	return service
+
+
 func get_estate_pilot_definition() -> EstateMapDefinition:
 	if estate_map_catalog == null:
 		return null

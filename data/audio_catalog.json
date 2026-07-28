@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "cues": [
+    {
+      "id": "music.h01.spring_day",
+      "kind": "music",
+      "godotPath": "res://assets/audio/p2/h01_spring_day.mp3",
+      "volumeDb": -17.0,
+      "loop": true
+    },
+    {
+      "id": "sfx.farm.till",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/farm_till.wav",
+      "volumeDb": -8.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.farm.plant",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/farm_plant.wav",
+      "volumeDb": -12.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.farm.water",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/farm_water.wav",
+      "volumeDb": -13.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.farm.harvest",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/farm_harvest.wav",
+      "volumeDb": -10.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.resource.gather",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/resource_gather.wav",
+      "volumeDb": -10.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.rest.confirm",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/rest_confirm.wav",
+      "volumeDb": -13.0,
+      "loop": false
+    },
+    {
+      "id": "sfx.rest.complete",
+      "kind": "sound",
+      "godotPath": "res://assets/audio/p2/rest_complete.wav",
+      "volumeDb": -11.0,
+      "loop": false
+    }
+  ]
+}

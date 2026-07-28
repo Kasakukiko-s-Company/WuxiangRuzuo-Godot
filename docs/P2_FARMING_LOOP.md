@@ -49,7 +49,9 @@
 - `home_door` 是当前正式日终交互点：第一次交互只显示确认，第二次才结算当天；移动、重置或与其他目标交互会取消确认。旧 `N` 原型动作不再推进 P2 日历。
 - `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、家门提示和领取/确认状态；休息成功使用可关闭的短淡出，不拥有领域状态。
 - `FarmPlotOverlay` 使用程序化绘制表现耕地、当日湿土和 0～3 阶段作物；它不是状态源，也不是正式资源。
-- Main 只从 `AppCompositionRoot` 注入通过校验的 `GameCatalog`、H01 runtime 与 `InputService`。
+- `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集和休息；减少动态效果时切换为极短静态反馈。
+- Main 只从 `AppCompositionRoot` 注入通过校验的 `GameCatalog`、H01 runtime、`InputService` 与 `AudioService`。
+- `GodotAudioService` 通过 `data/audio_catalog.json` 将稳定 ID 映射到 1 个音乐播放器和 4 个 SFX 播放器；玩法不读取音频路径。当前接入 7 个 P2 SFX 和 1 个 H01 春季日间音乐候选。
 - HUD 始终显示世界日、八格快捷栏和“不写存档”，避免把原型状态误认为已持久化。
 - 播种季节和 HUD 季节均来自当前 `EstateMapState.season`，不再硬编码春季；它仍是地产状态轴，不冒充完整历法。
 
@@ -58,7 +60,7 @@
 Godot `4.7.1.stable`：
 
 - headless editor/import/parse：exit 0。
-- 25 个 G1、G2、P1、地图和 P2 测试文件：全部 exit 0。
+- 最新完整测试数量与结果以本阶段结束时的 `PLANS.md` 和 `P2_AUDIO_VISUAL_FEEDBACK.md` 为准；此前 25 个 G1、G2、P1、地图和 P2 测试文件全部 exit 0。
 - 新增领域测试：
   - `tests/p2/test_crop_planting.gd`
   - `tests/p2/test_crop_day_cycle.gd`
@@ -66,6 +68,7 @@ Godot `4.7.1.stable`：
   - `tests/p2/test_daily_resource_gathering.gd`
   - `tests/p2/test_daily_rest_cycle.gd`
 - 新增场景闭环测试：`tests/p2/test_h01_farming_loop.gd`。
+- 新增音频 adapter 测试：`tests/p2/test_godot_audio_service.gd`；场景闭环同步验证 7 个稳定 SFX ID、H01 music ID 与交互动画。
 - 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源领取、休息确认、正式跨日、耕地和 N 不再跨日。
 - Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，实际生成并检查三张 1280×720 截图：
   - `builds/verification/p2_h01_resource_source.png`
@@ -78,9 +81,9 @@ Godot `4.7.1.stable`：
 - 文件存档、三档位、原子写入、恢复点或旧档导入。
 - 室内床铺场景、完整过夜演出、体力、水量、经济、商店或多类资源生态。
 - 多作物平衡、季节死亡、肥料、工具升级、机器加工或建造。
-- 正式作物/工具动画、UI 美术、音乐、环境音和音效。
+- 最终发行级逐帧作物/工具动画、UI 美术、完整音乐/环境音/音效覆盖与主观混音验收。
 - H02～H08 批量运行时接入、正式世界路由、NPC、剧情或战斗。
 
 ## P2 剩余出口
 
-下一批应先设计 application session 与 Windows `SaveService` 的原子存档边界；这会涉及不可逆 schema 兼容选择，实施前单独形成可测试的快照和迁移方案。P2 还需要代表性反馈音/动作、资源与作物成本基线、至少一项有意义的玩家选择，以及实际保存恢复后才能验收。
+代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。P2 剩余出口是资源与作物成本基线、至少一项有意义的玩家选择，以及实际保存恢复。下一批应先设计 application session 与 Windows `SaveService` 的原子存档边界；这会涉及不可逆 schema 兼容选择，实施前单独形成可测试的快照和迁移方案。

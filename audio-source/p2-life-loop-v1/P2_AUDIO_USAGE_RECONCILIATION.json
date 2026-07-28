@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "reconciledAt": "2026-07-28T13:21:04.702845+00:00",
+  "subscriptionTier": "creator",
+  "usageBasedOverageEnabled": false,
+  "creditLimit": 131000,
+  "creditUsedBeforeBatch": 10392,
+  "creditUsedBeforeMusic": 10683,
+  "creditUsedAfterProviderDelay": 11508,
+  "actualBatchCreditDelta": 1116,
+  "actualSoundEffectCreditDelta": 291,
+  "actualMusicCreditDelta": 825,
+  "notes": [
+    "Plan 请求前后 creditUsed 均为 10392，composition plan 实际额度变化为 0。",
+    "SFX phase 紧随请求的快照只显示 153 credits；music 请求前快照已变为 10683，因此供应商延迟核销后的 21 个 SFX 实际增量为 291。",
+    "Music 请求紧随请求的快照仍显示 10683；延迟后的只读订阅快照为 11508，因此唯一 music_v2 候选实际增量为 825。",
+    "本文件用于修正逐请求元数据中的延迟用量视图；不改写不可变候选音频或原始响应元数据。"
+  ]
+}

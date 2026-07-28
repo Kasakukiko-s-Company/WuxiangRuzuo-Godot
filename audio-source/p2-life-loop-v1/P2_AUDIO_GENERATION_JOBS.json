@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "project": "WuxiangRuzuo",
+  "purpose": "P2 核心生活循环代表性音效与 H01 日间音乐候选",
+  "candidateOnly": true,
+  "shippingApproval": false,
+  "provider": "ElevenLabs",
+  "soundEffectModel": "eleven_text_to_sound_v2",
+  "musicModel": "music_v2",
+  "soundEffectOutputFormat": "pcm_48000",
+  "musicOutputFormat": "mp3_48000_192",
+  "soundEffectVariants": [
+    {
+      "id": "a",
+      "modifier": "Neutral studio take, balanced transients and body."
+    },
+    {
+      "id": "b",
+      "modifier": "Softer intimate take, slightly less attack and less high-frequency brightness."
+    },
+    {
+      "id": "c",
+      "modifier": "Clearer gameplay-readable take, compact attack and short controlled tail."
+    }
+  ],
+  "soundEffects": [
+    {
+      "audioId": "sfx.farm.till",
+      "fileName": "farm_till.mp3",
+      "durationSeconds": 1.2,
+      "promptInfluence": 0.72,
+      "loop": false,
+      "prompt": "A single close-miked garden hoe strike breaking soft damp loam, compact earthy crumble, light wooden handle movement, warm natural farm foley, no voice, no music, no cinematic boom, clean one-shot for a cozy pixel farming RPG."
+    },
+    {
+      "audioId": "sfx.farm.plant",
+      "fileName": "farm_plant.mp3",
+      "durationSeconds": 0.9,
+      "promptInfluence": 0.76,
+      "loop": false,
+      "prompt": "A tiny handful of dry seeds sprinkled into freshly tilled soil followed by one soft fingertip pat, delicate organic foley, close and readable, no voice, no music, no magical sparkle, clean one-shot for a cozy pixel farming RPG."
+    },
+    {
+      "audioId": "sfx.farm.water",
+      "fileName": "farm_water.mp3",
+      "durationSeconds": 1.5,
+      "promptInfluence": 0.74,
+      "loop": false,
+      "prompt": "A small metal watering can pours a short controlled stream onto loose garden soil, gentle water patter and damp absorption, close natural foley, no voice, no music, no oversized splash, clean one-shot for a cozy pixel farming RPG."
+    },
+    {
+      "audioId": "sfx.farm.harvest",
+      "fileName": "farm_harvest.mp3",
+      "durationSeconds": 1.0,
+      "promptInfluence": 0.7,
+      "loop": false,
+      "prompt": "A tender leafy herb is plucked by hand with a light stem snap and soft leaf rustle, satisfying but restrained natural foley, no voice, no music, no coin sound, clean one-shot for a cozy pixel farming RPG."
+    },
+    {
+      "audioId": "sfx.resource.gather",
+      "fileName": "resource_gather.mp3",
+      "durationSeconds": 1.2,
+      "promptInfluence": 0.7,
+      "loop": false,
+      "prompt": "A small wild seed pod is gathered from meadow grass into a cloth pouch, brief grass brush, papery seeds and soft fabric rustle, calm natural foley, no voice, no music, no coin sound, clean one-shot for a cozy pixel farming RPG."
+    },
+    {
+      "audioId": "sfx.rest.confirm",
+      "fileName": "rest_confirm.mp3",
+      "durationSeconds": 0.8,
+      "promptInfluence": 0.78,
+      "loop": false,
+      "prompt": "A quiet warm wooden confirmation chime with two soft rounded notes, intimate and reassuring, very short decay, no voice, no melody phrase, no bright arcade beep, clean UI one-shot for a misty rural fantasy RPG."
+    },
+    {
+      "audioId": "sfx.rest.complete",
+      "fileName": "rest_complete.mp3",
+      "durationSeconds": 2.2,
+      "promptInfluence": 0.72,
+      "loop": false,
+      "prompt": "A very short peaceful dawn transition: soft room hush, one gentle wooden tone and faint morning air opening, warm and hopeful with a trace of misty mystery, no voice, no full music, no alarm clock, clean game transition one-shot."
+    }
+  ],
+  "music": {
+    "audioId": "music.h01.spring_day",
+    "fileName": "h01_spring_day.mp3",
+    "lengthMs": 60000,
+    "title": "雾野晨光（P2 候选）",
+    "prompt": "Create a 60-second instrumental, loop-friendly daytime exploration cue for an original HD-pixel rural fantasy RPG set in a misty East Asian village. Gentle plucked strings, soft bamboo-flute-like breath tones, restrained wood percussion, warm low strings and subtle field-air texture. Calm pastoral daily work is primary; a very faint unresolved mist motif adds curiosity without threat. 76-84 BPM, light dynamic range, clear midrange for gameplay sound effects, no vocals, no lyrics, no artist imitation, no recognizable existing melody, no dramatic trailer build, no heavy drums, no abrupt ending and no long fade. Make the final harmony and texture compatible with returning to the opening."
+  }
+}

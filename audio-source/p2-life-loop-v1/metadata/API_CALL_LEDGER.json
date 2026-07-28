@@ -1,0 +1,582 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "automaticRetries": 0,
+  "calls": [
+    {
+      "localRequestId": "72d35effde554a2986f2a9e5dce69f0b",
+      "capability": "music-composition-plan",
+      "audioId": "music.h01.spring_day",
+      "endpoint": "/music/plan",
+      "requestSha256": "48be8c14f4ed578a36e926328fd55918e5049b1670c468a5221512d3a88b9c40",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T12:59:03.063531+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T12:59:03.085602+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T12:59:11.999476+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "c1f3caaf8735d8898341b5f76a6d030a",
+      "characterCost": null,
+      "songId": null
+    },
+    {
+      "localRequestId": "b64d004de52a449eba8a42d2f3aaed62",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.till.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "939c35142c457f7a458fee89e43ff5643e6e9f12665feb70c1ae2ccf4a252847",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:00:48.915831+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:00:48.927476+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:00:52.653884+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "ddbeea15123032cb36d448fa81329e1b",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "12eb77b1c3584bdd8807ef180cf4abd6",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.till.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "29ed7ee05bf2a7cd404580e5a31b887b84e10de7d91b00fddbaaac898e18281a",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:00:52.701316+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:00:52.710691+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:00:56.032067+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "7e0d86516274ec8580c3033805319ac5",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "9a242d6b648f43bdb942a9aa66599f55",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.till.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "582ffaac8faee32044aa3a7f3791290ed8b0251516812bf606be2d7663c7b554",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:00:56.087942+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:00:56.100787+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:00:59.590800+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "7635e3301c393e1cebfa12f8a1623562",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "8f8aaa172e5c4eea828fafcaf06730d1",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.plant.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "effcd783cf25568f091a6c1df8692e7b2a7eb9723c539d1323fdfa0d68503ae4",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:00:59.649060+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:00:59.661185+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:03.745174+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "2761824ba3e5e9261875ca91bdfa8b35",
+      "characterCost": "10",
+      "songId": null
+    },
+    {
+      "localRequestId": "40b620e41f364184b0013558aee64171",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.plant.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "6941291ae661894ea93d0273ccc625ca710ca291f2094a4e390696c2d877d47f",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:03.911432+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:03.959966+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:06.651919+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "7d0bd7305604ba3747ea333a7afd9ba2",
+      "characterCost": "10",
+      "songId": null
+    },
+    {
+      "localRequestId": "5f977737b2824280a2c3b26bf77f4532",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.plant.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "38339d3d3fcbb664ab0e01d6d0b069c3c6cc65e4fbd6467752a7a1fc3301960a",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:06.700637+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:06.712203+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:09.584607+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "1a61cbcf84181c8e1b7ebaaf5b99fbe4",
+      "characterCost": "10",
+      "songId": null
+    },
+    {
+      "localRequestId": "e36dfd5ff7174f4d8599f40d7986814d",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.water.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "d267b793ef89c4330be3088cd1161e4671f1e9d5541a884d8c9446165d7b9d88",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:09.632997+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:09.644190+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:12.366777+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "a0b2ea9688982da8ad6d3d0e04c0b188",
+      "characterCost": "17",
+      "songId": null
+    },
+    {
+      "localRequestId": "90791ff1f29947f2aba0f24233b6553d",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.water.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "cbc241aae1dfd3c0ff5d26a7ffc62bcdf00e71ca1dbfbd4e50b6d675f0d03261",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:12.417470+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:12.426649+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:14.871273+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "d82d5ac9abb6d8a570fe6f4dff9556d0",
+      "characterCost": "17",
+      "songId": null
+    },
+    {
+      "localRequestId": "317095ec97154d1ba62e773143b339cf",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.water.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "c1edd91a0123b5af3ac5f3a37785cd8c8bd2d5fafe0486bcb4688baa6ffe8ce8",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:14.925661+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:14.938126+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:17.819044+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "2a5d4ecd62d08a1ee909c9c33c83cb90",
+      "characterCost": "17",
+      "songId": null
+    },
+    {
+      "localRequestId": "f8499bc56b9c45a68e45a43e3d0b9afd",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.harvest.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "63ade0196b31ceb495ca96f8c15979811ba53a54de5ef6b5111a8870ff7bd4db",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:17.875610+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:17.884323+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:20.540663+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "e47971b427fc7b187a2592940fb8f66f",
+      "characterCost": "11",
+      "songId": null
+    },
+    {
+      "localRequestId": "35e6f515e3604513ba37769f62413a03",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.harvest.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "095667ab0c5b06419a6d4c5b447a068b14c3a8e44d7f864fd5c9b9be92c69bb3",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:20.589893+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:20.600129+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:24.599490+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "b37956bd6f80eef0f9c2032cd04c0390",
+      "characterCost": "11",
+      "songId": null
+    },
+    {
+      "localRequestId": "c0e6861f45214624859f82a4ad80a270",
+      "capability": "sound-effect",
+      "audioId": "sfx.farm.harvest.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "0d8e1cb1647c75af36f6c10ae6bc082e97c09f2e6f02998811ac56fed64b0fff",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:24.647520+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:24.657109+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:27.419407+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "38d35a66a4354e874c684ae8139a5e0b",
+      "characterCost": "11",
+      "songId": null
+    },
+    {
+      "localRequestId": "ff1d4ea9b03c44b984aefe6e0b02e063",
+      "capability": "sound-effect",
+      "audioId": "sfx.resource.gather.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "ea1baca9b4e9b36402ed8ae609b148358bd1b43d29502dbe998d1d0974106ec5",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:27.471249+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:27.482993+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:30.337772+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "316cc8b249545d266dbbd8915d00799b",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "1606fba96c594a25b4199b36b079db2a",
+      "capability": "sound-effect",
+      "audioId": "sfx.resource.gather.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "fd6de5943f4df18898d3671220fce8576c077a8bc8126611d7526e89bf0991d6",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:30.389640+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:30.399974+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:33.183071+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "dc19fb4ff2ca6b9fd654bf18b01ceb22",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "3e25d6daa61944acb05846b536e621c0",
+      "capability": "sound-effect",
+      "audioId": "sfx.resource.gather.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "ed90db8dffc9b01fe14011fb54a11c8d7a6d13989cdda26c9facce4f08841dd2",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:33.334579+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:33.383417+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:35.830468+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "c750ca9f300c0de4af8d88fd4b54483a",
+      "characterCost": "13",
+      "songId": null
+    },
+    {
+      "localRequestId": "8a760ddf3cfb48ae84f85144fb8665da",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.confirm.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "974e0c055fbcc34fb2d433621bbaf1f87c817e06fc5033b8520a92a800d41bfb",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:35.886742+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:35.898538+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:38.876226+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "97f12e1557b90dbcfb572c7580bdb673",
+      "characterCost": "9",
+      "songId": null
+    },
+    {
+      "localRequestId": "ed8d82caee0d4ceba28a4314457364a1",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.confirm.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "73e51c52923d4fc15723dbee24cad7f2c17d7b1d5d79fc735ff6ecf8349abc9c",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:38.919601+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:38.931420+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:43.117151+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "0288c196d014c6a3ec8b707b141b025e",
+      "characterCost": "9",
+      "songId": null
+    },
+    {
+      "localRequestId": "552442637da34012bb3eb1efdccad487",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.confirm.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "e8df5c6ea2eb034a256c43373e34394d58fba61249152ee01306678b9acfe155",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:43.161100+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:43.170050+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:46.817809+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "91c78e681660bca73a72ae51ef183380",
+      "characterCost": "9",
+      "songId": null
+    },
+    {
+      "localRequestId": "5e014c0be419416f8206a22051419d84",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.complete.a",
+      "endpoint": "/sound-generation",
+      "requestSha256": "99762f9f4e1fc512910dc56e722e32a8a3e4c049cb770ca68c657c2391cdb4b8",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:46.860102+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:46.869759+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:50.726740+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "8d9306acb87c64c2dac1caa5ff72fb13",
+      "characterCost": "24",
+      "songId": null
+    },
+    {
+      "localRequestId": "bdd3d58c28dc44878619fcf073d95fdb",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.complete.b",
+      "endpoint": "/sound-generation",
+      "requestSha256": "5adfd6c2fa4af304d4626f6837b8b989b788c61f6ddb7c2112e82e79f3d610c0",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:50.786926+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:50.798907+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:53.510733+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "50ce165b611ef16278a12852d52d4efd",
+      "characterCost": "24",
+      "songId": null
+    },
+    {
+      "localRequestId": "84965a6fef5d4a7b8e655770ee866808",
+      "capability": "sound-effect",
+      "audioId": "sfx.rest.complete.c",
+      "endpoint": "/sound-generation",
+      "requestSha256": "2abebf7c8029911e570c9ff52a403c18055ff8885f3c3792a8ed556f574056b3",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:01:53.574054+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:01:53.585367+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:01:56.211704+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "494a079e2a20c494346ae8e35cd5947b",
+      "characterCost": "24",
+      "songId": null
+    },
+    {
+      "localRequestId": "b3c1935a918d4f378ed11f8eb8421762",
+      "capability": "music",
+      "audioId": "music.h01.spring_day",
+      "endpoint": "/music/detailed",
+      "requestSha256": "1ba1c053547b87008f3e9172cb1f6551e3ac1f6e86e4e6698a4a77008fda7dfa",
+      "states": [
+        {
+          "state": "RESERVED",
+          "at": "2026-07-28T13:04:31.511203+00:00"
+        },
+        {
+          "state": "ATTEMPTED",
+          "at": "2026-07-28T13:04:31.523281+00:00"
+        },
+        {
+          "state": "COMPLETED",
+          "at": "2026-07-28T13:04:43.046165+00:00"
+        }
+      ],
+      "providerRequestId": null,
+      "traceId": "4e02b2b56756572752760017b0ed950e",
+      "characterCost": null,
+      "songId": "gP6j4uf9pjovz0oYgogS"
+    }
+  ]
+}

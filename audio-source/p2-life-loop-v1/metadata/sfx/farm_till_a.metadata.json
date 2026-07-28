@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "createdAt": "2026-07-28T13:00:52.689731+00:00",
+  "kind": "sound-effect",
+  "audioId": "sfx.farm.till.a",
+  "provider": "ElevenLabs",
+  "capability": "sound-effect",
+  "endpoint": "/v1/sound-generation",
+  "model": "eleven_text_to_sound_v2",
+  "localRequestId": "b64d004de52a449eba8a42d2f3aaed62",
+  "request": {
+    "text": "A single close-miked garden hoe strike breaking soft damp loam, compact earthy crumble, light wooden handle movement, warm natural farm foley, no voice, no music, no cinematic boom, clean one-shot for a cozy pixel farming RPG. Neutral studio take, balanced transients and body.",
+    "loop": false,
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.72,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "promptSha256": "0220ccf182312ff6dfe5ece0f4b8f3294401814f7666312d1c3df10fdfe159f2",
+  "response": {
+    "requestId": null,
+    "traceId": "ddbeea15123032cb36d448fa81329e1b",
+    "characterCost": "13",
+    "songId": null,
+    "contentType": "audio/pcm"
+  },
+  "output": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\candidates\\sfx\\farm_till_a.pcm",
+    "bytes": 230400,
+    "sha256": "e444b6fd07383393f8f1557b6f2c64403fff8604c47b75591c297b654f831055"
+  },
+  "candidateOnly": true,
+  "godotRuntimeApproved": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "technicalMetrics": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "sampleFormat": "PCM_S16LE",
+    "sampleCount": 115200,
+    "frameCount": 57600,
+    "durationSeconds": 1.2,
+    "peakLinear": 0.60482788,
+    "rmsLinear": 0.01084672,
+    "dcOffsetLinear": -4.3e-05,
+    "clippedSampleCount": 0
+  },
+  "reviewWav": {
+    "path": "D:\\lzq\\AI游戏\\WuxiangRuzuo-Godot\\audio-source\\p2-life-loop-v1\\review\\wav\\farm_till_a.wav",
+    "bytes": 230444,
+    "sha256": "d40d9e409461a2845b1fcac587cfea908b2dfd1a8aff1b18ff0155362cae2e9c",
+    "sourcePcmSha256": "e444b6fd07383393f8f1557b6f2c64403fff8604c47b75591c297b654f831055",
+    "containerOnlyDerivation": true
+  },
+  "derivedArtifactsRebuiltAt": "2026-07-28T13:03:50.004016+00:00"
+}

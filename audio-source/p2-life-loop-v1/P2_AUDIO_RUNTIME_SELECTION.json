@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "batchId": "p2-life-loop-v1",
+  "selectedAt": "2026-07-28",
+  "selectionScope": "P2 vertical-slice representative runtime feedback",
+  "selectionBasis": "API contract, prompt role, stereo PCM integrity, duration, peak/RMS/DC/clipping checks and gameplay-readability variant intent",
+  "subjectiveListeningApproval": false,
+  "commercialReleaseAuthorized": false,
+  "shippingApproval": false,
+  "soundEffects": [
+    {
+      "audioId": "sfx.farm.till",
+      "selectedCandidateId": "sfx.farm.till.c",
+      "sourcePcm": "candidates/sfx/farm_till_c.pcm",
+      "reviewWav": "review/wav/farm_till_c.wav",
+      "runtimePath": "res://assets/audio/p2/farm_till.wav",
+      "reason": "compact readable attack, no clipped samples"
+    },
+    {
+      "audioId": "sfx.farm.plant",
+      "selectedCandidateId": "sfx.farm.plant.c",
+      "sourcePcm": "candidates/sfx/farm_plant_c.pcm",
+      "reviewWav": "review/wav/farm_plant_c.wav",
+      "runtimePath": "res://assets/audio/p2/farm_plant.wav",
+      "reason": "only unclipped candidate; compact gameplay-readable take"
+    },
+    {
+      "audioId": "sfx.farm.water",
+      "selectedCandidateId": "sfx.farm.water.a",
+      "sourcePcm": "candidates/sfx/farm_water_a.pcm",
+      "reviewWav": "review/wav/farm_water_a.wav",
+      "runtimePath": "res://assets/audio/p2/farm_water.wav",
+      "reason": "gentlest peak and balanced RMS for repeated farm use"
+    },
+    {
+      "audioId": "sfx.farm.harvest",
+      "selectedCandidateId": "sfx.farm.harvest.c",
+      "sourcePcm": "candidates/sfx/farm_harvest_c.pcm",
+      "reviewWav": "review/wav/farm_harvest_c.wav",
+      "runtimePath": "res://assets/audio/p2/farm_harvest.wav",
+      "reason": "moderate transient and zero clipping"
+    },
+    {
+      "audioId": "sfx.resource.gather",
+      "selectedCandidateId": "sfx.resource.gather.c",
+      "sourcePcm": "candidates/sfx/resource_gather_c.pcm",
+      "reviewWav": "review/wav/resource_gather_c.wav",
+      "runtimePath": "res://assets/audio/p2/resource_gather.wav",
+      "reason": "clearest peak among restrained, unclipped takes"
+    },
+    {
+      "audioId": "sfx.rest.confirm",
+      "selectedCandidateId": "sfx.rest.confirm.c",
+      "sourcePcm": "candidates/sfx/rest_confirm_c.pcm",
+      "reviewWav": "review/wav/rest_confirm_c.wav",
+      "runtimePath": "res://assets/audio/p2/rest_confirm.wav",
+      "reason": "compact confirmation cue with low DC and zero clipping"
+    },
+    {
+      "audioId": "sfx.rest.complete",
+      "selectedCandidateId": "sfx.rest.complete.c",
+      "sourcePcm": "candidates/sfx/rest_complete_c.pcm",
+      "reviewWav": "review/wav/rest_complete_c.wav",
+      "runtimePath": "res://assets/audio/p2/rest_complete.wav",
+      "reason": "balanced transition level between quiet and prominent takes"
+    }
+  ],
+  "music": {
+    "audioId": "music.h01.spring_day",
+    "sourceCandidate": "candidates/music/h01_spring_day.mp3",
+    "runtimePath": "res://assets/audio/p2/h01_spring_day.mp3",
+    "compositionPlan": "plans/h01_spring_day.music_v2.plan.json",
+    "reason": "single authorized music_v2 candidate generated from the reviewed instrumental loop-oriented plan"
+  }
+}
