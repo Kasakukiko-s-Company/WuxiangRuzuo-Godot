@@ -5,6 +5,7 @@ signal durable_state_committed(
 	reason: StringName,
 	protect_recovery: bool,
 )
+signal playtest_action_committed(action_id: StringName)
 signal return_to_title_requested
 
 const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
@@ -611,7 +612,7 @@ func _till_target() -> void:
 		)
 		_status_label.text = "已耕地：%s" % target
 		_play_interaction_feedback(&"sfx.farm.till", target)
-		_commit_durable_state(&"farm.tilled")
+		_commit_durable_state(&"farm.tilled", false, &"farm.tilled")
 	elif result.status == FarmTransactionResult.Status.ALREADY_TILLED:
 		_status_label.text = "这里已经耕过"
 	else:
@@ -634,7 +635,7 @@ func _plant_seed(seed_item_id: StringName) -> void:
 		_farming_session = result.session
 		_status_label.text = "已播种雾叶草"
 		_play_interaction_feedback(&"sfx.farm.plant", _target_cell())
-		_commit_durable_state(&"farm.planted")
+		_commit_durable_state(&"farm.planted", false, &"farm.planted")
 	elif result.status == CropPlantingResult.Status.NOT_TILLED:
 		_status_label.text = "需要先耕地"
 	elif result.status == CropPlantingResult.Status.TILE_OCCUPIED:
@@ -658,7 +659,7 @@ func _water_target() -> void:
 		_farming_session = result.session
 		_status_label.text = "已浇水：%s" % _target_cell()
 		_play_interaction_feedback(&"sfx.farm.water", _target_cell())
-		_commit_durable_state(&"farm.watered")
+		_commit_durable_state(&"farm.watered", false, &"farm.watered")
 	elif result.status == FarmWateringResult.Status.ALREADY_WATERED:
 		_status_label.text = "今天已经浇过水"
 	else:
@@ -686,7 +687,11 @@ func _advance_crate(intent: NorthMeadowCrateFlow.Intent) -> void:
 		_status_label.text = result.message
 	if not result.durable_reason.is_empty():
 		_play_interaction_feedback(result.audio_id, _resource_anchor.cell)
-		_commit_durable_state(result.durable_reason)
+		_commit_durable_state(
+			result.durable_reason,
+			false,
+			result.committed_action_id,
+		)
 	_update_daily_overlay()
 
 
@@ -731,7 +736,7 @@ func _request_or_complete_rest() -> void:
 		]
 		_play_interaction_feedback(&"sfx.rest.complete", _rest_anchor.cell)
 		_play_rest_transition()
-		_commit_durable_state(&"day.rested", true)
+		_commit_durable_state(&"day.rested", true, &"day.rested")
 	else:
 		_clear_rest_confirmation()
 		_status_label.text = "休息失败：当天状态不连续"
@@ -773,7 +778,11 @@ func _attempt_harvest(target_cell: Vector2i) -> bool:
 		_farming_session = result.session
 		_status_label.text = "收获雾叶草 ×%d" % result.harvested_quantity
 		_play_interaction_feedback(&"sfx.farm.harvest", target_cell)
-		_commit_durable_state(&"farm.harvested")
+		_commit_durable_state(
+			&"farm.harvested",
+			false,
+			&"farm.harvested",
+		)
 		return true
 	if result.status == CropHarvestingResult.Status.NOT_MATURE:
 		_status_label.text = "作物尚未成熟"
@@ -912,8 +921,11 @@ func _refresh_persistence_day_label() -> void:
 func _commit_durable_state(
 	reason: StringName,
 	protect_recovery: bool = false,
+	playtest_action_id: StringName = &"",
 ) -> void:
 	durable_state_committed.emit(reason, protect_recovery)
+	if not playtest_action_id.is_empty():
+		playtest_action_committed.emit(playtest_action_id)
 
 
 func _update_daily_overlay() -> void:

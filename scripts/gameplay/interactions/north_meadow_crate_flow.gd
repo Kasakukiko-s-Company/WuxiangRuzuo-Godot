@@ -160,6 +160,7 @@ func _confirm_resource(
 			"北草甸物资已领取 · %s" % action.label,
 			&"resource.claimed",
 			&"sfx.resource.gather",
+			action.definition_id,
 		)
 	if gathering.status == DailyResourceGatheringResult.Status.INVENTORY_FULL:
 		return _result(
@@ -195,6 +196,7 @@ func _confirm_trade(
 			"交换完成 · %s" % action.label,
 			&"economy.traded",
 			&"sfx.trade.exchange",
+			action.definition_id,
 		)
 	if trade.status == TradeResult.Status.INSUFFICIENT_COST:
 		return _result(
@@ -225,6 +227,7 @@ func _result(
 	message: String,
 	durable_reason: StringName = &"",
 	audio_id: StringName = &"",
+	committed_action_id: StringName = &"",
 ) -> NorthMeadowCrateResult:
 	return NorthMeadowCrateResult.new(
 		outcome,
@@ -234,6 +237,7 @@ func _result(
 		message,
 		durable_reason,
 		audio_id,
+		committed_action_id,
 	)
 
 

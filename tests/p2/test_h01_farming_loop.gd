@@ -71,6 +71,11 @@ func _run() -> void:
 		game_catalog,
 	))
 	pilot.configure_audio_service(recording_audio)
+	var playtest_actions: Array[StringName] = []
+	pilot.playtest_action_committed.connect(
+		func(action_id: StringName) -> void:
+			playtest_actions.append(action_id)
+	)
 	root.add_child(pilot)
 	await process_frame
 	await physics_frame
@@ -408,6 +413,24 @@ func _run() -> void:
 	_check(
 		interaction_feedback.get_last_action_id() == &"sfx.trade.exchange",
 		"the final exchange leaves a typed visual feedback cue",
+	)
+	var expected_playtest_actions: Array[StringName] = [
+		P2PacingEvidenceSession.ACTION_RESOURCE_SEED,
+		P2PacingEvidenceSession.ACTION_TILL,
+		P2PacingEvidenceSession.ACTION_PLANT,
+		P2PacingEvidenceSession.ACTION_WATER,
+		P2PacingEvidenceSession.ACTION_REST,
+		P2PacingEvidenceSession.ACTION_WATER,
+		P2PacingEvidenceSession.ACTION_REST,
+		P2PacingEvidenceSession.ACTION_WATER,
+		P2PacingEvidenceSession.ACTION_REST,
+		P2PacingEvidenceSession.ACTION_HARVEST,
+		P2PacingEvidenceSession.ACTION_SELL,
+		P2PacingEvidenceSession.ACTION_BUY,
+	]
+	_check(
+		playtest_actions == expected_playtest_actions,
+		"the real H01 loop emits the exact ordered playtest action sequence",
 	)
 	var title := pilot.get_node("HUD/TitlePanel/Margin/Title") as Label
 	_check(

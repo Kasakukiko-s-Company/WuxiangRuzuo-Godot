@@ -105,7 +105,8 @@ func _test_normal_daily_claim() -> void:
 		and not claimed.presentation.is_open
 		and _quantity(claimed.session.state.inventory, &"mistleaf_seed") == 3
 		and claimed.claims.last_claimed_day(CLAIM_GROUP_ID) == 1
-		and claimed.durable_reason == &"resource.claimed",
+		and claimed.durable_reason == &"resource.claimed"
+		and claimed.committed_action_id == SEED_SOURCE_ID,
 		"confirming the default action atomically claims three seeds",
 	)
 	var reopened := flow.advance(
@@ -162,7 +163,8 @@ func _test_full_inventory_can_trade_before_claim() -> void:
 		and _quantity(traded.session.state.inventory, &"mistleaf") == 98
 		and _quantity(traded.session.state.inventory, &"village_scrip") == 40
 		and traded.claims.last_claimed_day(CLAIM_GROUP_ID) == 0
-		and traded.durable_reason == &"economy.traded",
+		and traded.durable_reason == &"economy.traded"
+		and traded.committed_action_id == &"economy.h01.sell_mistleaf",
 		"selling from a full bag succeeds without consuming the daily claim",
 	)
 	var reopened := flow.advance(
@@ -184,7 +186,8 @@ func _test_full_inventory_can_trade_before_claim() -> void:
 	_check(
 		claimed.outcome == NorthMeadowCrateResult.Outcome.CLAIMED
 		and _quantity(claimed.session.state.inventory, &"mistleaf") == 99
-		and claimed.claims.last_claimed_day(CLAIM_GROUP_ID) == 1,
+		and claimed.claims.last_claimed_day(CLAIM_GROUP_ID) == 1
+		and claimed.committed_action_id == FORAGE_SOURCE_ID,
 		"the player can still take the daily reward after selling",
 	)
 
@@ -219,7 +222,8 @@ func _test_cost_removal_can_free_reward_slot() -> void:
 		bought.outcome == NorthMeadowCrateResult.Outcome.TRADED
 		and _quantity(bought.session.state.inventory, &"village_scrip") == 0
 		and _quantity(bought.session.state.inventory, &"mistleaf_seed") == 1
-		and bought.claims == claims,
+		and bought.claims == claims
+		and bought.committed_action_id == &"economy.h01.buy_mistleaf_seed",
 		"buying atomically reuses the slot released by its exact cost",
 	)
 	var blocked_inventory := InventoryState.create_empty(1)

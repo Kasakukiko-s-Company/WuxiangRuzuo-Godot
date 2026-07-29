@@ -90,6 +90,15 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 - 当前季节读取 `EstateMapRuntime.get_current_state().season`，同时驱动播种校验和 HUD；完整历法仍未实现。
 - `P2EstatePilot` 在空档时创建 session，在恢复档时安装 application 层提供的 `P2PersistentState`。成功耕地、播种、浇水、收获、资源领取、交换、地产状态变更和日终休息发送 durable commit signal；离开场景还捕获最后位置。节点不知道保存格式或路径。
 
+## P2 本地节奏证据 seam
+
+- `P2EstatePilot` 只在成功玩法事务后发出稳定 `playtest_action_committed`，不依赖 analytics、JSON、路径或网络；durable signal 继续只服务持久状态，不承载失败尝试。
+- `P2PacingEvidenceBinding` 位于 application 层，从已就绪 Pilot 投影强类型 `P2PacingEvidenceSample`，并把白名单动作交给 `P2PacingEvidenceSession`。会话用单调时钟派生时长，明确区分 `human_internal` 与 `automation`；只有新档中的资源→耕种→跨日→收获→出售有序动作链才标记完整循环，恢复档明确排除。
+- `LocalJsonlAnalyticsService` 是当前 `AnalyticsService` 的开发期 adapter：一个随机 session 对应一个 D 盘 JSONL，逐行 flush，并按事件校验完整字段集、逐字段类型和注册值域。未注册文本/路径、隐私、大小或写入边界失败时 adapter 自行停用，玩法与 schema v2 存档继续运行。
+- `AppCompositionRoot` 是唯一知道 `res://builds/playtest-evidence/p2-pacing` 及 D 盘守卫的装配点。普通编辑器、日常调试与自动化都默认关闭；只有显式 `--p2-pacing-human`、`--p2-pacing-automation` 或带明确 run kind 的测试注入才装配，绝不按显示环境猜测真人。
+- 每条记录带 `startingStateKind`、`buildRevision` 与 `contentRevision`，使首次循环样本、恢复档和不同采集/平衡修订可分组回溯。
+- 证据 `evidenceSchemaVersion=1` 不进入 `P2PersistentState`、`SaveSnapshot` 或 `SaveCodec`，存档继续保持 schema v2。
+
 ## P1 场景 seam
 
 - `MovementIntent` 是纯 `RefCounted`，只把语义输入解析为归一化方向和四方向面向。

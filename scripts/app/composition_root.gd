@@ -22,6 +22,11 @@ const P2_ESTATE_PILOT_SCENE: String = (
 	"res://scenes/vertical_slices/p2_estate_pilot.tscn"
 )
 const DEVELOPMENT_SAVE_DIRECTORY: String = "res://builds/save-dev"
+const P2_PACING_EVIDENCE_DIRECTORY: String = (
+	"res://builds/playtest-evidence/p2-pacing"
+)
+const P2_PACING_HUMAN_USER_FLAG: String = "--p2-pacing-human"
+const P2_PACING_AUTOMATION_USER_FLAG: String = "--p2-pacing-automation"
 
 var platform_descriptor: PlatformDescriptor
 var game_catalog: GameCatalog
@@ -256,6 +261,27 @@ func create_save_service() -> SaveService:
 	return AtomicFileSaveAdapter.new(save_directory)
 
 
+func create_analytics_service(
+	session_id_override: String = "",
+) -> AnalyticsService:
+	var output_directory := ProjectSettings.globalize_path(
+		P2_PACING_EVIDENCE_DIRECTORY
+	)
+	if not _is_d_drive_path(output_directory):
+		return null
+	var service := LocalJsonlAnalyticsService.new(
+		output_directory,
+		session_id_override,
+	)
+	if not service.is_ready():
+		push_warning(
+			"Local P2 pacing evidence is unavailable; gameplay continues: %s"
+			% service.last_error()
+		)
+		return null
+	return service
+
+
 func create_profile_roster(
 	storage_override: SaveService = null,
 ) -> SaveProfileRoster:
@@ -279,6 +305,8 @@ func create_profile_roster(
 func create_h01_launch(
 	profile_id: StringName,
 	storage_override: SaveService = null,
+	analytics_override: AnalyticsService = null,
+	pacing_run_kind_override: StringName = &"",
 ) -> H01LaunchResult:
 	if not is_ready():
 		return H01LaunchResult.blocked(
@@ -354,6 +382,38 @@ func create_h01_launch(
 	navigation_binding.name = "SessionNavigationBinding"
 	navigation_binding.configure(pilot, binding, MAIN_SCENE)
 	pilot.add_child(navigation_binding)
+	var analytics := analytics_override
+	var run_kind := pacing_run_kind_override
+	if analytics == null and run_kind.is_empty():
+		run_kind = _requested_local_pacing_run_kind()
+	var run_kind_is_valid := (
+		run_kind == P2PacingEvidenceSession.RUN_KIND_AUTOMATION
+		or run_kind == P2PacingEvidenceSession.RUN_KIND_HUMAN_INTERNAL
+	)
+	if not run_kind_is_valid:
+		if analytics != null or not run_kind.is_empty():
+			push_warning(
+				"Local P2 pacing evidence requires an explicit valid run kind; "
+				+ "gameplay continues without evidence"
+			)
+		analytics = null
+	elif analytics == null:
+		analytics = create_analytics_service()
+	if analytics != null:
+		var evidence_binding := P2PacingEvidenceBinding.new()
+		evidence_binding.name = "PacingEvidenceBinding"
+		var starting_state_kind := (
+			P2PacingEvidenceSession.STARTING_STATE_RESUMED
+			if load_result.status == GameSaveLoadResult.Status.LOADED
+			else P2PacingEvidenceSession.STARTING_STATE_FRESH
+		)
+		evidence_binding.configure(
+			analytics,
+			pilot,
+			run_kind,
+			starting_state_kind,
+		)
+		pilot.add_child(evidence_binding)
 	return H01LaunchResult.ready(pilot)
 
 
@@ -376,3 +436,33 @@ func _persistence_status(
 
 func _is_d_drive_path(path: String) -> bool:
 	return path.replace("\\", "/").to_lower().begins_with("d:/")
+
+
+func _requested_local_pacing_run_kind() -> StringName:
+	var user_arguments := OS.get_cmdline_user_args()
+	var resolved := _resolve_local_pacing_run_kind(user_arguments)
+	if resolved.is_empty() and (
+		user_arguments.has(P2_PACING_HUMAN_USER_FLAG)
+		or user_arguments.has(P2_PACING_AUTOMATION_USER_FLAG)
+	):
+		push_warning(
+			"Conflicting P2 pacing flags were supplied; "
+			+ "gameplay continues without evidence"
+		)
+	return resolved
+
+
+func _resolve_local_pacing_run_kind(
+	user_arguments: PackedStringArray,
+) -> StringName:
+	var human_requested := user_arguments.has(P2_PACING_HUMAN_USER_FLAG)
+	var automation_requested := user_arguments.has(
+		P2_PACING_AUTOMATION_USER_FLAG
+	)
+	if human_requested and automation_requested:
+		return &""
+	if human_requested:
+		return P2PacingEvidenceSession.RUN_KIND_HUMAN_INTERNAL
+	if automation_requested:
+		return P2PacingEvidenceSession.RUN_KIND_AUTOMATION
+	return &""

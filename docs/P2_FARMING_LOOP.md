@@ -111,6 +111,14 @@ Godot `4.7.1.stable`：
 - 最终发行级逐帧作物/工具动画、UI 美术、完整音乐/环境音/音效覆盖与主观混音验收。
 - H02～H08 批量运行时接入、正式世界路由、NPC、剧情或战斗。
 
+## 本地节奏证据
+
+H01 现在通过 application 层的 `P2PacingEvidenceBinding` 观察独立的 `playtest_action_committed` 语义信号；玩法节点仍不知道 `AnalyticsService`、JSONL 或文件路径。物资箱成功结果显式返回稳定 source/offer ID，耕地、播种、浇水、休息和收获沿用稳定动作 ID；证据层只接受白名单，不从 UI 文案或背包差值猜测选择。
+
+普通编辑器、日常调试、headless 和自动截图默认都不采集；只有显式 `--p2-pacing-human` 的知情内部试玩，或显式 `--p2-pacing-automation`/测试注入，才逐行写入 D 盘 Git 忽略目录 `builds/playtest-evidence/p2-pacing/`。记录按事件执行严格字段类型和逐值注册，不接收 profile ID、绝对路径、坐标、未注册自由文本或存档 payload；写入失败不会回滚合法玩法或 schema v2 保存事务。首次循环完成仅接受新档中的有序动作链，恢复档单独排除，并携带 build/content revision。完整契约见 `P2_PACING_EVIDENCE.md`。
+
+当前仅可声明 `instrumentationReady=true`；`humanEvidenceCollected=false`、`designDecisionReviewed=false`。自动测试仍不能替代实际玩家节奏判断。
+
 ## P2 剩余出口
 
 代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复、三档技术管理、会话安全返回和首轮生活循环目标可发现性的技术缺口已经关闭；发行 adapter 与最终标题视觉仍属于后续。北草甸二选一与轻量交换已经提供可运行的延迟产出、即时物品、卖出和必要回购闭环，但每日免费资源仍会削弱稀缺性，且自动目标不能替代真实玩家节奏证据。下一批应安排实际玩家验证，再依据证据调整早期资源压力；不能仅凭当前引导和确定性测试宣布 P2 完成。完整交换边界见 `P2_LIGHTWEIGHT_ECONOMY.md`。

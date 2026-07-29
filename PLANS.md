@@ -155,6 +155,7 @@
 - 轻量交换批次自动回归为 35/35 个 Godot 测试文件和 4/4 个 ElevenLabs pipeline guard 全通过；Godot 4.7.1 headless editor/import 与默认 Main 也为 exit 0。交易界面 Compatibility 截图已在后续同一 H01 捕获工具中生成并检查；它与资源、休息、农作、暂停画面都只保存在 D 盘 Git 忽略目录。
 - 2026-07-29 H01 已接入会话暂停、恢复和经二次确认的安全返回标题。`P2EstatePilot` 在暂停时取消瞬态资源箱/休息确认并锁住玩法输入，`P2PauseMenu` 可在暂停树中处理 Esc/Start，`P2SessionNavigationBinding` 由 application 层拥有 Main 路径和场景切换。可写会话返回前通过既有退出 seam 保存所选档位；只读恢复不承诺保存且保持损坏证据不变。专项回归覆盖暂停态恢复、取消默认焦点、返回后重进位置和只读证据保护；Compatibility Renderer 已生成并检查 640×360 暂停/返回确认画面。存档仍为 schema v2，P2 仍未完成。
 - 2026-07-29 H01 FarmingPanel 已增加强类型生活循环下一目标。`H01LifeLoopGuide` 不依赖 Node、I/O 或存档，以真实领取/交易/背包事务 dry-run 推导领取、耕地、播种、浇水、休息、收获、出售、必要回购或明确阻塞；已照料一株即可休息，当日免费资源先于回购，有种子时不会反复诱导购买，缺少工具或满背包也不会提示必然失败的操作。纯状态测试与完整场景动作链共同验证 HUD 更新；没有新增教程状态或修改 schema v2，P2 仍待真实玩家节奏验证。
+- 2026-07-29 H01 已建立不联网的本地节奏证据 seam：成功动作以稳定 source/offer/action ID 进入强类型会话；普通编辑器、日常调试和自动化默认都不采集，只有显式 `--p2-pacing-human`、`--p2-pacing-automation` 或带 run kind 的测试注入才在 D 盘 `builds/playtest-evidence/p2-pacing/` 生成一 session 一份 JSONL。adapter 按事件校验完整字段类型与注册值域，拒绝 profile、路径、坐标、未注册文本、嵌套属性和非 D 盘输出；中途写入失败不影响真实耕地事务或 schema v2 保存。首次完成只接受新档有序动作链，恢复档单独排除，记录携带 build/content revision；证据 schema v1 与 SaveSnapshot schema v2 分离。当前仅 `instrumentationReady=true`，尚无真人样本或平衡复盘，P2 仍未完成。
 - 当前 P2 已有首条可兑现的卖出/回购交换和确定性自动节奏基线，但仍缺玩家验证与据此进行的成本/收益校准；村社券和北草甸数值只是可替换的 P2 假设，不冒充完整经济决策。本地保存与代表性动画/声音缺口关闭，也不等于 P2 已完成。记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`、`docs/P2_RESOURCE_CHOICE.md`、`docs/P2_SAVE_RESTORE.md`、`docs/P2_LIGHTWEIGHT_ECONOMY.md`。
 
 ## 后续制作阶段
