@@ -78,6 +78,11 @@ func _run() -> void:
 		recording_audio.music_id == &"music.h01.spring_day",
 		"P2 starts the H01 daytime music through the AudioService boundary",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.CLAIM_DAILY_RESOURCE,
+		"the live HUD starts with an executable daily-resource objective",
+	)
 
 	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 	var player := pilot.get_player()
@@ -137,6 +142,11 @@ func _run() -> void:
 		_inventory_quantity(gathered.state.inventory, &"mistleaf_seed") == 3,
 		"confirming the default long-term offer obtains three seeds",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.TILL_SOIL,
+		"the live HUD advances from resource choice to tilling",
+	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	_check(
@@ -172,6 +182,11 @@ func _run() -> void:
 		tilled.state.farm.tile_at(target_cell) != null,
 		"selected hoe tills the facing farmable H01 cell",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.PLANT_SEED,
+		"the live HUD advances from tilling to planting",
+	)
 
 	_send_snapshot(
 		pilot,
@@ -186,6 +201,11 @@ func _run() -> void:
 		planted.state.inventory.stack_at(2).quantity == 2,
 		"planting consumes one seed obtained from the map resource source",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.WATER_CROP,
+		"the live HUD advances from planting to crop care",
+	)
 
 	_send_snapshot(
 		pilot,
@@ -195,6 +215,11 @@ func _run() -> void:
 	_check(
 		watered_day_one.state.farm.tile_at(target_cell).watered_on_day == 1,
 		"selected watering can waters the planted tile on day one",
+	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.REST_FOR_GROWTH,
+		"one cared-for crop completes the first-day objective chain",
 	)
 
 	var rest_anchor: EstateAnchorResult = runtime.query_anchor(
@@ -277,6 +302,11 @@ func _run() -> void:
 		mature_crop != null and mature_crop.stage_index == 3,
 		"three watered transitions produce a mature visible crop",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.HARVEST_CROP,
+		"the live HUD recognizes a harvestable mature crop",
+	)
 	player.global_position = mapper.cell_center(source_cell)
 	player.facing = approach["direction"]
 	player.velocity = Vector2.ZERO
@@ -290,6 +320,11 @@ func _run() -> void:
 	_check(
 		_inventory_quantity(harvested.state.inventory, &"mistleaf") == 1,
 		"harvest places one mistleaf in the in-memory inventory",
+	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.SELL_PRODUCE,
+		"the live HUD routes harvested produce to the exchange endpoint",
 	)
 	_place_for_interaction(player, mapper, resource_approach)
 	player.interaction_requested.emit(player.global_position, player.facing)
@@ -313,6 +348,11 @@ func _run() -> void:
 		and _inventory_quantity(sold.state.inventory, &"village_scrip") == 30,
 		"the north-meadow crate sells one harvested mistleaf",
 	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.CLAIM_DAILY_RESOURCE,
+		"existing seed stock prevents the HUD from forcing another purchase",
+	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	var select_buy := InputSnapshot.neutral()
@@ -334,6 +374,11 @@ func _run() -> void:
 	_check(
 		pilot.get_daily_interaction_overlay().is_daily_claim_available(),
 		"trade leaves the current day's resource choice available",
+	)
+	_check_objective(
+		pilot,
+		P2LifeLoopObjective.Stage.CLAIM_DAILY_RESOURCE,
+		"optional buying does not hide the still-available daily resource choice",
 	)
 	var overlay: FarmPlotOverlay = pilot.get_farm_overlay()
 	_check(
@@ -463,6 +508,25 @@ func _inventory_quantity(
 		if stack != null and stack.item_id == item_id:
 			quantity += stack.quantity
 	return quantity
+
+
+func _check_objective(
+	pilot: P2EstatePilot,
+	expected_stage: P2LifeLoopObjective.Stage,
+	label: String,
+) -> void:
+	var objective := pilot.current_life_loop_objective()
+	var objective_label := pilot.get_node(
+		"HUD/FarmingPanel/Margin/Rows/ObjectiveLabel"
+	) as Label
+	_check(
+		objective != null
+		and objective.stage == expected_stage
+		and objective_label != null
+		and objective_label.is_visible_in_tree()
+		and objective_label.text.contains(objective.text),
+		label,
+	)
 
 
 func _check(condition: bool, label: String) -> void:

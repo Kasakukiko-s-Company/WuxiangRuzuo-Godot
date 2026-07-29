@@ -27,6 +27,7 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
 @onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
 @onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
+@onready var _objective_label: Label = %ObjectiveLabel
 @onready var _sleep_fade: ColorRect = $HUD/SleepFade
 @onready var _pause_menu: P2PauseMenu = $HUD/PauseMenu
 
@@ -46,6 +47,7 @@ var _resource_anchor: EstateAnchorResult
 var _rest_anchor: EstateAnchorResult
 var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
+var _life_loop_guide: H01LifeLoopGuide
 var _reduce_motion: bool = false
 var _initial_persistent_state: P2PersistentState
 var _persistence_status: String = "内存状态，不写存档"
@@ -67,6 +69,11 @@ func _ready() -> void:
 	)
 	_initialize_farming_session()
 	_initialize_daily_interactions()
+	_life_loop_guide = H01LifeLoopGuide.new(
+		_game_catalog,
+		_trade_book,
+		_daily_resource_sources,
+	)
 	if not _restore_initial_state():
 		reset_to_safe_spawn()
 	_apply_camera_bounds()
@@ -296,6 +303,19 @@ func get_interaction_feedback() -> P2InteractionFeedback:
 
 func get_pause_menu() -> P2PauseMenu:
 	return _pause_menu
+
+
+func current_life_loop_objective() -> P2LifeLoopObjective:
+	if (
+		_farming_session == null
+		or _daily_resource_claims == null
+		or _life_loop_guide == null
+	):
+		return null
+	return _life_loop_guide.present(
+		_farming_session,
+		_daily_resource_claims,
+	)
 
 
 func get_player_cell() -> Vector2i:
@@ -837,6 +857,12 @@ func _refresh_farming_view() -> void:
 				]
 			)
 	_quickbar_label.text = "  ".join(slot_labels)
+	var objective := current_life_loop_objective()
+	_objective_label.text = (
+		"目标：%s" % objective.text
+		if objective != null
+		else "目标：生活循环状态暂不可用"
+	)
 
 
 func _update_persistence_labels() -> void:

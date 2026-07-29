@@ -80,6 +80,7 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 - `DailyResourceSourceCatalog` 先验证来源 ID 到地图、锚点、物品和数量的唯一映射；同一每日选择组的来源必须共享地图和锚点，组 ID 不得与来源 ID 冲突。`DailyResourceClaims` 与 `DailyResourceGathering` 再以来源 ID 或共享组 ID 作为稳定领取键，把“每个领取键每天最多成功一次”放在纯领域层。背包满、日期回退或伪造来源时领取记录不前移。
 - `DailyRestPointCatalog` 验证休息点的地图归属与锚点；`DailyRestCycle` 只接收目录 ID 与待完成世界日。场景的二次确认只负责发出命令，不能直接递增日期。
 - `TradeOfferCatalog` 独立于场景验证 offer、endpoint、物品引用与数量；`TradeBook` 只暴露 `offers(endpoint_id)` 和 `execute(inventory, command)`。`NorthMeadowCrateFlow` 把每日资源与交换编排为四项 H01 行动牌组，以不可变 dry-run 决定 enabled/blocked 和默认选择；成功领取才更新 claim，交易从不修改 claim。H01 Node 不临时改价格或直接修改背包。
+- `H01LifeLoopGuide.present()` 是 H01 专用的纯展示投影：输入不可变 session、claims 和受验证目录，输出只读 `P2LifeLoopObjective`。它复用 `DailyResourceGathering.attempt()`、`TradeBook.execute()` 与 `InventoryState.with_added()` 做无副作用可执行性探测，不另建教程状态、任务完成标记或存档字段；Node 只把结果写入常驻 HUD。
 - `village_scrip` 作为普通 material 进入既有背包/存档 seam，不建立尚未通过产品验证的全局钱包。未来若改变为通用货币，必须显式迁移 schema 和语义。
 - `FarmDayAdvanceCommand` 携带明确 `completed_day`，使已处理命令幂等、未来命令拒绝，并让整批作物在预检通过后才统一结算。
 - `FarmState.restore()` 验证农田自身结构、作物引用、阶段派生与种植/结算日关系；世界地图 ID 是否存在由 codec/application 使用相应世界目录校验，避免领域层继续绑定退役的四地图 fixture。

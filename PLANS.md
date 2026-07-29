@@ -154,6 +154,7 @@
 - 2026-07-29 Main 已接入三档技术管理页：只读巡检区分空档、可继续、恢复、损坏、不支持 schema、内容不兼容和读取失败；成功启动后以独立 `profile-directory` metadata v1 记录最近档，损坏的最近档保持选中并禁止启动。确认删除按 quarantine → protected → current 清理并逐键验证，取消零写入，部分失败不会谎报空档；H01 只绑定所选 profile。`SaveSnapshot` 仍为 schema v2。Godot 4.7.1 全量 40/40、Python guard 4/4、默认 Main、真实 D 盘 adapter 和 Compatibility Renderer 640×360 档位/删除画面均已验证；当前页不是最终标题美术，P2 仍未完成。
 - 轻量交换批次自动回归为 35/35 个 Godot 测试文件和 4/4 个 ElevenLabs pipeline guard 全通过；Godot 4.7.1 headless editor/import 与默认 Main 也为 exit 0。交易界面 Compatibility 截图已在后续同一 H01 捕获工具中生成并检查；它与资源、休息、农作、暂停画面都只保存在 D 盘 Git 忽略目录。
 - 2026-07-29 H01 已接入会话暂停、恢复和经二次确认的安全返回标题。`P2EstatePilot` 在暂停时取消瞬态资源箱/休息确认并锁住玩法输入，`P2PauseMenu` 可在暂停树中处理 Esc/Start，`P2SessionNavigationBinding` 由 application 层拥有 Main 路径和场景切换。可写会话返回前通过既有退出 seam 保存所选档位；只读恢复不承诺保存且保持损坏证据不变。专项回归覆盖暂停态恢复、取消默认焦点、返回后重进位置和只读证据保护；Compatibility Renderer 已生成并检查 640×360 暂停/返回确认画面。存档仍为 schema v2，P2 仍未完成。
+- 2026-07-29 H01 FarmingPanel 已增加强类型生活循环下一目标。`H01LifeLoopGuide` 不依赖 Node、I/O 或存档，以真实领取/交易/背包事务 dry-run 推导领取、耕地、播种、浇水、休息、收获、出售、必要回购或明确阻塞；已照料一株即可休息，当日免费资源先于回购，有种子时不会反复诱导购买，缺少工具或满背包也不会提示必然失败的操作。纯状态测试与完整场景动作链共同验证 HUD 更新；没有新增教程状态或修改 schema v2，P2 仍待真实玩家节奏验证。
 - 当前 P2 已有首条可兑现的卖出/回购交换和确定性自动节奏基线，但仍缺玩家验证与据此进行的成本/收益校准；村社券和北草甸数值只是可替换的 P2 假设，不冒充完整经济决策。本地保存与代表性动画/声音缺口关闭，也不等于 P2 已完成。记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`、`docs/P2_RESOURCE_CHOICE.md`、`docs/P2_SAVE_RESTORE.md`、`docs/P2_LIGHTWEIGHT_ECONOMY.md`。
 
 ## 后续制作阶段
