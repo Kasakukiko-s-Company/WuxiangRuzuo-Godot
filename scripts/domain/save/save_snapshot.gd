@@ -1,7 +1,8 @@
 class_name SaveSnapshot
 extends RefCounted
 
-const SCHEMA_VERSION: int = 1
+const SCHEMA_VERSION: int = 2
+const LEGACY_SCHEMA_VERSION: int = 1
 const PROFILE_IDS: Array[StringName] = [&"profile-1", &"profile-2", &"profile-3"]
 
 
@@ -64,6 +65,8 @@ var current_map_id: StringName
 var player: Player
 var farm: FarmState
 var inventory: InventoryState
+var estate_map_state: EstateMapState
+var daily_resource_claims: DailyResourceClaims = DailyResourceClaims.create_empty()
 var story_flags: Dictionary = {}
 var relationships: Array[Relationship] = []
 var spouse_character_id: StringName

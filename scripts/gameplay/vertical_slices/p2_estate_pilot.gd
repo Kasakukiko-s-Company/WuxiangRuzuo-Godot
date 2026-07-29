@@ -1,6 +1,11 @@
 class_name P2EstatePilot
 extends Node2D
 
+signal durable_state_committed(
+	reason: StringName,
+	protect_recovery: bool,
+)
+
 const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
 const RESOURCE_SEED_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
 const RESOURCE_FORAGE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow.forage"
@@ -14,6 +19,7 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _farm_overlay: FarmPlotOverlay = $FarmPlotOverlay
 @onready var _daily_overlay: EstateDailyInteractionOverlay = $DailyInteractionOverlay
 @onready var _interaction_feedback: P2InteractionFeedback = $InteractionFeedback
+@onready var _title_label: Label = $HUD/TitlePanel/Margin/Title
 @onready var _debug_panel: PanelContainer = $HUD/DebugPanel
 @onready var _debug_label: Label = $HUD/DebugPanel/Margin/DebugLabel
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
@@ -39,6 +45,9 @@ var _resource_choice_index: int = 0
 var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
+var _initial_persistent_state: P2PersistentState
+var _persistence_status: String = "内存状态，不写存档"
+var _player_health: int = 5
 
 
 func _ready() -> void:
@@ -49,8 +58,10 @@ func _ready() -> void:
 	_player.interaction_requested.connect(_on_interaction_requested)
 	_initialize_farming_session()
 	_initialize_daily_interactions()
-	reset_to_safe_spawn()
+	if not _restore_initial_state():
+		reset_to_safe_spawn()
 	_apply_camera_bounds()
+	_update_persistence_labels()
 	_refresh_farming_view()
 	_update_debug()
 	if _audio_service != null:
@@ -59,6 +70,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if _farming_session != null and _estate_runtime != null:
+		_commit_durable_state(&"session.exiting")
 	if _audio_service != null:
 		_audio_service.stop_music()
 
@@ -135,6 +148,66 @@ func configure_game_catalog(catalog: GameCatalog) -> void:
 	_game_catalog = catalog
 
 
+func configure_initial_state(state: P2PersistentState) -> bool:
+	assert(
+		not is_node_ready(),
+		"initial persistent state must be configured before entering the tree",
+	)
+	if (
+		state == null
+		or _estate_runtime == null
+		or state.map_id != _estate_runtime.get_map_id()
+	):
+		return false
+	_initial_persistent_state = state.snapshot()
+	return true
+
+
+func configure_persistence_status(status: String) -> void:
+	assert(
+		not is_node_ready(),
+		"persistence status must be configured before entering the tree",
+	)
+	assert(
+		not status.strip_edges().is_empty(),
+		"persistence status must not be empty",
+	)
+	_persistence_status = status.strip_edges()
+
+
+func capture_persistent_state() -> P2PersistentState:
+	assert(
+		_farming_session != null and _estate_runtime != null,
+		"persistent state can only be captured after pilot initialization",
+	)
+	return P2PersistentState.new(
+		_estate_runtime.get_map_id(),
+		_farming_session,
+		_player.global_position,
+		_player.facing,
+		SAFE_SPAWN_ID,
+		_player_health,
+		_estate_runtime.get_current_state(),
+		_daily_resource_claims,
+	)
+
+
+func present_persistence_failure(message: String) -> void:
+	_persistence_status = "存档故障 · 仅内存（不会覆盖）"
+	_update_persistence_labels()
+	_refresh_persistence_day_label()
+	_status_label.text = "自动保存失败：%s" % message
+
+
+func present_persistence_status(status: String, message: String = "") -> void:
+	assert(not status.strip_edges().is_empty(), "persistence status must not be empty")
+	_persistence_status = status.strip_edges()
+	_update_persistence_labels()
+	_refresh_persistence_day_label()
+	if not message.is_empty():
+		_status_label.text = message
+
+
 func get_estate_runtime() -> EstateMapRuntime:
 	return _estate_runtime
 
@@ -193,6 +266,7 @@ func apply_estate_state(state: EstateMapState) -> EstateMapApplyResult:
 			state.development,
 			state.anomaly,
 		]
+		_commit_durable_state(&"estate.state_changed")
 	else:
 		_status_label.text = "地产状态切换失败：%s" % result.message
 	return result
@@ -316,6 +390,49 @@ func _initialize_daily_interactions() -> void:
 	)
 
 
+func _restore_initial_state() -> bool:
+	if _initial_persistent_state == null:
+		return false
+	var state := _initial_persistent_state
+	var map_result := _estate_runtime.apply_state(state.estate_map_state)
+	if not map_result.is_success():
+		return false
+	_farming_session = state.farming_session
+	_daily_resource_claims = state.daily_resource_claims
+	_player_health = state.player_health
+	_resource_choice_day = 0
+	_resource_choice_index = 0
+	_rest_confirmation_day = 0
+	var player_cell := _coordinate_mapper.world_to_cell(
+		state.player_position
+	)
+	var semantics := _estate_runtime.query_cell(player_cell)
+	if semantics.is_in_bounds() and not semantics.colliding:
+		_player.global_position = state.player_position
+		_player.facing = state.player_facing
+	else:
+		var fallback := _estate_runtime.query_anchor(
+			&"spawn",
+			state.player_fallback_anchor_id,
+		)
+		if not fallback.is_found():
+			fallback = _estate_runtime.query_anchor(
+				&"spawn",
+				SAFE_SPAWN_ID,
+			)
+		if not fallback.is_found():
+			return false
+		_player.global_position = fallback.world_position
+		_player.facing = Vector2i.DOWN
+	_player.velocity = Vector2.ZERO
+	_player.set_input_locked(false)
+	_status_label.text = "已恢复本地档位 · 第 %d 天" % (
+		_farming_session.world_day
+	)
+	_initial_persistent_state = null
+	return true
+
+
 func _add_starter_item(
 	inventory: InventoryState,
 	item_id: StringName,
@@ -409,6 +526,7 @@ func _till_target() -> void:
 		)
 		_status_label.text = "已耕地：%s" % target
 		_play_interaction_feedback(&"sfx.farm.till", target)
+		_commit_durable_state(&"farm.tilled")
 	elif result.status == FarmTransactionResult.Status.ALREADY_TILLED:
 		_status_label.text = "这里已经耕过"
 	else:
@@ -431,6 +549,7 @@ func _plant_seed(seed_item_id: StringName) -> void:
 		_farming_session = result.session
 		_status_label.text = "已播种雾叶草"
 		_play_interaction_feedback(&"sfx.farm.plant", _target_cell())
+		_commit_durable_state(&"farm.planted")
 	elif result.status == CropPlantingResult.Status.NOT_TILLED:
 		_status_label.text = "需要先耕地"
 	elif result.status == CropPlantingResult.Status.TILE_OCCUPIED:
@@ -454,6 +573,7 @@ func _water_target() -> void:
 		_farming_session = result.session
 		_status_label.text = "已浇水：%s" % _target_cell()
 		_play_interaction_feedback(&"sfx.farm.water", _target_cell())
+		_commit_durable_state(&"farm.watered")
 	elif result.status == FarmWateringResult.Status.ALREADY_WATERED:
 		_status_label.text = "今天已经浇过水"
 	else:
@@ -508,6 +628,7 @@ func _attempt_daily_resource_gathering(source_id: StringName) -> void:
 			&"sfx.resource.gather",
 			_resource_anchor.cell,
 		)
+		_commit_durable_state(&"resource.claimed")
 	elif result.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED:
 		_clear_resource_choice()
 		_status_label.text = "北草甸今天已经选择过资源了"
@@ -543,6 +664,7 @@ func _request_or_complete_rest() -> void:
 		]
 		_play_interaction_feedback(&"sfx.rest.complete", _rest_anchor.cell)
 		_play_rest_transition()
+		_commit_durable_state(&"day.rested", true)
 	else:
 		_clear_rest_confirmation()
 		_status_label.text = "休息失败：当天状态不连续"
@@ -584,6 +706,7 @@ func _attempt_harvest(target_cell: Vector2i) -> bool:
 		_farming_session = result.session
 		_status_label.text = "收获雾叶草 ×%d" % result.harvested_quantity
 		_play_interaction_feedback(&"sfx.farm.harvest", target_cell)
+		_commit_durable_state(&"farm.harvested")
 		return true
 	if result.status == CropHarvestingResult.Status.NOT_MATURE:
 		_status_label.text = "作物尚未成熟"
@@ -645,9 +768,10 @@ func _refresh_farming_view() -> void:
 		_farming_session.world_day,
 	)
 	_update_daily_overlay()
-	_day_label.text = "第 %d 天 · %s · 内存原型" % [
+	_day_label.text = "第 %d 天 · %s · %s" % [
 		_farming_session.world_day,
 		_season_display_name(_estate_runtime.get_current_state().season),
+		_persistence_status,
 	]
 	var inventory := _farming_session.state.inventory
 	var slot_labels: PackedStringArray = []
@@ -666,6 +790,33 @@ func _refresh_farming_view() -> void:
 				]
 			)
 	_quickbar_label.text = "  ".join(slot_labels)
+
+
+func _update_persistence_labels() -> void:
+	if _title_label == null:
+		return
+	_title_label.text = (
+		"P2 地产生活闭环 · H01 开阔草甸（%s）\n"
+		+ "移动 · E/A 选择/确认/收获/休息 · "
+		+ "Q/Tab/肩键切换 · F/X 使用 · R 重置"
+	) % _persistence_status
+
+
+func _refresh_persistence_day_label() -> void:
+	if _day_label == null or _farming_session == null:
+		return
+	_day_label.text = "第 %d 天 · %s · %s" % [
+		_farming_session.world_day,
+		_season_display_name(_estate_runtime.get_current_state().season),
+		_persistence_status,
+	]
+
+
+func _commit_durable_state(
+	reason: StringName,
+	protect_recovery: bool = false,
+) -> void:
+	durable_state_committed.emit(reason, protect_recovery)
 
 
 func _update_daily_overlay() -> void:

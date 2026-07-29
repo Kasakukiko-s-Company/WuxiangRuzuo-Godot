@@ -7,6 +7,12 @@ extends RefCounted
 func read(slot_id: StringName) -> SaveReadResult
 
 
+## Returns the storage adapter's previous physical version, if it has one.
+## Application code still validates the opaque payload through SaveCodec.
+@abstract
+func read_previous(slot_id: StringName) -> SaveReadResult
+
+
 @abstract
 func write(slot_id: StringName, payload: String) -> SaveWriteResult
 

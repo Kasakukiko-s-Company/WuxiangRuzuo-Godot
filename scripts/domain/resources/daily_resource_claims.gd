@@ -9,6 +9,15 @@ static func create_empty() -> DailyResourceClaims:
 	return DailyResourceClaims.new(empty)
 
 
+static func restore(
+	last_claimed_days: Dictionary[StringName, int],
+) -> DailyResourceClaims:
+	for claim_key: StringName in last_claimed_days:
+		if claim_key.is_empty() or last_claimed_days[claim_key] < 1:
+			return null
+	return DailyResourceClaims.new(last_claimed_days)
+
+
 func _init(
 	last_claimed_days: Dictionary[StringName, int],
 ) -> void:
@@ -32,3 +41,7 @@ func with_claim(resource_claim_key: StringName, world_day: int) -> DailyResource
 
 func snapshot() -> DailyResourceClaims:
 	return DailyResourceClaims.new(_last_claimed_days)
+
+
+func copy_claim_days() -> Dictionary[StringName, int]:
+	return _last_claimed_days.duplicate()

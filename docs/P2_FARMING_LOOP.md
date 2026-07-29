@@ -6,11 +6,11 @@
 
 `前往北草甸选择当日资源 → 选择种子时耕地 → 播种 → 浇水 → 回家二次确认休息 → 跨日成长 → 成熟 → 收获入包`
 
-它验证了互斥资源选择、资源获得、农作事务、正式休息点与 Godot 场景桥接，但当前 session 和每日资源领取记录只在运行内存中存在。退出场景或关闭游戏后状态会丢失；本轮没有修改 `SaveSnapshot`、`SaveCodec` 或存档 schema，也没有宣称 P2 已完成。
+它验证了互斥资源选择、资源获得、农作事务、正式休息点、Godot 场景桥接和本地保存恢复。当前 `profile-1` 会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。该技术切片仍不代表 P2 完成。
 
 ## 可玩入口与操作
 
-从 `res://scenes/Main.tscn` 点击“进入 H01 地产农作闭环”，或直接通过 application composition root 装配 `res://scenes/vertical_slices/p2_estate_pilot.tscn`。
+从 `res://scenes/Main.tscn` 点击“进入 H01 地产农作闭环”。正式入口调用 `AppCompositionRoot.create_h01_launch(&"profile-1")`，不应绕过 application 层直接运行持久会话场景。
 
 | 操作 | 键盘 | 手柄 |
 | --- | --- | --- |
@@ -43,19 +43,21 @@ HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作�
 - 当前雾叶草的三个成长阶段各需一个已浇水日；第 4 天进入成熟阶段。
 - 收获先验证背包能完整容纳产物，再移除作物；背包满时成熟作物保留。
 - `FarmState.tile_at()` 与 `InventoryState.stack_at()` 返回防御性副本，场景层不能绕过事务修改权威状态。
-- `FarmState.restore()` 验证自身结构、作物目录、阶段派生和种植/结算日关系，不再错误依赖旧四地图目录；地图 ID 的世界目录校验留在 `SaveCodec`/application 边界。H01 农田状态已能在不修改存档 schema 的情况下完成领域往返。
+- `FarmState.restore()` 验证自身结构、作物目录、阶段派生和种植/结算日关系，不再错误依赖旧四地图目录；地图 ID 的世界/地产目录校验留在 `SaveCodec`/application 边界。
+- `SaveSnapshot.schemaVersion=2` 新增 H01 `estateMapState` 与 `dailyResourceClaims`；decoder 仍能读取 Godot v1，但不伪造缺失的 H01 状态。
+- `P2PersistentState` 是场景和保存模块之间的强类型聚合；`GameSaveModule` 隔离 current/protected 语义，`SaveService` 只看到不透明字符串。
 
 ## Godot 场景桥接
 
-- `P2EstatePilot` 只持有当前 in-memory session、每日领取记录和可取消的资源选择 UI 状态；每个物理帧采样一次语义输入、查询 H01 格/锚点语义并刷新视图。P2 中的 Player 明确进入 external-snapshot 模式并关闭自身物理采样，避免父子双重驱动和速度被清零。
+- `P2EstatePilot` 持有当前 session、每日领取记录和可取消的资源选择 UI 状态；每个物理帧采样一次语义输入、查询 H01 格/锚点语义并刷新视图。它只捕获/安装 `P2PersistentState` 并发送 durable commit signal，不读取 JSON、档位键或文件路径。P2 中的 Player 明确进入 external-snapshot 模式并关闭自身物理采样，避免父子双重驱动和速度被清零。
 - `resource_north_meadow` 仍是地图提供的资源生成区域数据包络；Area2D 物理监测关闭不等于其语义数据不可查询。玩法用强类型来源定义把领域 ID 投影到锚点和中心位置，不读取候选路径或 TMX 对象序号。
 - `home_door` 是当前正式日终交互点：第一次交互只显示确认，第二次才结算当天；移动、重置或与其他目标交互会取消确认。旧 `N` 原型动作不再推进 P2 日历。
 - `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、两个选择标记、当前选择环、家门提示和领取/确认状态；休息成功使用可关闭的短淡出，不拥有领域状态。
 - `FarmPlotOverlay` 使用程序化绘制表现耕地、当日湿土和 0～3 阶段作物；它不是状态源，也不是正式资源。
 - `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集和休息；减少动态效果时切换为极短静态反馈。
-- Main 只从 `AppCompositionRoot` 注入通过校验的 `GameCatalog`、H01 runtime、`InputService` 与 `AudioService`。
+- Main 只向 `AppCompositionRoot` 请求一个固定 profile 的 H01 launch；组合根注入通过校验的 `GameCatalog`、H01 runtime、`InputService`、`AudioService`、`GameSaveModule` 和具体 `SaveService`。
 - `GodotAudioService` 通过 `data/audio_catalog.json` 将稳定 ID 映射到 1 个音乐播放器和 4 个 SFX 播放器；玩法不读取音频路径。当前接入 7 个 P2 SFX 和 1 个 H01 春季日间音乐候选。
-- HUD 始终显示世界日、八格快捷栏和“不写存档”，避免把原型状态误认为已持久化。
+- HUD 始终显示世界日、八格快捷栏和真实保存模式。空档、当前档、受保护恢复点和存档故障不会冒充同一状态。
 - 播种季节和 HUD 季节均来自当前 `EstateMapState.season`，不再硬编码春季；它仍是地产状态轴，不冒充完整历法。
 
 ## 自动验证
@@ -63,7 +65,7 @@ HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作�
 Godot `4.7.1.stable`：
 
 - headless editor/import/parse：exit 0。
-- 2026-07-29 最新完整回归为 27 个 G1、G2、P1、地图和 P2 测试文件全部 exit 0；headless editor/import/parse 与默认 Main 启动同样 exit 0。
+- 保存专项测试覆盖 v1/v2 codec、typed state bridge、current/protected 回退、三 profile 隔离、原子替换、损坏隔离和 composition root 端到端启动。最新完整测试数量与结果以 `PLANS.md` 和 `P2_SAVE_RESTORE.md` 为准。
 - 新增领域测试：
   - `tests/p2/test_crop_planting.gd`
   - `tests/p2/test_crop_day_cycle.gd`
@@ -80,9 +82,17 @@ Godot `4.7.1.stable`：
   - `builds/verification/p2_h01_farming_loop.png`
 - 截图和运行日志位于 D 盘 Git 忽略目录，不进入提交。
 
+## 当前保存边界
+
+- 开发期存档固定在 D 盘项目 `builds/save-dev/profile-N.json`；该目录由 `.gdignore`/`.gitignore` 隔离，不是发行路径承诺。
+- `.tmp`、`.rollback`、`.bak` 与目标文件位于同一目录；现有目标先转为 `.rollback`，新目标提交成功后才更新 `.bak`。`.bak` 是物理写入保护，不等于业务上的 `profile-N.protected`。
+- 普通成功动作和离开场景更新 current；成功确认休息再更新 protected。protected 写失败会报告降级，但不否认 current 已成功。
+- current primary 有效时直接恢复；否则同时验证 current previous、protected primary 和 protected previous，并按世界日、保存时间与稳定来源优先级选择最新 fallback。pre-promote 的 `.rollback` 会作为 primary 暴露，不会被更旧 `.bak` 隐藏。无效载荷先隔离；无法隔离时仍可只读恢复，但不会写回。没有任何有效候选时阻止 H01 启动并保留载荷。
+- `profile-1`～`profile-3` 的键空间和 codec 已隔离，Main 当前只选择 `profile-1`；档位选择/删除/最近档 UI 尚未实现。
+
 ## 本轮明确不做
 
-- 文件存档、三档位、原子写入、恢复点或旧档导入。
+- 三档位选择/删除/最近档 UI、发行期 Windows 路径、Steam 云、Web/微信 adapter 或旧 Cocos 档导入。
 - 室内床铺场景、完整过夜演出、体力、水量、经济、商店或多类资源生态。
 - 能把目录售价实际兑现的出售/消费/货币闭环，以及经玩家测试的选择平衡。
 - 多作物平衡、季节死亡、肥料、工具升级、机器加工或建造。
@@ -91,4 +101,4 @@ Godot `4.7.1.stable`：
 
 ## P2 剩余出口
 
-代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。北草甸二选一已经提供可运行的互斥奖励和容量失败成本，但在出售/消费能力进入前不能单独关闭“有意义的玩家选择”出口。P2 仍缺实际保存恢复，以及能兑现并验证成本/收益的轻量经济闭环。下一批应先设计 application session 与 Windows `SaveService` 的原子存档边界；这会涉及不可逆 schema 兼容选择，实施前单独形成可测试的快照和迁移方案。
+代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复缺口已经关闭，但三档管理 UI 和发行 adapter 仍属于后续。北草甸二选一已经提供可运行的互斥奖励和容量失败成本，在出售/消费能力进入前仍不能单独关闭“有意义的经济选择”出口。下一批应实现最小可兑现经济闭环并做节奏验证，同时保持本轮 schema v2 回归。

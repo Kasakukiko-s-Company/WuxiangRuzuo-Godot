@@ -1,15 +1,14 @@
 extends Control
 
 const P1_PROTOTYPE_SCENE: String = "res://scenes/prototypes/p1_experience_probe.tscn"
-const P2_ESTATE_PILOT_SCENE: String = (
-	"res://scenes/vertical_slices/p2_estate_pilot.tscn"
-)
+const ACTIVE_PROFILE_ID: StringName = &"profile-1"
 
 @onready var status_label: Label = %StatusLabel
 @onready var launch_p1_button: Button = $Margin/Center/Content/LaunchP1Button
 @onready var launch_p2_button: Button = $Margin/Center/Content/LaunchP2Button
 
 var _composition_root: AppCompositionRoot
+var _save_service_override: SaveService
 
 
 func _ready() -> void:
@@ -27,6 +26,15 @@ func _ready() -> void:
 	print("[WuxiangRuzuo] main scene started: %s" % status_label.text)
 
 
+func configure_save_service_override(service: SaveService) -> void:
+	assert(
+		not is_node_ready(),
+		"Main save override must be configured before entering the tree",
+	)
+	assert(service != null, "Main save override requires a SaveService")
+	_save_service_override = service
+
+
 func _on_launch_p1_pressed() -> void:
 	var result := get_tree().change_scene_to_file(P1_PROTOTYPE_SCENE)
 	if result != OK:
@@ -40,38 +48,18 @@ func _on_launch_p2_pressed() -> void:
 	if _composition_root == null or not _composition_root.is_ready():
 		push_error("[WuxiangRuzuo] P2 scene transition blocked: bootstrap is not ready")
 		return
-	var pilot_scene := load(P2_ESTATE_PILOT_SCENE) as PackedScene
-	var definition: EstateMapDefinition = (
-		_composition_root.get_estate_pilot_definition()
+	var launch := _composition_root.create_h01_launch(
+		ACTIVE_PROFILE_ID,
+		_save_service_override,
 	)
-	if pilot_scene == null or definition == null:
-		push_error("[WuxiangRuzuo] P2 scene transition failed: pilot contract is missing")
-		return
-	var runtime_scene := load(definition.runtime_scene_path) as PackedScene
-	if runtime_scene == null:
+	if not launch.is_ready():
+		status_label.text = "H01 档位不可用（原文件未被覆盖）"
 		push_error(
-			"[WuxiangRuzuo] P2 scene transition failed: %s"
-			% definition.runtime_scene_path
+			"[WuxiangRuzuo] P2 scene transition blocked: %s"
+			% launch.message
 		)
 		return
-	var pilot := pilot_scene.instantiate() as P2EstatePilot
-	var runtime := runtime_scene.instantiate() as EstateMapRuntime
-	if pilot == null or runtime == null:
-		push_error(
-			"[WuxiangRuzuo] P2 scene transition failed: typed scene contract mismatch"
-		)
-		if pilot != null:
-			pilot.free()
-		if runtime != null:
-			runtime.free()
-		return
-	pilot.configure_estate_runtime(runtime)
-	pilot.configure_input_service(_composition_root.create_input_service())
-	pilot.configure_game_catalog(_composition_root.game_catalog)
-	pilot.configure_audio_service(
-		_composition_root.create_audio_service(pilot)
-	)
-	_replace_current_scene(pilot)
+	_replace_current_scene(launch.pilot)
 
 
 func _replace_current_scene(next_scene: Node) -> void:

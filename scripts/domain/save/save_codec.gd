@@ -4,14 +4,22 @@ extends RefCounted
 const FACING_VALUES: Array[StringName] = [&"up", &"right", &"down", &"left"]
 
 
-static func encode(snapshot: SaveSnapshot, catalog: GameCatalog) -> SaveCodecResult:
-	var issues := _validate_snapshot(snapshot, catalog)
+static func encode(
+	snapshot: SaveSnapshot,
+	catalog: GameCatalog,
+	estate_catalog: EstateMapCatalog = null,
+) -> SaveCodecResult:
+	var issues := _validate_snapshot(snapshot, catalog, estate_catalog)
 	if not issues.is_empty():
 		return SaveCodecResult.failed(SaveCodecResult.Status.INVALID_DATA, issues)
 	return SaveCodecResult.encoded(JSON.stringify(_snapshot_to_dictionary(snapshot)))
 
 
-static func decode(payload: String, catalog: GameCatalog) -> SaveCodecResult:
+static func decode(
+	payload: String,
+	catalog: GameCatalog,
+	estate_catalog: EstateMapCatalog = null,
+) -> SaveCodecResult:
 	var json := JSON.new()
 	if json.parse(payload) != OK:
 		return SaveCodecResult.failed(
@@ -25,7 +33,11 @@ static func decode(payload: String, catalog: GameCatalog) -> SaveCodecResult:
 		)
 	var document: Dictionary = json.data as Dictionary
 	var schema_value: Variant = document.get("schemaVersion")
-	if _is_integer(schema_value) and int(schema_value) != SaveSnapshot.SCHEMA_VERSION:
+	if (
+		_is_integer(schema_value)
+		and int(schema_value) != SaveSnapshot.LEGACY_SCHEMA_VERSION
+		and int(schema_value) != SaveSnapshot.SCHEMA_VERSION
+	):
 		return SaveCodecResult.failed(
 			SaveCodecResult.Status.UNSUPPORTED_SCHEMA,
 			[DataValidationIssue.new(
@@ -40,15 +52,22 @@ static func decode(payload: String, catalog: GameCatalog) -> SaveCodecResult:
 		)
 
 	var issues: Array[DataValidationIssue] = []
-	var snapshot := _dictionary_to_snapshot(document, catalog, issues)
-	issues.append_array(_validate_snapshot(snapshot, catalog))
+	var schema_version := int(schema_value)
+	var snapshot := _dictionary_to_snapshot(
+		document,
+		schema_version,
+		catalog,
+		issues,
+	)
+	issues.append_array(_validate_snapshot(snapshot, catalog, estate_catalog))
 	if not issues.is_empty():
 		return SaveCodecResult.failed(SaveCodecResult.Status.INVALID_DATA, issues)
-	return SaveCodecResult.decoded(snapshot)
+	return SaveCodecResult.decoded(snapshot, schema_version)
 
 
 static func _dictionary_to_snapshot(
 	document: Dictionary,
+	schema_version: int,
 	catalog: GameCatalog,
 	issues: Array[DataValidationIssue],
 ) -> SaveSnapshot:
@@ -65,6 +84,19 @@ static func _dictionary_to_snapshot(
 	snapshot.player = _decode_player(document.get("player"), issues)
 	snapshot.inventory = _decode_inventory(document.get("inventory"), catalog, issues)
 	snapshot.farm = _decode_farm(document.get("farm"), catalog, issues)
+	if schema_version >= SaveSnapshot.SCHEMA_VERSION:
+		snapshot.estate_map_state = _decode_estate_map_state(
+			document.get("estateMapState"),
+			snapshot.current_map_id,
+			issues,
+		)
+		snapshot.daily_resource_claims = _decode_daily_resource_claims(
+			document.get("dailyResourceClaims"),
+			issues,
+		)
+	else:
+		snapshot.estate_map_state = null
+		snapshot.daily_resource_claims = DailyResourceClaims.create_empty()
 	snapshot.story_flags = _decode_story_flags(document.get("storyFlags"), issues)
 	snapshot.relationships = _decode_relationships(document.get("relationships"), issues)
 	snapshot.spouse_character_id = _read_nullable_id(
@@ -164,6 +196,124 @@ static func _decode_farm(
 	return farm
 
 
+static func _decode_estate_map_state(
+	value: Variant,
+	current_map_id: StringName,
+	issues: Array[DataValidationIssue],
+) -> EstateMapState:
+	if value == null:
+		return null
+	var record := _as_record(value, "estateMapState", issues)
+	var map_id := StringName(_read_string(
+		record,
+		"mapId",
+		"estateMapState.mapId",
+		issues,
+	))
+	if map_id != current_map_id:
+		_add_issue(
+			issues,
+			"estateMapState.mapId",
+			"must match currentMapId",
+		)
+	var axes := _as_record(
+		record.get("axes"),
+		"estateMapState.axes",
+		issues,
+	)
+	var axis_values: Dictionary[StringName, StringName] = {}
+	for raw_axis_id: Variant in axes:
+		if typeof(raw_axis_id) != TYPE_STRING:
+			_add_issue(
+				issues,
+				"estateMapState.axes",
+				"axis IDs must be strings",
+			)
+			continue
+		var axis_id := String(raw_axis_id)
+		if not _is_stable_id(axis_id):
+			_add_issue(
+				issues,
+				"estateMapState.axes.%s" % axis_id,
+				"axis ID must be a lowercase stable ID",
+			)
+			continue
+		var axis_value: Variant = axes[raw_axis_id]
+		if (
+			typeof(axis_value) != TYPE_STRING
+			or String(axis_value).strip_edges().is_empty()
+		):
+			_add_issue(
+				issues,
+				"estateMapState.axes.%s" % axis_id,
+				"axis value must be a non-empty string",
+			)
+			continue
+		axis_values[StringName(axis_id)] = StringName(
+			String(axis_value).strip_edges()
+		)
+	for required_axis: StringName in [&"season", &"development", &"anomaly"]:
+		if not axis_values.has(required_axis):
+			_add_issue(
+				issues,
+				"estateMapState.axes.%s" % required_axis,
+				"required estate axis is missing",
+			)
+	return EstateMapState.new(
+		axis_values.get(&"season", &""),
+		axis_values.get(&"development", &""),
+		axis_values.get(&"anomaly", &""),
+		axis_values,
+	)
+
+
+static func _decode_daily_resource_claims(
+	value: Variant,
+	issues: Array[DataValidationIssue],
+) -> DailyResourceClaims:
+	var raw_claims: Array = []
+	if value is Array:
+		raw_claims = value as Array
+	else:
+		_add_issue(issues, "dailyResourceClaims", "must be an array")
+	var claim_days: Dictionary[StringName, int] = {}
+	for index: int in raw_claims.size():
+		var path := "dailyResourceClaims[%d]" % index
+		var record := _as_record(raw_claims[index], path, issues)
+		var claim_key := _read_string(
+			record,
+			"claimKey",
+			path + ".claimKey",
+			issues,
+		)
+		if not _is_stable_id(claim_key):
+			_add_issue(
+				issues,
+				path + ".claimKey",
+				"must be a lowercase stable ID",
+			)
+			continue
+		var typed_key := StringName(claim_key)
+		if claim_days.has(typed_key):
+			_add_issue(issues, path + ".claimKey", "duplicates a claim key")
+			continue
+		claim_days[typed_key] = _read_integer(
+			record,
+			"lastClaimedDay",
+			path + ".lastClaimedDay",
+			issues,
+			1,
+		)
+	var claims := DailyResourceClaims.restore(claim_days)
+	if claims == null:
+		_add_issue(
+			issues,
+			"dailyResourceClaims",
+			"claim keys and days are invalid",
+		)
+	return claims
+
+
 static func _decode_story_flags(value: Variant, issues: Array[DataValidationIssue]) -> Dictionary:
 	var record := _as_record(value, "storyFlags", issues)
 	var flags: Dictionary = {}
@@ -216,6 +366,7 @@ static func _decode_mine_run(value: Variant, issues: Array[DataValidationIssue])
 static func _validate_snapshot(
 	snapshot: SaveSnapshot,
 	catalog: GameCatalog,
+	estate_catalog: EstateMapCatalog,
 ) -> Array[DataValidationIssue]:
 	var issues: Array[DataValidationIssue] = []
 	if snapshot == null:
@@ -227,8 +378,15 @@ static func _validate_snapshot(
 		_add_issue(issues, "profileId", "must be profile-1, profile-2, or profile-3")
 	if snapshot.world_day < 1:
 		_add_issue(issues, "worldDay", "must be >= 1")
-	var current_map: CatalogDefinitions.DemoMap = catalog.get_map(snapshot.current_map_id)
-	if current_map == null:
+	var current_map: CatalogDefinitions.DemoMap = catalog.get_map(
+		snapshot.current_map_id
+	)
+	var current_estate: EstateMapDefinition = (
+		null
+		if estate_catalog == null
+		else estate_catalog.get_map(snapshot.current_map_id)
+	)
+	if current_map == null and current_estate == null:
 		_add_issue(issues, "currentMapId", "references an unknown map")
 	if snapshot.player == null:
 		_add_issue(issues, "player", "must be present")
@@ -239,10 +397,59 @@ static func _validate_snapshot(
 			_add_issue(issues, "player.health", "must be between 0 and 5")
 		if not is_finite(snapshot.player.position.x) or not is_finite(snapshot.player.position.y):
 			_add_issue(issues, "player.position", "must contain finite coordinates")
-		if current_map != null and not snapshot.player.anchor_id.is_empty() and not current_map.has_anchor(snapshot.player.anchor_id):
+		if (
+			current_map != null
+			and not snapshot.player.anchor_id.is_empty()
+			and not current_map.has_anchor(snapshot.player.anchor_id)
+		):
 			_add_issue(issues, "player.anchorId", "is not registered by current map")
+		if (
+			current_estate != null
+			and not snapshot.player.anchor_id.is_empty()
+			and snapshot.player.anchor_id != current_estate.safe_spawn_id
+		):
+			_add_issue(
+				issues,
+				"player.anchorId",
+				"is not the registered estate fallback anchor",
+			)
+		if (
+			current_estate != null
+			and (
+				snapshot.player.position.x < 0.0
+				or snapshot.player.position.y < 0.0
+				or snapshot.player.position.x
+					>= current_estate.size_tiles.x
+					* current_estate.tile_size_pixels
+				or snapshot.player.position.y
+					>= current_estate.size_tiles.y
+					* current_estate.tile_size_pixels
+			)
+		):
+			_add_issue(
+				issues,
+				"player.position",
+				"must be inside the estate map bounds",
+			)
 	_validate_inventory(snapshot.inventory, catalog, issues)
-	_validate_farm(snapshot.farm, snapshot.world_day, catalog, issues)
+	_validate_farm(
+		snapshot.farm,
+		snapshot.world_day,
+		catalog,
+		estate_catalog,
+		issues,
+	)
+	_validate_estate_map_state(
+		snapshot.estate_map_state,
+		current_map,
+		current_estate,
+		issues,
+	)
+	_validate_daily_resource_claims(
+		snapshot.daily_resource_claims,
+		snapshot.world_day,
+		issues,
+	)
 	_validate_story_flags(snapshot.story_flags, issues)
 	_validate_relationships(snapshot.relationships, snapshot.spouse_character_id, catalog, issues)
 	_validate_mine_run(snapshot.mine_run, snapshot.world_day, issues)
@@ -276,15 +483,22 @@ static func _validate_farm(
 	farm: FarmState,
 	world_day: int,
 	catalog: GameCatalog,
+	estate_catalog: EstateMapCatalog,
 	issues: Array[DataValidationIssue],
 ) -> void:
 	if farm == null:
 		_add_issue(issues, "farm", "must be present")
 		return
 	var map: CatalogDefinitions.DemoMap = catalog.get_map(farm.map_id)
-	if map == null:
+	var estate: EstateMapDefinition = (
+		null
+		if estate_catalog == null
+		else estate_catalog.get_map(farm.map_id)
+	)
+	if map == null and estate == null:
 		_add_issue(issues, "farm.mapId", "references an unknown map")
 		return
+	var map_size := map.size_tiles if map != null else estate.size_tiles
 	var tiles := farm.copy_tiles()
 	var seen: Dictionary = {}
 	for index: int in tiles.size():
@@ -293,7 +507,12 @@ static func _validate_farm(
 		if seen.has(tile.coordinate):
 			_add_issue(issues, path, "duplicates a farm coordinate")
 		seen[tile.coordinate] = true
-		if tile.coordinate.x < 0 or tile.coordinate.y < 0 or tile.coordinate.x >= map.size_tiles.x or tile.coordinate.y >= map.size_tiles.y:
+		if (
+			tile.coordinate.x < 0
+			or tile.coordinate.y < 0
+			or tile.coordinate.x >= map_size.x
+			or tile.coordinate.y >= map_size.y
+		):
 			_add_issue(issues, path, "coordinate must be inside its map")
 		if tile.watered_on_day < 0 or tile.watered_on_day > world_day:
 			_add_issue(issues, path + ".wateredOnDay", "must be zero or an elapsed world day")
@@ -309,6 +528,73 @@ static func _validate_farm(
 			_add_issue(issues, path + ".crop.lastGrowthDay", "must be zero or an elapsed world day")
 		if tile.crop.growth_progress < 0 or tile.crop.stage_index < 0 or tile.crop.stage_index > crop_definition.growth_stages.size():
 			_add_issue(issues, path + ".crop", "growth progress or stage is invalid")
+
+
+static func _validate_estate_map_state(
+	state: EstateMapState,
+	demo_map: CatalogDefinitions.DemoMap,
+	estate: EstateMapDefinition,
+	issues: Array[DataValidationIssue],
+) -> void:
+	if estate == null:
+		if state != null:
+			_add_issue(
+				issues,
+				"estateMapState",
+				"must be null for a non-estate map",
+			)
+		return
+	if demo_map != null:
+		_add_issue(
+			issues,
+			"currentMapId",
+			"cannot resolve to both demo and estate catalogs",
+		)
+	if state == null:
+		_add_issue(issues, "estateMapState", "must be present for an estate map")
+		return
+	var known_axes: Dictionary[StringName, bool] = {}
+	for axis: EstateStateAxis in estate.state_axes:
+		known_axes[axis.id] = true
+		var value := state.value_for_axis(axis.id)
+		if not axis.values.has(value):
+			_add_issue(
+				issues,
+				"estateMapState.axes.%s" % axis.id,
+				"value is not allowed by the estate catalog",
+			)
+	for axis_id: StringName in state.axis_values:
+		if not known_axes.has(axis_id):
+			_add_issue(
+				issues,
+				"estateMapState.axes.%s" % axis_id,
+				"axis is not registered by the estate catalog",
+			)
+
+
+static func _validate_daily_resource_claims(
+	claims: DailyResourceClaims,
+	world_day: int,
+	issues: Array[DataValidationIssue],
+) -> void:
+	if claims == null:
+		_add_issue(issues, "dailyResourceClaims", "must be present")
+		return
+	var claim_days := claims.copy_claim_days()
+	for claim_key: StringName in claim_days:
+		if not _is_stable_id(String(claim_key)):
+			_add_issue(
+				issues,
+				"dailyResourceClaims.%s" % claim_key,
+				"claim key must be a lowercase stable ID",
+			)
+		var claimed_day: int = claim_days[claim_key]
+		if claimed_day < 1 or claimed_day > world_day:
+			_add_issue(
+				issues,
+				"dailyResourceClaims.%s" % claim_key,
+				"claim day must be between one and worldDay",
+			)
 
 
 static func _validate_story_flags(flags: Dictionary, issues: Array[DataValidationIssue]) -> void:
@@ -397,6 +683,32 @@ static func _snapshot_to_dictionary(snapshot: SaveSnapshot) -> Dictionary:
 			"affinity": relationship.affinity,
 			"relationshipState": String(relationship.relationship_state),
 		})
+	var estate_state_value: Variant = null
+	if snapshot.estate_map_state != null:
+		var axes: Dictionary = {}
+		var axis_ids: Array[StringName] = []
+		for axis_id: StringName in snapshot.estate_map_state.axis_values:
+			axis_ids.append(axis_id)
+		axis_ids.sort()
+		for axis_id: StringName in axis_ids:
+			axes[String(axis_id)] = String(
+				snapshot.estate_map_state.value_for_axis(axis_id)
+			)
+		estate_state_value = {
+			"mapId": String(snapshot.current_map_id),
+			"axes": axes,
+		}
+	var daily_claim_values: Array = []
+	var claim_days := snapshot.daily_resource_claims.copy_claim_days()
+	var claim_keys: Array[StringName] = []
+	for claim_key: StringName in claim_days:
+		claim_keys.append(claim_key)
+	claim_keys.sort()
+	for claim_key: StringName in claim_keys:
+		daily_claim_values.append({
+			"claimKey": String(claim_key),
+			"lastClaimedDay": claim_days[claim_key],
+		})
 	return {
 		"schemaVersion": SaveSnapshot.SCHEMA_VERSION,
 		"savedAt": snapshot.saved_at,
@@ -411,6 +723,8 @@ static func _snapshot_to_dictionary(snapshot: SaveSnapshot) -> Dictionary:
 		},
 		"farm": {"mapId": String(snapshot.farm.map_id), "tiles": tiles},
 		"inventory": {"selectedIndex": snapshot.inventory.selected_slot_index, "slots": slots},
+		"estateMapState": estate_state_value,
+		"dailyResourceClaims": daily_claim_values,
 		"storyFlags": flags,
 		"relationships": relationships,
 		"spouseCharacterId": null if snapshot.spouse_character_id.is_empty() else String(snapshot.spouse_character_id),

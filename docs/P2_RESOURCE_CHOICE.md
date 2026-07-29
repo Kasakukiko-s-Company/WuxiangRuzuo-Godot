@@ -23,7 +23,7 @@
 - `DailyResourceSourceCatalog` 拒绝选择组与普通来源 ID 冲突，也拒绝同组来源指向不同地图或不同语义锚点。
 - `DailyResourceGathering` 仍只接受稳定来源 ID；奖励来自受验证目录，领取记录使用来源定义计算出的领取键。
 - `DailyResourceClaims` 不知道 UI 和奖励内容，只记录稳定领取键的最近成功世界日。
-- 没有修改 `SaveSnapshot`、`SaveCodec`、`SaveService` 或存档 Schema；退出场景后选择与领取记录仍会丢失。
+- `SaveSnapshot.schemaVersion=2` 持久化成功领取记录；可取消的“当前选中哪一项”仍是瞬时 UI 状态，不进入存档。退出并重新进入 H01 后，同日已领取资格不会被重置。
 
 ## 自动验收
 
@@ -31,10 +31,10 @@
 - 场景：第一次交互只打开、移动取消、再次打开后第二次确认默认种子。
 - 真实输入：E 打开、Q 切到雾叶、E 确认；休息到次日后再次打开并确认种子；Q 没有意外改变快捷栏，F 仍正常开垦。
 - 画面：Godot 4.7.1 Compatibility Renderer 在 Intel Iris Xe / OpenGL 3.3 下输出 `builds/verification/p2_h01_resource_choice.png`，选择文案和选中环均可读。
-- 回归：27 个 Godot 测试文件、headless editor/import/parse 和默认 Main 启动全部 exit 0。
+- 回归：领取记录 schema v2 往返、H01 typed state 恢复和 current/protected 端到端启动已加入自动测试；完整数量以 `PLANS.md` 为准。
 
 ## 未关闭的 P2 出口
 
 当前目录售价没有出售、消费或货币系统承接，“即时目录价值”和“预计收获价值”只是量级对照。这个切片证明了互斥规则、选择交互和容量失败成本，但不能单独证明玩家面临了有意义的经济决策，也不替代玩家节奏验证。
 
-下一项技术工作是 application session 与 Windows `SaveService` 的原子保存/恢复设计。它涉及不可逆存档兼容策略，须在实施前确认快照范围与 schema 演进方案。
+application session、schema v2 与开发期 Windows 原子保存/恢复已经实现。下一项产品工作是让即时物品和延迟种植收益进入可兑现的消费/出售用途，再通过节奏测试校准选择。

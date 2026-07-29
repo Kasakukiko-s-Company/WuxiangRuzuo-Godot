@@ -1,10 +1,33 @@
 extends SceneTree
 
-const SCENE_PATH: String = "res://scenes/vertical_slices/p2_estate_pilot.tscn"
 const FARM_OUTPUT_PATH: String = "res://builds/verification/p2_h01_farming_loop.png"
 const RESOURCE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_source.png"
 const RESOURCE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_choice.png"
 const REST_OUTPUT_PATH: String = "res://builds/verification/p2_h01_rest_confirmation.png"
+
+
+class CaptureSaveService extends SaveService:
+	var payloads: Dictionary[StringName, String] = {}
+
+
+	func read(slot_id: StringName) -> SaveReadResult:
+		if not payloads.has(slot_id):
+			return SaveReadResult.missing()
+		return SaveReadResult.found(payloads[slot_id])
+
+
+	func read_previous(_slot_id: StringName) -> SaveReadResult:
+		return SaveReadResult.missing()
+
+
+	func write(slot_id: StringName, payload: String) -> SaveWriteResult:
+		payloads[slot_id] = payload
+		return SaveWriteResult.written()
+
+
+	func remove(slot_id: StringName) -> SaveWriteResult:
+		payloads.erase(slot_id)
+		return SaveWriteResult.written()
 
 
 func _initialize() -> void:
@@ -12,36 +35,24 @@ func _initialize() -> void:
 
 
 func _capture() -> void:
-	var packed_scene := load(SCENE_PATH) as PackedScene
-	if packed_scene == null:
-		push_error("Unable to load H01 estate pilot")
-		quit(1)
-		return
 	var composition_root := AppCompositionRoot.new()
 	var status := composition_root.bootstrap()
 	if not composition_root.is_ready():
 		push_error("Unable to bootstrap H01 estate pilot capture: %s" % status)
 		quit(1)
 		return
-	var definition := composition_root.get_estate_pilot_definition()
-	var scene := packed_scene.instantiate()
-	var runtime_scene := load(definition.runtime_scene_path) as PackedScene
-	if runtime_scene == null:
-		push_error("Unable to load the formal H01 estate runtime")
+	var launch := composition_root.create_h01_launch(
+		&"profile-1",
+		CaptureSaveService.new(),
+	)
+	if not launch.is_ready():
+		push_error("Unable to compose the persistent H01 estate pilot: %s" % launch.message)
 		quit(1)
 		return
-	var pilot := scene as P2EstatePilot
-	var runtime := runtime_scene.instantiate() as EstateMapRuntime
-	if pilot == null or runtime == null:
-		push_error("Unable to compose the typed H01 estate pilot")
-		quit(1)
-		return
-	pilot.configure_estate_runtime(runtime)
-	pilot.configure_input_service(composition_root.create_input_service())
-	pilot.configure_game_catalog(composition_root.game_catalog)
-	pilot.configure_audio_service(composition_root.create_audio_service(pilot))
-	root.add_child(scene)
-	current_scene = scene
+	var pilot := launch.pilot
+	var runtime := pilot.get_estate_runtime()
+	root.add_child(pilot)
+	current_scene = pilot
 	for _frame in range(5):
 		await process_frame
 	var resource_anchor := runtime.query_anchor(

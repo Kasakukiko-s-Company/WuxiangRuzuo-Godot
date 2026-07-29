@@ -127,13 +127,13 @@
 
 ## 当前执行点：P2 核心生活循环垂直切片
 
-状态：H01 正式工程先导已在提交 `2c251fb0371466a4f80662c368328fee021a4121` 建立并推送独立基线。其上的首个内存农作闭环已实现并通过自动回归与 Compatibility Renderer 画面检查；P2 仍未完成。
+状态：H01 正式工程先导已在提交 `2c251fb0371466a4f80662c368328fee021a4121` 建立并推送独立基线。其上的农作闭环、代表性视听反馈、每日资源选择和本地保存恢复切片已实现；P2 仍未完成。
 
 - `data/estate_maps.json` 已把 H01～H08 的稳定身份、尺寸、安全出生点和状态轴投影为强类型 `EstateMapCatalog`；只有 H01 具有正式运行场景路径。
 - `EstateMapRuntime` 统一 map ID、世界边界、状态、锚点和格语义查询；H01 正式场景不依赖候选 staging 路径或泄漏的 H03 组名。
 - 主场景已增加 H01 工程先导入口；composition root 按目录路径装配正式地图并注入 InputService，玩家、真实撞墙、Camera2D、状态预览和目标格查询在 128×96 正式地图上实际运行。
 - Godot 4.7.1 Compatibility Renderer 已在 Intel Iris Xe / OpenGL 3.3 上捕获并检查 1280×720 画面；截图只保存在 D 盘被 Git 忽略的 `builds/verification/`。
-- 本轮没有修改 `project.godot`、`SaveSnapshot`、`SaveCodec` 或存档 Schema；portal 仍只是地图契约，不宣称跨图切换完成。
+- H01 先导接入时没有修改存档；当前保存批次已把 Godot `SaveSnapshot`/`SaveCodec` 演进为 schema v2 并加入显式 v1 provenance。portal 仍只是地图契约，不宣称跨图切换完成。
 - 正式 H01 运行 payload 约 1.36 MiB，最大文件小于 1 MiB；本次不需要 Git LFS。其余七图和完整 300+ MiB 候选树不进入本基线。
 - Godot 4.7.1 headless import/parse 通过；G1、G2、P1、P2 共 18 个测试文件全部 exit 0。地产 portal 可用性、空目录拒绝、平台 adapter 注入、目录驱动装配、专属状态轴扩展和真实碰撞均有回归覆盖。
 - 完整入口、架构、资源边界和测试见 `docs/P2_ESTATE_MAP_PILOT.md`。
@@ -141,14 +141,15 @@
 - H01 入口现可实际完成“耕地 → 播种 → 浇水 → 连续过夜成长 → 收获入包”；八格快捷栏、键盘/手柄语义输入和程序化地块/作物占位显示已经接线。
 - 初始背包只提供锄头和浇水壶；种子必须在 H01 北草甸稳定资源点通过交互获得。每日领取由纯领域事务约束，重复领取和背包满均保持原状态。
 - `home_door` 已成为正式日终交互点：第一次交互请求确认，第二次才由 `DailyRestCycle` 结算当天；移动/重置/其他交互取消确认，旧 N 动作不再推进 P2 日历。
-- 资源领取记录、农田、背包和世界日仍只存在运行内存；HUD 明确写明“不写存档”。本轮没有修改 `SaveSnapshot`、`SaveCodec` 或 schema。
+- `P2PersistentState` 现聚合世界日、玩家变换、农田/作物、背包/快捷栏、地产状态和每日领取记录；HUD 显示真实 profile/恢复/故障状态，不再错误声称“不写存档”。
 - 2026-07-28 Godot 4.7.1 headless import/parse、默认 Main 和 25 个测试文件全部 exit 0；真实 E/F/N 输入链路通过。Compatibility Renderer 在 Intel Iris Xe / OpenGL 3.3 上生成并检查资源点、休息确认和农作三张 1280×720 截图。
-- 该切片尚缺文件存档/恢复、代表性动画与声音、有意义的玩家选择、成本/收益平衡和玩家节奏验证，因此不能作为 P2 出口。完整边界和验收记录见 `docs/P2_FARMING_LOOP.md`。
+- 文件存档/恢复和代表性动画/声音缺口已经关闭；仍缺能实际兑现的有意义玩家选择、成本/收益平衡和玩家节奏验证，因此不能作为 P2 出口。完整边界和验收记录见 `docs/P2_FARMING_LOOP.md`。
 - 2026-07-28 已把外部案例中的功能区域/环路、居民可发现性、居民日程与居民知识分离、资源家族和 AI 方向参考板准入经验保存到 `docs/DESIGN_REFERENCE_LESSONS.md`，并同步领域词汇、P3/P5 路线、NPC 候选边界、资源生产、来源台账和法律护栏。只吸收抽象方法，没有复制外部图片、地图、角色、物品、数值或文本；没有修改当前 P2 功能或存档 Schema。
 - 2026-07-28 完整审计用户提供的另一项目视听生产对话，只迁移 ElevenLabs 安全生产方法；没有复制其中角色、卡牌、cue、提示词或候选文件。建立 D 盘 `audio-source/p2-life-loop-v1/` 批次，使用 `eleven_text_to_sound_v2` 生成 7 cue×3 的 48 kHz stereo PCM 候选，使用 `music_v2` plan + detailed endpoint 生成 1 首 60 秒 H01 日间候选；22/22 自动门禁通过，实际延迟核销 1116 credits，超额计费关闭。
 - P2 运行时现通过 `GodotAudioService` 和版本化 `data/audio_catalog.json` 播放 7 个稳定 SFX ID 与 1 个 H01 music ID；`P2InteractionFeedback` 为成功的耕地、播种、浇水、收获、采集和休息提供 Tween/自绘反馈并支持减少动态效果。Godot 4.7.1 Compatibility 在 Intel Iris Xe 上实际运行并捕获反馈画面；候选仍为 `subjectiveListeningApproval=false`、`commercialReleaseAuthorized=false`、`shippingApproval=false`，不冒充最终发行混音。
 - 2026-07-29 H01 北草甸改为每日互斥资源选择组：第一次 E/A 打开、Q/Tab/肩键切换、第二次 E/A 确认“种子×3”或“雾叶×1”；组内来源共享领取键，同日不能重复取得另一项，背包失败不消耗资格，次日恢复。选择提示、状态投影、真实输入和 Compatibility Renderer 截图均有自动证据；27 个 Godot 测试文件、headless import/parse 与默认 Main 启动全部 exit 0。
-- 当前 P2 仍缺文件存档/恢复，以及能实际兑现并经玩家节奏验证的成本/收益选择；北草甸目录价值比较只是可运行的互斥奖励基线，不冒充完整经济决策。代表性动画与声音这一缺口已关闭，不等于 P2 已完成。记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`、`docs/P2_RESOURCE_CHOICE.md`。
+- 2026-07-29 已实现 schema v2、强类型 H01 application session、D 盘开发期原子文件 adapter、current 自动保存、成功休息 protected 恢复点、current/protected 的物理 previous 候选、损坏证据隔离/只读回退和 profile-1～3 键空间隔离。pre-promote 中断会优先验证较新 rollback，current primary 无效时会在其余有效候选中选择最新世界日/保存时间，避免旧 bak 压过较新 protected。Main 当前使用 profile-1；三档选择/删除/最近档 UI、发行期 Windows/Steam/Web adapter 和旧 Cocos 导入未实现。专项测试覆盖 v1/v2、三档隔离、原子替换、中断状态、恢复回退、退出位置和端到端 composition root；33 个 Godot 测试文件全部 exit 0，headless editor/import、默认 Main 和 4 个 ElevenLabs pipeline Python guards 同样通过。记录见 `docs/P2_SAVE_RESTORE.md`。
+- 当前 P2 仍缺能实际兑现并经玩家节奏验证的成本/收益选择；北草甸目录价值比较只是可运行的互斥奖励基线，不冒充完整经济决策。本地保存与代表性动画/声音缺口关闭，不等于 P2 已完成。记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`、`docs/P2_RESOURCE_CHOICE.md`、`docs/P2_SAVE_RESTORE.md`。
 
 ## 后续制作阶段
 

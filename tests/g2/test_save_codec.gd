@@ -36,7 +36,10 @@ func _run() -> void:
 
 	var encoded: SaveCodecResult = SaveCodecScript.encode(snapshot, catalog)
 	_check(encoded.status == SaveCodecResult.Status.ENCODED, "valid snapshot encodes")
-	_check(encoded.payload.contains("\"schemaVersion\":1"), "payload declares the new schemaVersion")
+	_check(
+		encoded.payload.contains("\"schemaVersion\":2"),
+		"payload declares the current Godot schemaVersion",
+	)
 	_check(not encoded.payload.contains("saveVersion"), "payload does not reuse the Cocos saveVersion")
 
 	var decoded: SaveCodecResult = SaveCodecScript.decode(encoded.payload, catalog)
@@ -54,7 +57,7 @@ func _run() -> void:
 	_check(invalid_json.status == SaveCodecResult.Status.INVALID_JSON, "invalid JSON is isolated")
 
 	var unsupported: SaveCodecResult = SaveCodecScript.decode(
-		encoded.payload.replace("\"schemaVersion\":1", "\"schemaVersion\":99"),
+		encoded.payload.replace("\"schemaVersion\":2", "\"schemaVersion\":99"),
 		catalog,
 	)
 	_check(unsupported.status == SaveCodecResult.Status.UNSUPPORTED_SCHEMA, "unsupported schema is explicit")

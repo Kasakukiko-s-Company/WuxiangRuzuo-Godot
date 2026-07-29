@@ -2,7 +2,7 @@
 
 ## 当前事实（G2 技术底座 + P1 体验原型 + P2 生活闭环切片）
 
-项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、新 Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON/`FileAccess` 只存在于 codec 和 application 边界；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、每日资源领取、家门二次确认休息、八格快捷栏、跨天成长和程序化状态投影，但这些状态不写存档。H01 美术资源仍为 `shippingApproval=false`；项目仍没有存档 adapter、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
+项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON 和 `FileAccess` 只存在于 application 数据加载边界、codec 或具体 persistence adapter，不进入 domain/gameplay；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、每日资源选择、家门二次确认休息、八格快捷栏、跨天成长、程序化状态投影，以及 profile-1 的 D 盘原子自动保存/恢复和受保护恢复点。H01 美术资源仍为 `shippingApproval=false`；项目仍没有档位选择 UI、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
 
 ## 目录与依赖方向
 
@@ -41,7 +41,9 @@ scenes / scripts/gameplay / scripts/ui
 | `DailyResourceGathering` | 已实现 P2 切片 | 按稳定来源 ID 执行奖励，按来源或互斥组领取键记录世界日 |
 | `DailyRestPointCatalog` | 已实现 P2 切片 | 原子验证休息点 ID、地图与锚点 |
 | `DailyRestCycle` | 已实现 P2 切片 | 通过地图/休息点/完成日命令触发日终结算 |
-| `SaveCodec` | 已实现 G2 | 新 Godot schema 的编码/解码/完整快照校验；不负责存储 |
+| `SaveCodec` | 已实现 v2 | Godot schema v1/v2 的编码/解码/完整快照校验；不负责存储或档位策略 |
+| `GameSaveModule` | 已实现 P2 切片 | 固定 profile 的 current/protected 选择、H01 强类型聚合和损坏隔离 |
+| `AtomicFileSaveAdapter` | 已实现开发期 Windows adapter | 同目录 `.tmp` 写入、`.rollback` 提交保护、`.bak` 崩溃回退和不透明载荷读写；路径由 composition root 注入 |
 | `CocosSaveImporter` | 独立迁移器 | 显式读取旧 v1 payload；不污染正常 codec |
 | `RelationshipLedger` | 领域服务 | 全员好感、多 dating、唯一配偶、年龄边界 |
 
@@ -49,7 +51,7 @@ scenes / scripts/gameplay / scripts/ui
 
 G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioService`、`AnalyticsService` 和显式结果类型。运行环境：`windows-native`、`web`；发行渠道：`standalone`、`steam`、`wechat`。Steam 只允许 Windows，微信只允许 Web；微信能力只能通过独立可行性闸门决定。
 
-当前已实现 `GodotInputService` 和 P2 `GodotAudioService`。音频 adapter 从版本化 `data/audio_catalog.json` 解析稳定 ID，拥有独立音乐播放器与 SFX 播放器池；`P2EstatePilot` 只调用 `AudioService.play_music/play_sound`，不依赖 ElevenLabs、文件路径或平台音频 API。其他平台、存档和分析 adapter 仍未实现。
+当前已实现 `GodotInputService`、P2 `GodotAudioService` 和开发期 `AtomicFileSaveAdapter`。音频 adapter 从版本化 `data/audio_catalog.json` 解析稳定 ID，拥有独立音乐播放器与 SFX 播放器池；`P2EstatePilot` 只调用 `AudioService.play_music/play_sound`，不依赖 ElevenLabs、文件路径或平台音频 API。保存 adapter 只处理 opaque payload；H01 玩法不接触 JSON、档位名或路径。发行期 Windows、Steam、Web/微信和分析 adapter 仍未实现。
 
 ## 场景与状态
 
@@ -61,9 +63,9 @@ G2 已建立抽象 `PlatformService`、`SaveService`、`InputService`、`AudioSe
 
 P1 的实际坐标约定为左上原点、Y 向下、32×32 基础格；`TileCoordinateMapper` 负责 world/cell/cell-center/facing-cell 转换。`prototype_mist_edge` 只是 40×28 的验证场，不登记进正式 `world.json`。
 
-P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类型状态切换、命名锚点和格语义查询。`EstateMapState` 的三个核心字段之外还可携带强类型 map-specific axes，使水文、桥梁、灌溉等地产专属状态无需修改公共方法签名；具体 runtime 必须验证自己支持的轴。H01 的正式实现不让玩法读取候选组名、TMX 对象序号或 TileSet source ID；未知锚点与状态关闭锚点是不同结果。`runtime_disabled_semantic_area` 对资源生成区表示 Area2D 物理监测关闭，资源系统仍可按稳定 ID 查询其数据包络；portal/trigger 的业务关闭仍返回显式 disabled。H01 状态切换当前只允许在工程预览和安全过渡边界使用，尚未绑定日历或存档。
+P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类型状态切换、命名锚点和格语义查询。`EstateMapState` 的三个核心字段之外还可携带强类型 map-specific axes，使水文、桥梁、灌溉等地产专属状态无需修改公共方法签名；具体 runtime 必须验证自己支持的轴。H01 的正式实现不让玩法读取候选组名、TMX 对象序号或 TileSet source ID；未知锚点与状态关闭锚点是不同结果。`runtime_disabled_semantic_area` 对资源生成区表示 Area2D 物理监测关闭，资源系统仍可按稳定 ID 查询其数据包络；portal/trigger 的业务关闭仍返回显式 disabled。H01 状态切换已经进入 schema v2 存档，但仍只允许在工程预览和安全过渡边界使用，尚未绑定完整历法或正式地图过渡流程。
 
-`AppCompositionRoot` 校验地产目录后根据 H01 `runtimeScenePath` 实例化正式地图，并把地图、`GameCatalog` 与 `InputService` adapter 注入 `P2EstatePilot`。玩法场景不直接构造平台 adapter，也不能在目录/H01 场景验证失败时绕过 composition root 启动。
+`AppCompositionRoot.create_h01_launch(profile_id)` 校验目录后，根据 H01 `runtimeScenePath` 实例化正式地图，创建输入/音频/存储 adapter，读取 current/protected，并在节点进入树前安装强类型 `P2PersistentState`。玩法场景不直接构造平台 adapter，也不能在目录、场景或档位验证失败时绕过 composition root 启动。
 
 ## P2 农作状态 seam
 
@@ -76,7 +78,7 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 - `P2EstatePilot.apply_input_snapshot()` 是语义输入转发 seam；实际 `_physics_process` 每帧只从注入的 `InputService` 采样一次，再把同一快照转发给玩家和农作桥接。P2 的 Player 明确启用 external-snapshot mode 并关闭自身 physics callback，避免双重物理所有权；独立 P1 场景仍由 Player 自己采样。
 - `FarmPlotOverlay` 与 `EstateDailyInteractionOverlay` 只投影农田、资源来源和休息确认，不拥有权威状态。当前画面是可替换的程序化占位，不构成正式美术批准。
 - 当前季节读取 `EstateMapRuntime.get_current_state().season`，同时驱动播种校验和 HUD；完整历法仍未实现。
-- 当前 session 由 `P2EstatePilot` 在进入场景时创建，离开场景即丢失；不得把它描述成自动保存或恢复能力。
+- `P2EstatePilot` 在空档时创建 session，在恢复档时安装 application 层提供的 `P2PersistentState`。成功耕地、播种、浇水、收获、资源领取、地产状态变更和日终休息发送 durable commit signal；离开场景还捕获最后位置。节点不知道保存格式或路径。
 
 ## P1 场景 seam
 
@@ -87,7 +89,9 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 
 ## 存档 seam
 
-`SaveCodec` 已只处理领域快照；`SaveService` 契约只处理不透明 payload；P2 起由 application session 决定何时捕获/恢复，P6 前覆盖完整流程。Windows adapter 将使用受控的 Godot user data 路径/文件协议并实现临时文件替换；Web/微信和 Steam adapter 不改变领域 schema。
+`SaveCodec` 只处理领域快照；`SaveService` 契约只处理不透明 payload。`P2PersistentState` 聚合 H01 farming session、玩家位置/朝向/生命、地产状态和每日领取记录。`GameSaveModule` 为一个固定 profile 决定 current/protected 的加载与保存；`P2PersistenceBinding` 把场景 durable signal 接到 module；`AppCompositionRoot` 隐藏场景、目录和具体存储装配。
+
+开发期 Windows adapter 使用项目内 D 盘 `builds/save-dev/`，以同目录 `.tmp` 写入并 flush；旧目标先进入 `.rollback`，新目标提交成功后才把 rollback 晋升为 `.bak`。pre-promote 中断时 adapter 把较新的 rollback 暴露为 primary、旧 bak 暴露为 previous；post-promote 中断则把新 target 暴露为 primary、rollback 暴露为 previous。module 先验证 current primary；它无效时，再验证 current previous、protected primary 和 protected previous，并按世界日、保存时间与稳定来源优先级选择最新 fallback。无效载荷写入 quarantine，隔离失败则由 module 锁定只读恢复。普通动作只更新 current，成功休息同时更新 protected。没有有效候选时启动被阻止，原载荷不被覆盖。发行期 Windows user data、Web/微信和 Steam adapter 不改变领域 schema。
 
 ## 质量与测试
 

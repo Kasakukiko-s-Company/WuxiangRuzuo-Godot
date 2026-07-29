@@ -12,6 +12,8 @@ enum Status {
 var status: Status
 var payload: String
 var snapshot: SaveSnapshot
+var source_schema_version: int = 0
+var requires_resave: bool = false
 var issues: Array[DataValidationIssue] = []
 
 
@@ -22,10 +24,17 @@ static func encoded(encoded_payload: String) -> SaveCodecResult:
 	return result
 
 
-static func decoded(decoded_snapshot: SaveSnapshot) -> SaveCodecResult:
+static func decoded(
+	decoded_snapshot: SaveSnapshot,
+	decoded_schema_version: int = SaveSnapshot.SCHEMA_VERSION,
+) -> SaveCodecResult:
 	var result := SaveCodecResult.new()
 	result.status = Status.DECODED
 	result.snapshot = decoded_snapshot
+	result.source_schema_version = decoded_schema_version
+	result.requires_resave = (
+		decoded_schema_version != SaveSnapshot.SCHEMA_VERSION
+	)
 	return result
 
 
