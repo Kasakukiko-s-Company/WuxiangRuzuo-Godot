@@ -1,5 +1,20 @@
 extends SceneTree
 
+const InvalidTradeCatalogSource = preload(
+	"res://tests/support/invalid_trade_catalog_source.gd"
+)
+
+
+class InvalidGameCatalogSource extends AppCatalogSource:
+	func load_game_catalog() -> CatalogDecodeResult:
+		return CatalogDecodeResult.invalid([
+			DataValidationIssue.new(
+				"catalog",
+				"injected invalid game catalog",
+			),
+		])
+
+
 var _failures: int = 0
 
 
@@ -101,6 +116,54 @@ func _run() -> void:
 	_check(
 		composition_root.platform_descriptor.distribution_id() == &"standalone",
 		"default distribution channel is explicit",
+	)
+
+	var isolated_root := AppCompositionRoot.new(
+		InvalidTradeCatalogSource.new(),
+	)
+	var isolated_status := isolated_root.bootstrap()
+	_check(
+		isolated_root.entry_status(
+			AppCompositionRoot.ENTRY_P1_EXPERIENCE_PROBE,
+		).is_available(),
+		"invalid H01 trade data does not block the P1 entry",
+	)
+	_check(
+		not isolated_root.entry_status(
+			AppCompositionRoot.ENTRY_P2_H01,
+		).is_available(),
+		"invalid H01 trade data blocks only the H01 entry",
+	)
+	_check(
+		isolated_root.entry_status(
+			AppCompositionRoot.ENTRY_P2_H01,
+		).describe_issues()
+		== "tradeOffers: injected invalid trade catalog",
+		"blocked entry exposes a stable human-readable diagnostic",
+	)
+	_check(
+		isolated_root.game_catalog != null
+		and isolated_root.estate_map_catalog != null
+		and isolated_root.trade_offer_catalog == null,
+		"entry isolation retains independent validated catalogs",
+	)
+	_check(
+		isolated_status.contains("P1")
+		and isolated_status.contains("H01 blocked"),
+		"bootstrap summary reports partial entry availability",
+	)
+	var invalid_game_root := AppCompositionRoot.new(
+		InvalidGameCatalogSource.new(),
+	)
+	invalid_game_root.bootstrap()
+	_check(
+		invalid_game_root.entry_status(
+			AppCompositionRoot.ENTRY_P1_EXPERIENCE_PROBE,
+		).is_available()
+		and not invalid_game_root.entry_status(
+			AppCompositionRoot.ENTRY_P2_H01,
+		).is_available(),
+		"invalid core game data still cannot expand into a P1 entry failure",
 	)
 
 	_finish()

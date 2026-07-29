@@ -294,14 +294,16 @@ func _run() -> void:
 	_place_for_interaction(player, mapper, resource_approach)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
-	player.interaction_requested.emit(player.global_position, player.facing)
-	await process_frame
-	player.interaction_requested.emit(player.global_position, player.facing)
-	await process_frame
+	var select_sell := InputSnapshot.neutral()
+	select_sell.select_next = true
+	_send_snapshot(pilot, select_sell)
+	_send_snapshot(pilot, select_sell)
 	_check(
-		pilot.get_daily_interaction_overlay().is_trade_choice_pending()
-		and pilot.get_daily_interaction_overlay().get_trade_choice_index() == 0,
-		"the claimed crate projects a distinct default trade choice",
+		pilot.get_daily_interaction_overlay().is_crate_open()
+		and pilot.get_daily_interaction_overlay().get_crate_selected_index() == 2
+		and pilot.get_daily_interaction_overlay().get_selected_crate_action_id()
+		== &"economy.h01.sell_mistleaf",
+		"the unified crate can reach trade before taking the current daily reward",
 	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
@@ -309,20 +311,29 @@ func _run() -> void:
 	_check(
 		_inventory_quantity(sold.state.inventory, &"mistleaf") == 0
 		and _inventory_quantity(sold.state.inventory, &"village_scrip") == 30,
-		"the claimed north-meadow crate sells one harvested mistleaf",
+		"the north-meadow crate sells one harvested mistleaf",
 	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	var select_buy := InputSnapshot.neutral()
-	select_buy.select_next = true
+	select_buy.select_previous = true
 	_send_snapshot(pilot, select_buy)
+	_check(
+		pilot.get_daily_interaction_overlay().get_selected_crate_action_id()
+		== &"economy.h01.buy_mistleaf_seed",
+		"the unified crate reaches the seed purchase without consuming the daily claim",
+	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	var bought := pilot.get_farming_session()
 	_check(
 		_inventory_quantity(bought.state.inventory, &"village_scrip") == 10
-		and _inventory_quantity(bought.state.inventory, &"mistleaf_seed") == 6,
+		and _inventory_quantity(bought.state.inventory, &"mistleaf_seed") == 3,
 		"earned village scrip buys one replacement seed without a wallet schema",
+	)
+	_check(
+		pilot.get_daily_interaction_overlay().is_daily_claim_available(),
+		"trade leaves the current day's resource choice available",
 	)
 	var overlay: FarmPlotOverlay = pilot.get_farm_overlay()
 	_check(

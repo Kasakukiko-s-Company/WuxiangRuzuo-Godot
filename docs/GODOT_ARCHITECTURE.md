@@ -2,7 +2,7 @@
 
 ## 当前事实（G2 技术底座 + P1 体验原型 + P2 生活闭环切片）
 
-项目有可启动 `Main.tscn`、真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON 和 `FileAccess` 只存在于 application 数据加载边界、codec 或具体 persistence adapter，不进入 domain/gameplay；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、每日资源选择、家门二次确认休息、八格快捷栏、跨天成长、程序化状态投影，以及 profile-1 的 D 盘原子自动保存/恢复和受保护恢复点。H01 美术资源仍为 `shippingApproval=false`；项目仍没有档位选择 UI、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
+项目有可启动 `Main.tscn`、按入口隔离的真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON 和 `FileAccess` 只存在于 application 数据加载边界、codec 或具体 persistence adapter，不进入 domain/gameplay；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、统一资源/交换物资箱、家门二次确认休息、八格快捷栏、跨天成长、程序化状态投影，以及 profile-1 的 D 盘原子自动保存/恢复和受保护恢复点。H01 美术资源仍为 `shippingApproval=false`；项目仍没有档位选择 UI、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
 
 ## 目录与依赖方向
 
@@ -43,6 +43,8 @@ scenes / scripts/gameplay / scripts/ui
 | `DailyRestCycle` | 已实现 P2 切片 | 通过地图/休息点/完成日命令触发日终结算 |
 | `TradeOfferCatalog` | 已实现 P2 切片 | 解码并索引受验证的稳定端点与交换项目 |
 | `TradeBook` | 已实现 P2 切片 | 对不可变背包执行原子交换；失败返回原状态 |
+| `NorthMeadowCrateFlow` | 已实现 P2 切片 | 合并 H01 每日资源/交换行动、可执行性预检、瞬时选择与领域结果翻译 |
+| `AppEntryStatus` / `AppCatalogSource` | 已实现入口隔离 | 以生产/测试 adapter 加载目录，并让局部 H01 故障只阻断 H01 入口 |
 | `SaveCodec` | 已实现 v2 | Godot schema v1/v2 的编码/解码/完整快照校验；不负责存储或档位策略 |
 | `GameSaveModule` | 已实现 P2 切片 | 固定 profile 的 current/protected 选择、H01 强类型聚合和损坏隔离 |
 | `AtomicFileSaveAdapter` | 已实现开发期 Windows adapter | 同目录 `.tmp` 写入、`.rollback` 提交保护、`.bak` 崩溃回退和不透明载荷读写；路径由 composition root 注入 |
@@ -67,7 +69,7 @@ P1 的实际坐标约定为左上原点、Y 向下、32×32 基础格；`TileCoo
 
 P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类型状态切换、命名锚点和格语义查询。`EstateMapState` 的三个核心字段之外还可携带强类型 map-specific axes，使水文、桥梁、灌溉等地产专属状态无需修改公共方法签名；具体 runtime 必须验证自己支持的轴。H01 的正式实现不让玩法读取候选组名、TMX 对象序号或 TileSet source ID；未知锚点与状态关闭锚点是不同结果。`runtime_disabled_semantic_area` 对资源生成区表示 Area2D 物理监测关闭，资源系统仍可按稳定 ID 查询其数据包络；portal/trigger 的业务关闭仍返回显式 disabled。H01 状态切换已经进入 schema v2 存档，但仍只允许在工程预览和安全过渡边界使用，尚未绑定完整历法或正式地图过渡流程。
 
-`AppCompositionRoot.create_h01_launch(profile_id)` 校验目录后，根据 H01 `runtimeScenePath` 实例化正式地图，创建输入/音频/存储 adapter，读取 current/protected，并在节点进入树前安装强类型 `P2PersistentState`。玩法场景不直接构造平台 adapter，也不能在目录、场景或档位验证失败时绕过 composition root 启动。
+`AppCompositionRoot.bootstrap()` 分别发布 P1 与 H01 的 `AppEntryStatus`；游戏、地产、交易或 H01 场景故障不会扩大成 P1 全局故障。`create_h01_launch(profile_id)` 仍要求 H01 入口可用，再根据 `runtimeScenePath` 实例化正式地图，创建输入/音频/存储 adapter，读取 current/protected，并在节点进入树前安装强类型 `P2PersistentState`。玩法场景不直接构造平台 adapter，也不能在目录、场景或档位验证失败时绕过 composition root 启动。
 
 ## P2 农作状态 seam
 
@@ -75,12 +77,12 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 - `CropPlanting`、`FarmWatering`、`FarmDayCycle` 与 `CropHarvesting` 使用各自命令和结果类型，不让场景节点直接改作物字段。
 - `DailyResourceSourceCatalog` 先验证来源 ID 到地图、锚点、物品和数量的唯一映射；同一每日选择组的来源必须共享地图和锚点，组 ID 不得与来源 ID 冲突。`DailyResourceClaims` 与 `DailyResourceGathering` 再以来源 ID 或共享组 ID 作为稳定领取键，把“每个领取键每天最多成功一次”放在纯领域层。背包满、日期回退或伪造来源时领取记录不前移。
 - `DailyRestPointCatalog` 验证休息点的地图归属与锚点；`DailyRestCycle` 只接收目录 ID 与待完成世界日。场景的二次确认只负责发出命令，不能直接递增日期。
-- `TradeOfferCatalog` 独立于场景验证 offer、endpoint、物品引用与数量；`TradeBook` 只暴露 `offers(endpoint_id)` 和 `execute(inventory, command)`。H01 Node 只管理可取消的选择索引，不能临时改价格或直接修改背包。
+- `TradeOfferCatalog` 独立于场景验证 offer、endpoint、物品引用与数量；`TradeBook` 只暴露 `offers(endpoint_id)` 和 `execute(inventory, command)`。`NorthMeadowCrateFlow` 把每日资源与交换编排为四项 H01 行动牌组，以不可变 dry-run 决定 enabled/blocked 和默认选择；成功领取才更新 claim，交易从不修改 claim。H01 Node 不临时改价格或直接修改背包。
 - `village_scrip` 作为普通 material 进入既有背包/存档 seam，不建立尚未通过产品验证的全局钱包。未来若改变为通用货币，必须显式迁移 schema 和语义。
 - `FarmDayAdvanceCommand` 携带明确 `completed_day`，使已处理命令幂等、未来命令拒绝，并让整批作物在预检通过后才统一结算。
 - `FarmState.restore()` 验证农田自身结构、作物引用、阶段派生与种植/结算日关系；世界地图 ID 是否存在由 codec/application 使用相应世界目录校验，避免领域层继续绑定退役的四地图 fixture。
 - `P2EstatePilot.apply_input_snapshot()` 是语义输入转发 seam；实际 `_physics_process` 每帧只从注入的 `InputService` 采样一次，再把同一快照转发给玩家和农作桥接。P2 的 Player 明确启用 external-snapshot mode 并关闭自身 physics callback，避免双重物理所有权；独立 P1 场景仍由 Player 自己采样。
-- `FarmPlotOverlay` 与 `EstateDailyInteractionOverlay` 只投影农田、资源/交换选择和休息确认，不拥有权威状态。当前画面是可替换的程序化占位，不构成正式美术批准。
+- `FarmPlotOverlay` 只投影农田；`EstateDailyInteractionOverlay` 只消费 `NorthMeadowCratePresentation` 与休息确认，不再拥有两套资源/交换 pending 状态。当前画面是可替换的程序化占位，不构成正式美术批准。
 - 当前季节读取 `EstateMapRuntime.get_current_state().season`，同时驱动播种校验和 HUD；完整历法仍未实现。
 - `P2EstatePilot` 在空档时创建 session，在恢复档时安装 application 层提供的 `P2PersistentState`。成功耕地、播种、浇水、收获、资源领取、交换、地产状态变更和日终休息发送 durable commit signal；离开场景还捕获最后位置。节点不知道保存格式或路径。
 

@@ -28,3 +28,13 @@ func _init(
 
 func snapshot() -> FarmingSessionState:
 	return FarmingSessionState.new(_state.snapshot(), _world_day)
+
+
+func with_inventory(inventory: InventoryState) -> FarmingSessionState:
+	assert(inventory != null, "farming session inventory must be present")
+	if inventory == _state.inventory:
+		return self
+	return FarmingSessionState.new(
+		FarmingTransactionState.new(_state.farm, inventory),
+		_world_day,
+	)

@@ -38,15 +38,10 @@ var _rendered_farming_session: FarmingSessionState
 var _daily_resource_claims: DailyResourceClaims
 var _daily_resource_sources: DailyResourceSourceCatalog
 var _daily_rest_points: DailyRestPointCatalog
-var _resource_offers: Array[DailyResourceSourceDefinition] = []
+var _crate_flow: NorthMeadowCrateFlow
 var _rest_point: DailyRestPointDefinition
 var _resource_anchor: EstateAnchorResult
 var _rest_anchor: EstateAnchorResult
-var _resource_choice_day: int = 0
-var _resource_choice_index: int = 0
-var _trade_offers: Array[TradeOfferDefinition] = []
-var _trade_choice_day: int = 0
-var _trade_choice_index: int = 0
 var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
@@ -99,39 +94,30 @@ func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 	if snapshot.reduce_motion_toggle:
 		set_reduce_motion(not _reduce_motion)
 	if snapshot.quickbar_slot_index >= 0:
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 		_select_quickbar_slot(snapshot.quickbar_slot_index)
 	if snapshot.select_previous:
-		if _is_resource_choice_pending():
-			_select_relative_resource_offer(-1)
-		elif _is_trade_choice_pending():
-			_select_relative_trade_offer(-1)
+		if _is_crate_open():
+			_advance_crate(NorthMeadowCrateFlow.Intent.PREVIOUS)
 		else:
 			_select_relative_slot(-1)
 	if snapshot.select_next:
-		if _is_resource_choice_pending():
-			_select_relative_resource_offer(1)
-		elif _is_trade_choice_pending():
-			_select_relative_trade_offer(1)
+		if _is_crate_open():
+			_advance_crate(NorthMeadowCrateFlow.Intent.NEXT)
 		else:
 			_select_relative_slot(1)
 	if snapshot.secondary_action:
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 		_cycle_anomaly_preview()
 	if snapshot.primary_action:
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 		_use_selected_item()
 	if snapshot.watering_action:
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 		_select_and_use_watering_can()
 	if snapshot.move != Vector2.ZERO:
 		_clear_rest_confirmation()
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 	_refresh_farming_view()
 	_update_debug()
 
@@ -272,13 +258,13 @@ func reset_to_safe_spawn() -> void:
 	_player.velocity = Vector2.ZERO
 	_player.set_input_locked(false)
 	_clear_rest_confirmation()
-	_clear_resource_choice()
-	_clear_trade_choice()
+	_cancel_crate()
 	_status_label.text = "已回到安全出生点 · 农作状态保留"
 	_camera.reset_smoothing()
 
 
 func apply_estate_state(state: EstateMapState) -> EstateMapApplyResult:
+	_cancel_crate()
 	var result: EstateMapApplyResult = _estate_runtime.apply_state(state)
 	if result.is_success():
 		_rendered_farming_session = null
@@ -368,18 +354,23 @@ func _initialize_daily_interactions() -> void:
 		_daily_resource_sources != null,
 		"P2 resource source definitions must match the validated game catalog",
 	)
-	_resource_offers = [
-		_daily_resource_sources.get_source(RESOURCE_SEED_SOURCE_ID),
-		_daily_resource_sources.get_source(RESOURCE_FORAGE_SOURCE_ID),
-	]
+	var seed_source := _daily_resource_sources.get_source(
+		RESOURCE_SEED_SOURCE_ID
+	)
+	var forage_source := _daily_resource_sources.get_source(
+		RESOURCE_FORAGE_SOURCE_ID
+	)
 	assert(
-		not _resource_offers.has(null),
+		seed_source != null and forage_source != null,
 		"P2 resource choice offers must resolve from the source catalog",
 	)
-	_trade_offers = _trade_book.offers(TRADE_ENDPOINT_ID)
-	assert(
-		not _trade_offers.is_empty(),
-		"P2 H01 trade endpoint must expose at least one offer",
+	_crate_flow = NorthMeadowCrateFlow.new(
+		_daily_resource_sources,
+		_trade_book,
+		_game_catalog,
+		RESOURCE_SEED_SOURCE_ID,
+		RESOURCE_FORAGE_SOURCE_ID,
+		TRADE_ENDPOINT_ID,
 	)
 	var rest_definitions: Array[DailyRestPointDefinition] = [
 		DailyRestPointDefinition.new(
@@ -396,8 +387,8 @@ func _initialize_daily_interactions() -> void:
 	)
 	_rest_point = _daily_rest_points.get_point(REST_POINT_ID)
 	_resource_anchor = _estate_runtime.query_anchor(
-		_resource_offers[0].anchor_kind,
-		_resource_offers[0].anchor_id,
+		seed_source.anchor_kind,
+		seed_source.anchor_id,
 	)
 	_rest_anchor = _estate_runtime.query_anchor(
 		_rest_point.anchor_kind,
@@ -427,10 +418,6 @@ func _restore_initial_state() -> bool:
 	_farming_session = state.farming_session
 	_daily_resource_claims = state.daily_resource_claims
 	_player_health = state.player_health
-	_resource_choice_day = 0
-	_resource_choice_index = 0
-	_trade_choice_day = 0
-	_trade_choice_index = 0
 	_rest_confirmation_day = 0
 	var player_cell := _coordinate_mapper.world_to_cell(
 		state.player_position
@@ -492,13 +479,7 @@ func _select_relative_slot(offset: int) -> void:
 
 
 func _replace_inventory(inventory: InventoryState) -> void:
-	_farming_session = FarmingSessionState.new(
-		FarmingTransactionState.new(
-			_farming_session.state.farm,
-			inventory,
-		),
-		_farming_session.world_day,
-	)
+	_farming_session = _farming_session.with_inventory(inventory)
 
 
 func _use_selected_item() -> void:
@@ -618,133 +599,39 @@ func _select_and_use_watering_can() -> void:
 			return
 
 
-func _request_or_complete_resource_choice() -> void:
-	if _resource_choice_claimed_today():
-		_clear_resource_choice()
-		_request_or_complete_trade()
-		return
-	if not _is_resource_choice_pending():
-		_resource_choice_day = _farming_session.world_day
-		_resource_choice_index = 0
-		_show_resource_choice_status()
-		_update_daily_overlay()
-		return
-	_attempt_daily_resource_gathering(
-		_resource_offers[_resource_choice_index].id
-	)
-
-
-func _attempt_daily_resource_gathering(source_id: StringName) -> void:
-	var result := DailyResourceGathering.attempt(
+func _advance_crate(intent: NorthMeadowCrateFlow.Intent) -> void:
+	var result := _crate_flow.advance(
+		intent,
 		_farming_session,
 		_daily_resource_claims,
-		DailyResourceGatheringCommand.new(
-			source_id,
-			_farming_session.world_day,
-		),
-		_daily_resource_sources,
-		_game_catalog,
 	)
-	if result.is_success():
-		_farming_session = result.session
-		_daily_resource_claims = result.claims
-		var source: DailyResourceSourceDefinition = (
-			_daily_resource_sources.get_source(source_id)
-		)
-		_status_label.text = "北草甸选择完成：%s" % _resource_offer_label(source)
-		_clear_resource_choice()
-		_play_interaction_feedback(
-			&"sfx.resource.gather",
-			_resource_anchor.cell,
-		)
-		_commit_durable_state(&"resource.claimed")
-	elif result.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED:
-		_clear_resource_choice()
-		_status_label.text = "北草甸今天已经选择过资源了"
-	elif result.status == DailyResourceGatheringResult.Status.INVENTORY_FULL:
-		_status_label.text = "背包无法容纳该选项；资格仍保留，可切换另一项"
-	else:
-		_status_label.text = "当前无法采集这处资源"
-
-
-func _request_or_complete_trade() -> void:
-	if not _is_trade_choice_pending():
-		_trade_choice_day = _farming_session.world_day
-		_trade_choice_index = 0
-		_show_trade_choice_status()
-		_update_daily_overlay()
-		return
-	var offer := _trade_offers[_trade_choice_index]
-	var result := _trade_book.execute(
-		_farming_session.state.inventory,
-		TradeCommand.new(TRADE_ENDPOINT_ID, offer.id),
-	)
-	if result.status == TradeResult.Status.COMPLETED:
-		_replace_inventory(result.inventory)
-		_status_label.text = "交换完成 · %s" % _trade_offer_label(offer)
-		_clear_trade_choice()
-		_play_interaction_feedback(
-			&"sfx.trade.exchange",
-			_resource_anchor.cell,
-		)
-		_commit_durable_state(&"economy.traded")
-	elif result.status == TradeResult.Status.INSUFFICIENT_COST:
-		_status_label.text = "交换所需物品不足 · %s" % _trade_offer_label(offer)
-	elif result.status == TradeResult.Status.REWARD_CAPACITY:
-		_status_label.text = "背包没有空间容纳交换所得"
-	else:
-		_clear_trade_choice()
-		_status_label.text = "当前交换项目不可用"
-
-
-func _is_trade_choice_pending() -> bool:
-	return _trade_choice_day == _farming_session.world_day
-
-
-func _clear_trade_choice() -> void:
-	if _trade_choice_day == 0:
-		return
-	_trade_choice_day = 0
-	_trade_choice_index = 0
+	_farming_session = result.session
+	_daily_resource_claims = result.claims
+	if not result.message.is_empty():
+		_status_label.text = result.message
+	if not result.durable_reason.is_empty():
+		_play_interaction_feedback(result.audio_id, _resource_anchor.cell)
+		_commit_durable_state(result.durable_reason)
 	_update_daily_overlay()
 
 
-func _select_relative_trade_offer(offset: int) -> void:
-	_trade_choice_index = posmod(
-		_trade_choice_index + offset,
-		_trade_offers.size(),
-	)
-	_show_trade_choice_status()
-	_update_daily_overlay()
+func _is_crate_open() -> bool:
+	if _crate_flow == null:
+		return false
+	return _crate_flow.presentation(
+		_farming_session,
+		_daily_resource_claims,
+	).is_open
 
 
-func _show_trade_choice_status() -> void:
-	var selected := _trade_offers[_trade_choice_index]
-	_status_label.text = (
-		"北草甸交换 · %s · Q/Tab/肩键切换 · E/A确认"
-		% _trade_offer_label(selected)
-	)
-
-
-func _trade_offer_label(offer: TradeOfferDefinition) -> String:
-	return "%s×%d → %s×%d" % [
-		_item_display_name(offer.cost_item_id),
-		offer.cost_quantity,
-		_item_display_name(offer.reward_item_id),
-		offer.reward_quantity,
-	]
-
-
-func _item_display_name(item_id: StringName) -> String:
-	var item := _game_catalog.get_item(item_id)
-	if item == null:
-		return String(item_id)
-	return _game_catalog.get_localized_text(item.display_name_key)
+func _cancel_crate() -> void:
+	if _crate_flow == null or _farming_session == null:
+		return
+	_advance_crate(NorthMeadowCrateFlow.Intent.CANCEL)
 
 
 func _request_or_complete_rest() -> void:
-	_clear_resource_choice()
-	_clear_trade_choice()
+	_cancel_crate()
 	if _rest_confirmation_day != _farming_session.world_day:
 		_rest_confirmation_day = _farming_session.world_day
 		_status_label.text = "回屋休息并结束今天？再次交互确认"
@@ -832,18 +719,16 @@ func _on_interaction_requested(
 	)
 	if target_cell == _resource_anchor.cell:
 		_clear_rest_confirmation()
-		_request_or_complete_resource_choice()
+		_advance_crate(NorthMeadowCrateFlow.Intent.OPEN_OR_CONFIRM)
 		_refresh_farming_view()
 		return
 	if target_cell == _rest_anchor.cell:
-		_clear_resource_choice()
-		_clear_trade_choice()
+		_cancel_crate()
 		_request_or_complete_rest()
 		_refresh_farming_view()
 		return
 	_clear_rest_confirmation()
-	_clear_resource_choice()
-	_clear_trade_choice()
+	_cancel_crate()
 	if _attempt_harvest(target_cell):
 		_refresh_farming_view()
 		return
@@ -927,72 +812,21 @@ func _commit_durable_state(
 
 
 func _update_daily_overlay() -> void:
-	if _daily_overlay == null or _daily_resource_claims == null:
+	if (
+		_daily_overlay == null
+		or _daily_resource_claims == null
+		or _crate_flow == null
+	):
 		return
-	_daily_overlay.show_state(
-		not _resource_choice_claimed_today(),
-		_rest_confirmation_day == _farming_session.world_day,
-		_is_resource_choice_pending(),
-		_resource_choice_index,
-		_is_trade_choice_pending(),
-		_trade_choice_index,
-	)
-
-
-func _resource_choice_claimed_today() -> bool:
-	return (
-		_daily_resource_claims.last_claimed_day(RESOURCE_CHOICE_GROUP_ID)
-		>= _farming_session.world_day
-	)
-
-
-func _is_resource_choice_pending() -> bool:
-	return _resource_choice_day == _farming_session.world_day
-
-
-func _clear_resource_choice() -> void:
-	if _resource_choice_day == 0:
-		return
-	_resource_choice_day = 0
-	_resource_choice_index = 0
-	_update_daily_overlay()
-
-
-func _select_relative_resource_offer(offset: int) -> void:
-	_resource_choice_index = posmod(
-		_resource_choice_index + offset,
-		_resource_offers.size(),
-	)
-	_show_resource_choice_status()
-	_update_daily_overlay()
-
-
-func _show_resource_choice_status() -> void:
-	var selected := _resource_offers[_resource_choice_index]
-	_status_label.text = (
-		"二选一 · %s · Q/Tab/肩键切换 · E/A确认"
-		% _resource_offer_label(selected)
-	)
-
-
-func _resource_offer_label(source: DailyResourceSourceDefinition) -> String:
-	if source.item_id == &"mistleaf_seed":
-		var crop := _game_catalog.get_crop(&"mistleaf")
-		var harvest_item := _game_catalog.get_item(&"mistleaf")
-		var future_value := (
-			source.quantity
-			* crop.harvest_quantity
-			* harvest_item.sell_price
+	_daily_overlay.show_crate(
+		_crate_flow.presentation(
+			_farming_session,
+			_daily_resource_claims,
 		)
-		return "种子×%d → 预计收获价值%d" % [
-			source.quantity,
-			future_value,
-		]
-	var item := _game_catalog.get_item(source.item_id)
-	return "雾叶×%d → 即时目录价值%d" % [
-		source.quantity,
-		source.quantity * item.sell_price,
-	]
+	)
+	_daily_overlay.show_rest_confirmation(
+		_rest_confirmation_day == _farming_session.world_day
+	)
 
 
 func _play_interaction_feedback(

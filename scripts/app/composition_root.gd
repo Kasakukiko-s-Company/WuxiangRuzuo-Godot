@@ -2,6 +2,11 @@ class_name AppCompositionRoot
 extends RefCounted
 
 const LOGICAL_VIEWPORT: Vector2i = Vector2i(640, 360)
+const ENTRY_P1_EXPERIENCE_PROBE: StringName = &"entry.p1.experience_probe"
+const ENTRY_P2_H01: StringName = &"entry.p2.h01"
+const P1_PROTOTYPE_SCENE: String = (
+	"res://scenes/prototypes/p1_experience_probe.tscn"
+)
 const ESTATE_PILOT_MAP_ID: StringName = &"home_h01_open_meadow"
 const ESTATE_PILOT_TRADE_ENDPOINT_ID: StringName = (
 	&"economy.h01.north_meadow_crate"
@@ -22,76 +27,86 @@ var game_catalog: GameCatalog
 var estate_map_catalog: EstateMapCatalog
 var trade_offer_catalog: TradeOfferCatalog
 var bootstrap_issues: Array[DataValidationIssue] = []
+var _catalog_source: AppCatalogSource
+var _entry_statuses: Dictionary[StringName, AppEntryStatus] = {}
 
 
-func _init() -> void:
+func _init(catalog_source_override: AppCatalogSource = null) -> void:
 	platform_descriptor = PlatformDescriptor.create(
 		PlatformDescriptor.RuntimeEnvironment.WINDOWS_NATIVE,
 		PlatformDescriptor.DistributionChannel.STANDALONE,
 	)
+	_catalog_source = (
+		catalog_source_override
+		if catalog_source_override != null
+		else FileAppCatalogSource.new()
+	)
 
 
 func bootstrap() -> String:
-	var catalog_result := CatalogFileLoader.load_catalog()
+	bootstrap_issues = []
+	game_catalog = null
+	estate_map_catalog = null
+	trade_offer_catalog = null
+	_entry_statuses = {}
+	_bootstrap_p1_entry()
+
+	var catalog_result := _catalog_source.load_game_catalog()
 	if not catalog_result.is_valid():
-		bootstrap_issues = catalog_result.issues
-		game_catalog = null
-		estate_map_catalog = null
-		trade_offer_catalog = null
-		return "G2 bootstrap failed · %d catalog issue(s)" % bootstrap_issues.size()
-	var estate_result := EstateMapCatalogFileLoader.load_catalog()
+		return _block_h01_entry(
+			"G2 catalog",
+			catalog_result.issues,
+		)
+	game_catalog = catalog_result.catalog
+
+	var estate_result := _catalog_source.load_estate_map_catalog()
 	if not estate_result.is_valid():
-		bootstrap_issues = estate_result.issues
-		game_catalog = null
-		estate_map_catalog = null
-		trade_offer_catalog = null
-		return "P2 estate bootstrap failed · %d catalog issue(s)" % bootstrap_issues.size()
-	var trade_result := TradeOfferCatalogFileLoader.load_catalog(
-		catalog_result.catalog,
-	)
+		return _block_h01_entry(
+			"P2 estate catalog",
+			estate_result.issues,
+		)
+	estate_map_catalog = estate_result.catalog
+
+	var trade_result := _catalog_source.load_trade_offer_catalog(game_catalog)
 	if not trade_result.is_valid():
-		bootstrap_issues = trade_result.issues
-		game_catalog = null
-		estate_map_catalog = null
-		trade_offer_catalog = null
-		return "P2 economy bootstrap failed · %d catalog issue(s)" % bootstrap_issues.size()
+		return _block_h01_entry(
+			"P2 economy catalog",
+			trade_result.issues,
+		)
 	var trade_contract_issues := validate_h01_trade_contract(
 		trade_result.catalog,
-		catalog_result.catalog,
+		game_catalog,
 	)
 	if not trade_contract_issues.is_empty():
-		bootstrap_issues = trade_contract_issues
-		game_catalog = null
-		estate_map_catalog = null
-		trade_offer_catalog = null
-		return "P2 economy bootstrap failed · %d H01 contract issue(s)" % bootstrap_issues.size()
-	var pilot_definition: EstateMapDefinition = estate_result.catalog.get_map(
+		return _block_h01_entry(
+			"P2 economy contract",
+			trade_contract_issues,
+		)
+	trade_offer_catalog = trade_result.catalog
+
+	var pilot_definition: EstateMapDefinition = estate_map_catalog.get_map(
 		ESTATE_PILOT_MAP_ID
 	)
+	var pilot_issues: Array[DataValidationIssue] = []
 	if pilot_definition == null:
-		bootstrap_issues = [DataValidationIssue.new(
+		pilot_issues = [DataValidationIssue.new(
 			"estateMaps.%s" % ESTATE_PILOT_MAP_ID,
 			"required P2 pilot definition is missing",
 		)]
 	elif pilot_definition.runtime_scene_path.is_empty():
-		bootstrap_issues = [DataValidationIssue.new(
+		pilot_issues = [DataValidationIssue.new(
 			"estateMaps.%s.runtimeScenePath" % ESTATE_PILOT_MAP_ID,
 			"required P2 pilot runtime scene is not integrated",
 		)]
 	elif not ResourceLoader.exists(pilot_definition.runtime_scene_path, "PackedScene"):
-		bootstrap_issues = [DataValidationIssue.new(
+		pilot_issues = [DataValidationIssue.new(
 			"estateMaps.%s.runtimeScenePath" % ESTATE_PILOT_MAP_ID,
 			"integrated runtime scene does not exist",
 		)]
-	if not bootstrap_issues.is_empty():
-		game_catalog = null
-		estate_map_catalog = null
-		trade_offer_catalog = null
-		return "P2 estate bootstrap failed · %d catalog issue(s)" % bootstrap_issues.size()
-	bootstrap_issues = []
-	game_catalog = catalog_result.catalog
-	estate_map_catalog = estate_result.catalog
-	trade_offer_catalog = trade_result.catalog
+	if not pilot_issues.is_empty():
+		return _block_h01_entry("P2 estate scene", pilot_issues)
+
+	_entry_statuses[ENTRY_P2_H01] = AppEntryStatus.available(ENTRY_P2_H01)
 	return "P2 H01 ready · G2 domain active · %d items · %d world maps · %d estate candidates · %d trade offers" % [
 		game_catalog.items.size(),
 		game_catalog.maps.size(),
@@ -101,13 +116,59 @@ func bootstrap() -> String:
 
 
 func is_ready() -> bool:
-	return (
-		platform_descriptor != null
-		and game_catalog != null
-		and estate_map_catalog != null
-		and trade_offer_catalog != null
-		and bootstrap_issues.is_empty()
+	return entry_status(ENTRY_P2_H01).is_available()
+
+
+func entry_status(entry_id: StringName) -> AppEntryStatus:
+	return _entry_statuses.get(
+		entry_id,
+		AppEntryStatus.unknown(entry_id),
+	) as AppEntryStatus
+
+
+func _bootstrap_p1_entry() -> void:
+	var issues: Array[DataValidationIssue] = []
+	if platform_descriptor == null:
+		issues.append(DataValidationIssue.new(
+			"entry.p1.platform",
+			"platform descriptor is unavailable",
+		))
+	if not ResourceLoader.exists(P1_PROTOTYPE_SCENE, "PackedScene"):
+		issues.append(DataValidationIssue.new(
+			"entry.p1.scene",
+			"P1 experience probe scene is unavailable",
+		))
+	if issues.is_empty():
+		_entry_statuses[ENTRY_P1_EXPERIENCE_PROBE] = AppEntryStatus.available(
+			ENTRY_P1_EXPERIENCE_PROBE
+		)
+		return
+	_entry_statuses[ENTRY_P1_EXPERIENCE_PROBE] = AppEntryStatus.blocked(
+		ENTRY_P1_EXPERIENCE_PROBE,
+		issues,
 	)
+	bootstrap_issues.append_array(issues)
+
+
+func _block_h01_entry(
+	dependency_label: String,
+	issues: Array[DataValidationIssue],
+) -> String:
+	_entry_statuses[ENTRY_P2_H01] = AppEntryStatus.blocked(
+		ENTRY_P2_H01,
+		issues,
+	)
+	bootstrap_issues.append_array(issues)
+	var p1_status := (
+		"P1 ready"
+		if entry_status(ENTRY_P1_EXPERIENCE_PROBE).is_available()
+		else "P1 blocked"
+	)
+	return "%s · H01 blocked · %s · %d issue(s)" % [
+		p1_status,
+		dependency_label,
+		issues.size(),
+	]
 
 
 static func validate_h01_trade_contract(

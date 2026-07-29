@@ -61,15 +61,30 @@ func _run() -> void:
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
 			) == 0
-			and daily_overlay.is_resource_choice_pending()
-			and daily_overlay.get_resource_choice_index() == 0,
-			"first physical E opens the daily resource choice without collecting",
+			and daily_overlay.is_crate_open()
+			and daily_overlay.get_crate_selected_index() == 0
+			and daily_overlay.get_crate_action_count() == 4,
+			"first physical E opens the unified crate without collecting",
 		)
 		await _tap_key(KEY_Q)
 		_check(
-			daily_overlay.is_resource_choice_pending()
-			and daily_overlay.get_resource_choice_index() == 1,
-			"Q moves the visible resource choice to the second offer",
+			daily_overlay.get_crate_selected_index() == 3
+			and daily_overlay.get_selected_crate_action_id()
+			== &"economy.h01.buy_mistleaf_seed",
+			"Q moves backward across the unified crate actions",
+		)
+		await _tap_key(KEY_TAB)
+		_check(
+			daily_overlay.get_crate_selected_index() == 0,
+			"Tab moves forward from the last action to the first",
+		)
+		await _tap_key(KEY_TAB)
+		_check(
+			daily_overlay.is_crate_open()
+			and daily_overlay.get_crate_selected_index() == 1
+			and daily_overlay.get_selected_crate_action_id()
+			== &"home.h01.resource.north_meadow.forage",
+			"Tab moves the unified crate to the forage action",
 		)
 		await _tap_key(KEY_E)
 		_check(
@@ -81,20 +96,22 @@ func _run() -> void:
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
 			) == 0
-			and not daily_overlay.is_resource_choice_pending()
-			and not daily_overlay.is_resource_available(),
-			"Q switches to the immediate forage offer and E confirms it",
+			and not daily_overlay.is_crate_open()
+			and not daily_overlay.is_daily_claim_available(),
+			"Tab switches to the immediate forage offer and E confirms it",
 		)
 		await _tap_key(KEY_E)
 		_check(
-			daily_overlay.is_trade_choice_pending()
-			and daily_overlay.get_trade_choice_index() == 0,
-			"physical E opens the distinct trade choice after daily collection",
+			daily_overlay.is_crate_open()
+			and daily_overlay.get_crate_action_count() == 2
+			and daily_overlay.get_selected_crate_action_id()
+			== &"economy.h01.sell_mistleaf",
+			"physical E reopens the same crate on its executable sale",
 		)
 		await _tap_key(KEY_D)
 		_check(
-			not daily_overlay.is_trade_choice_pending(),
-			"physical movement cancels an unconfirmed trade",
+			not daily_overlay.is_crate_open(),
+			"physical movement cancels the unified crate menu",
 		)
 		_place_for_interaction(player, mapper, resource_approach)
 		await _tap_key(KEY_E)
@@ -111,11 +128,12 @@ func _run() -> void:
 			"physical E confirms the default mistleaf sale",
 		)
 		await _tap_key(KEY_E)
-		await _tap_key(KEY_Q)
 		_check(
-			daily_overlay.is_trade_choice_pending()
-			and daily_overlay.get_trade_choice_index() == 1,
-			"physical Q selects the seed purchase offer",
+			daily_overlay.is_crate_open()
+			and daily_overlay.get_crate_selected_index() == 1
+			and daily_overlay.get_selected_crate_action_id()
+			== &"economy.h01.buy_mistleaf_seed",
+			"reopening skips the unavailable sale and selects the seed purchase",
 		)
 		await _tap_key(KEY_E)
 		_check(
@@ -162,9 +180,10 @@ func _run() -> void:
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
 			) == 1
-			and daily_overlay.is_resource_choice_pending()
-			and daily_overlay.is_resource_available(),
-			"the daily choice reopens without collecting when day two begins",
+			and daily_overlay.is_crate_open()
+			and daily_overlay.is_daily_claim_available()
+			and daily_overlay.get_crate_action_count() == 4,
+			"all four crate actions return without collecting when day two begins",
 		)
 		await _tap_key(KEY_E)
 		_check(

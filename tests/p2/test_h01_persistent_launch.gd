@@ -108,11 +108,12 @@ func _run() -> void:
 			)
 			await process_frame
 			_check(
-				committed_reasons.has(&"economy.traded")
+				committed_reasons.has(&"resource.claimed")
+				and committed_reasons.has(&"economy.traded")
 				and new_storage.payloads[&"profile-1"].contains(
 					"village_scrip"
 				),
-				"a real trade emits a durable commit containing village scrip",
+				"real claim and trade mutations both autosave the resulting inventory",
 			)
 		new_launch.pilot.durable_state_committed.emit(
 			&"test.current",
@@ -158,6 +159,10 @@ func _run() -> void:
 				&"village_scrip",
 			) == 30,
 			"the composition root restores the inventory produced by a real trade",
+		)
+		_check(
+			not recovered_launch.pilot.get_daily_interaction_overlay().is_crate_open(),
+			"restoring a profile never persists the transient crate menu",
 		)
 		recovered_launch.pilot.queue_free()
 		current_scene = null

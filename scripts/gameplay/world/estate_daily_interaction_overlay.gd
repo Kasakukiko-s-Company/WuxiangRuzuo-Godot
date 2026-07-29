@@ -3,12 +3,13 @@ extends Node2D
 
 var _resource_position: Vector2
 var _rest_position: Vector2
-var _resource_available: bool = true
 var _rest_confirmation_pending: bool = false
-var _resource_choice_pending: bool = false
-var _resource_choice_index: int = 0
-var _trade_choice_pending: bool = false
-var _trade_choice_index: int = 0
+var _crate_presentation := NorthMeadowCratePresentation.new(
+	false,
+	true,
+	[],
+	-1,
+)
 
 
 func configure(
@@ -20,29 +21,16 @@ func configure(
 	queue_redraw()
 
 
-func show_state(
-	resource_available: bool,
-	rest_confirmation_pending: bool,
-	resource_choice_pending: bool = false,
-	resource_choice_index: int = 0,
-	trade_choice_pending: bool = false,
-	trade_choice_index: int = 0,
-) -> void:
-	if (
-		_resource_available == resource_available
-		and _rest_confirmation_pending == rest_confirmation_pending
-		and _resource_choice_pending == resource_choice_pending
-		and _resource_choice_index == resource_choice_index
-		and _trade_choice_pending == trade_choice_pending
-		and _trade_choice_index == trade_choice_index
-	):
+func show_crate(presentation: NorthMeadowCratePresentation) -> void:
+	assert(presentation != null, "daily overlay requires a crate presentation")
+	_crate_presentation = presentation
+	queue_redraw()
+
+
+func show_rest_confirmation(pending: bool) -> void:
+	if _rest_confirmation_pending == pending:
 		return
-	_resource_available = resource_available
-	_rest_confirmation_pending = rest_confirmation_pending
-	_resource_choice_pending = resource_choice_pending
-	_resource_choice_index = resource_choice_index
-	_trade_choice_pending = trade_choice_pending
-	_trade_choice_index = trade_choice_index
+	_rest_confirmation_pending = pending
 	queue_redraw()
 
 
@@ -54,24 +42,25 @@ func get_rest_world_position() -> Vector2:
 	return _rest_position
 
 
-func is_resource_choice_pending() -> bool:
-	return _resource_choice_pending
+func is_crate_open() -> bool:
+	return _crate_presentation.is_open
 
 
-func get_resource_choice_index() -> int:
-	return _resource_choice_index
+func get_crate_selected_index() -> int:
+	return _crate_presentation.selected_index
 
 
-func is_trade_choice_pending() -> bool:
-	return _trade_choice_pending
+func get_crate_action_count() -> int:
+	return _crate_presentation.actions.size()
 
 
-func get_trade_choice_index() -> int:
-	return _trade_choice_index
+func get_selected_crate_action_id() -> StringName:
+	var selected := _crate_presentation.selected_action()
+	return &"" if selected == null else selected.definition_id
 
 
-func is_resource_available() -> bool:
-	return _resource_available
+func is_daily_claim_available() -> bool:
+	return _crate_presentation.daily_claim_available
 
 
 func _draw() -> void:
@@ -83,14 +72,14 @@ func _draw_resource_source() -> void:
 	var aura := Color(0.42, 0.78, 0.48, 0.24)
 	var crate := Color(0.48, 0.30, 0.17, 1.0)
 	var sprout := Color(0.68, 0.92, 0.52, 1.0)
-	if not _resource_available and not _trade_choice_pending:
+	if _crate_presentation.is_open:
+		aura = Color(0.92, 0.72, 0.28, 0.30)
+		crate = Color(0.55, 0.34, 0.16, 1.0)
+		sprout = Color(0.94, 0.78, 0.34, 1.0)
+	elif not _crate_presentation.daily_claim_available:
 		aura = Color(0.42, 0.45, 0.43, 0.13)
 		crate = Color(0.33, 0.31, 0.28, 1.0)
 		sprout = Color(0.44, 0.48, 0.44, 1.0)
-	elif _trade_choice_pending:
-		aura = Color(0.92, 0.72, 0.28, 0.28)
-		crate = Color(0.55, 0.34, 0.16, 1.0)
-		sprout = Color(0.94, 0.78, 0.34, 1.0)
 	draw_circle(_resource_position, 14.0, aura)
 	draw_rect(
 		Rect2(_resource_position + Vector2(-9.0, -4.0), Vector2(18.0, 11.0)),
@@ -114,58 +103,51 @@ func _draw_resource_source() -> void:
 		sprout,
 		2.0,
 	)
-	if _resource_choice_pending:
-		_draw_resource_choice()
-	elif _trade_choice_pending:
-		_draw_trade_choice()
+	if _crate_presentation.is_open:
+		_draw_crate_actions()
 
 
-func _draw_resource_choice() -> void:
-	var seed_color := Color(0.72, 0.95, 0.52, 1.0)
-	var forage_color := Color(0.92, 0.72, 0.38, 1.0)
-	var seed_center := _resource_position + Vector2(-10.0, -22.0)
-	var forage_center := _resource_position + Vector2(10.0, -22.0)
-	draw_circle(seed_center, 4.0, seed_color)
-	draw_circle(forage_center, 4.0, forage_color)
-	var selected_center := (
-		seed_center if _resource_choice_index == 0 else forage_center
-	)
-	draw_arc(
-		selected_center,
-		7.0,
-		0.0,
-		TAU,
-		12,
-		Color(1.0, 0.94, 0.66, 1.0),
-		2.0,
-	)
+func _draw_crate_actions() -> void:
+	var count := _crate_presentation.actions.size()
+	for index: int in count:
+		var action := _crate_presentation.actions[index]
+		var center := _resource_position + Vector2(
+			(float(index) - (float(count - 1) * 0.5)) * 11.0,
+			-23.0,
+		)
+		var color := _action_color(action)
+		draw_circle(center, 4.0, color)
+		if not action.enabled:
+			draw_line(
+				center + Vector2(-3.0, -3.0),
+				center + Vector2(3.0, 3.0),
+				Color(0.20, 0.22, 0.22, 0.9),
+				1.5,
+			)
+		if index == _crate_presentation.selected_index:
+			draw_arc(
+				center,
+				7.0,
+				0.0,
+				TAU,
+				12,
+				Color(1.0, 0.96, 0.72, 1.0),
+				2.0,
+			)
 
 
-func _draw_trade_choice() -> void:
-	var sell_color := Color(0.48, 0.82, 0.66, 1.0)
-	var buy_color := Color(0.96, 0.72, 0.3, 1.0)
-	var sell_center := _resource_position + Vector2(-10.0, -22.0)
-	var buy_center := _resource_position + Vector2(10.0, -22.0)
-	draw_circle(sell_center, 4.0, sell_color)
-	draw_circle(buy_center, 4.0, buy_color)
-	draw_line(
-		sell_center + Vector2(2.0, 7.0),
-		buy_center + Vector2(-2.0, 7.0),
-		Color(0.94, 0.86, 0.56, 0.9),
-		1.5,
-	)
-	var selected_center := (
-		sell_center if _trade_choice_index == 0 else buy_center
-	)
-	draw_arc(
-		selected_center,
-		7.0,
-		0.0,
-		TAU,
-		12,
-		Color(1.0, 0.96, 0.72, 1.0),
-		2.0,
-	)
+func _action_color(action: NorthMeadowCrateAction) -> Color:
+	var color: Color
+	match action.visual_role:
+		NorthMeadowCrateAction.VisualRole.DAILY_SEED:
+			color = Color(0.72, 0.95, 0.52, 1.0)
+		NorthMeadowCrateAction.VisualRole.DAILY_FORAGE:
+			color = Color(0.92, 0.72, 0.38, 1.0)
+		NorthMeadowCrateAction.VisualRole.TRADE_SELL:
+			color = Color(0.48, 0.82, 0.66, 1.0)
+		_:
+			color = Color(0.96, 0.72, 0.30, 1.0)
+	return color if action.enabled else color.darkened(0.55)
 
 
 func _draw_rest_point() -> void:
