@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/p2_crate_choice_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/p2_crate_action_card.tscn" id="2_card"]
+
+[node name="P2CrateChoicePanel" type="Control"]
+visible = false
+z_index = 80
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -302.0
+offset_top = -204.0
+offset_right = 302.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="Label" parent="Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "北草甸物资箱 · 今日资源可领取"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Card1" parent="Panel/Margin/Content/Cards" instance=ExtResource("2_card")]
+layout_mode = 2
+
+[node name="Card2" parent="Panel/Margin/Content/Cards" instance=ExtResource("2_card")]
+layout_mode = 2
+
+[node name="Card3" parent="Panel/Margin/Content/Cards" instance=ExtResource("2_card")]
+layout_mode = 2
+
+[node name="Card4" parent="Panel/Margin/Content/Cards" instance=ExtResource("2_card")]
+layout_mode = 2
+
+[node name="SelectedStatus" type="Label" parent="Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.79, 0.74, 1)
+theme_override_font_sizes/font_size = 10
+text = "已选择：雾叶草种子 ×3（每日） · 可执行"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Hint" type="Label" parent="Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.54, 0.62, 0.6, 1)
+theme_override_font_sizes/font_size = 9
+text = "Q / Tab 或手柄肩键切换 · E / 手柄 A 确认 · 移动取消"
+horizontal_alignment = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/vertical_slices/p2_estate_pilot.gd" id="1_pilot"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/farm_plot_overlay.gd" id="2_farm_overlay"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/gameplay/feedback/p2_interaction_feedback.gd" id="6_feedback"]
 [ext_resource type="Script" path="res://scripts/ui/p2_pause_menu.gd" id="7_pause_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/p2_day_transition_overlay.tscn" id="8_day_transition"]
+[ext_resource type="PackedScene" path="res://scenes/ui/p2_crate_choice_panel.tscn" id="9_crate_choice"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(18, 20)
@@ -142,6 +143,8 @@ theme_override_constants/margin_bottom = 6
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "H01 ESTATE PILOT"
+
+[node name="CrateChoicePanel" parent="HUD" instance=ExtResource("9_crate_choice")]
 
 [node name="DayTransition" parent="HUD" instance=ExtResource("8_day_transition")]
 

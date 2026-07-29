@@ -38,6 +38,8 @@ func _run() -> void:
 	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 	var player := pilot.get_player()
 	var daily_overlay := pilot.get_daily_interaction_overlay()
+	var crate_panel := pilot.get_crate_choice_panel()
+	var status_panel := pilot.get_node("HUD/StatusPanel") as PanelContainer
 	await _tap_key(KEY_N)
 	_check(
 		pilot.get_farming_session().world_day == 1,
@@ -63,14 +65,20 @@ func _run() -> void:
 			) == 0
 			and daily_overlay.is_crate_open()
 			and daily_overlay.get_crate_selected_index() == 0
-			and daily_overlay.get_crate_action_count() == 4,
+			and daily_overlay.get_crate_action_count() == 4
+			and crate_panel.is_open()
+			and crate_panel.get_visible_action_count() == 4
+			and not status_panel.visible,
 			"first physical E opens the unified crate without collecting",
 		)
 		await _tap_key(KEY_Q)
 		_check(
 			daily_overlay.get_crate_selected_index() == 3
 			and daily_overlay.get_selected_crate_action_id()
-			== &"economy.h01.buy_mistleaf_seed",
+			== &"economy.h01.buy_mistleaf_seed"
+			and crate_panel.get_selected_action_id()
+			== &"economy.h01.buy_mistleaf_seed"
+			and crate_panel.get_selected_status_text().contains("所需物品不足"),
 			"Q moves backward across the unified crate actions",
 		)
 		await _tap_key(KEY_TAB)
@@ -110,8 +118,10 @@ func _run() -> void:
 		)
 		await _tap_key(KEY_D)
 		_check(
-			not daily_overlay.is_crate_open(),
-			"physical movement cancels the unified crate menu",
+			not daily_overlay.is_crate_open()
+			and not crate_panel.is_open()
+			and status_panel.visible,
+			"physical movement cancels both crate projections and restores status",
 		)
 		_place_for_interaction(player, mapper, resource_approach)
 		await _tap_key(KEY_E)

@@ -2,7 +2,7 @@
 
 《雾乡如昨》是一款正在正式制作的原创 2D 生活模拟与悬疑探索游戏。本仓库以 Godot 4 开发完整游戏；旧 Cocos Creator 工程只是早期雏形和可选参考，不是产品规格或内容上限。
 
-当前状态：**G0～G2、P0～P1 与 H01 地产地图先导均已有独立远端基线；P2 正在实现核心生活循环**。默认 Main 可选择三个独立档位进入 H01 地产生活闭环，并以 schema v2 在 D 盘开发目录原子保存当前状态和受保护恢复点。耕地、播种、浇水、跨日成长、可确认日结反馈、收获、每日资源选择、轻量交换、暂停/安全返回和常驻目标均已可运行；本地节奏证据采集已就绪，但尚无真人样本和据此完成的平衡复盘，因此仍不代表 P2 完成。
+当前状态：**G0～G2、P0～P1 与 H01 地产地图先导均已有独立远端基线；P2 正在实现核心生活循环**。默认 Main 可选择三个独立档位进入 H01 地产生活闭环，并以 schema v2 在 D 盘开发目录原子保存当前状态和受保护恢复点。耕地、播种、浇水、跨日成长、可确认日结反馈、收获、可读的每日资源/交换行动卡、暂停/安全返回和常驻目标均已可运行；本地节奏证据采集已就绪，但尚无真人样本和据此完成的平衡复盘，因此仍不代表 P2 完成。
 
 ## 当前技术基线
 
@@ -36,6 +36,7 @@
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_h01_farming_loop.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_h01_input_route.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_p2_day_transition.gd
+& 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_p2_crate_choice_panel.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --quit-after 2
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --path . --resolution 1280x720 --script res://tools/capture_h01_estate_pilot.gd
 ```

@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/p2_crate_action_card.gd" id="1_card"]
+
+[node name="P2CrateActionCard" type="PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(132, 72)
+mouse_filter = 2
+size_flags_horizontal = 3
+script = ExtResource("1_card")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 5
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Role" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "每日种子"
+horizontal_alignment = 1
+
+[node name="Action" type="Label" parent="Margin/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.84, 0.88, 0.8, 1)
+theme_override_font_sizes/font_size = 10
+text = "雾叶草种子 ×3（每日）"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="State" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "可执行"
+horizontal_alignment = 1
+text_overrun_behavior = 3

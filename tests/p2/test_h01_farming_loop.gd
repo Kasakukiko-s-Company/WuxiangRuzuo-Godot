@@ -91,6 +91,8 @@ func _run() -> void:
 
 	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 	var player := pilot.get_player()
+	var crate_panel := pilot.get_crate_choice_panel()
+	var status_panel := pilot.get_node("HUD/StatusPanel") as PanelContainer
 	var initial_session: FarmingSessionState = pilot.get_farming_session()
 	_check(
 		_inventory_quantity(initial_session.state.inventory, &"mistleaf_seed") == 0,
@@ -128,9 +130,22 @@ func _run() -> void:
 		) == 0,
 		"first resource interaction opens the default seed offer without collecting",
 	)
+	_check(
+		crate_panel.is_open()
+		and crate_panel.get_visible_action_count() == 4
+		and crate_panel.get_selected_action_id()
+		== P2PacingEvidenceSession.ACTION_RESOURCE_SEED
+		and not status_panel.visible,
+		"the dedicated choice panel replaces the clipped status line while open",
+	)
 	var resource_choice_movement := InputSnapshot.neutral()
 	resource_choice_movement.move = Vector2.RIGHT
 	_send_snapshot(pilot, resource_choice_movement)
+	_check(
+		not crate_panel.is_open()
+		and status_panel.visible,
+		"movement closes the transient choice panel and restores normal status",
+	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
 	_check(
@@ -386,6 +401,13 @@ func _run() -> void:
 		and pilot.get_daily_interaction_overlay().get_selected_crate_action_id()
 		== &"economy.h01.sell_mistleaf",
 		"the unified crate can reach trade before taking the current daily reward",
+	)
+	_check(
+		crate_panel.is_open()
+		and crate_panel.get_selected_action_id()
+		== &"economy.h01.sell_mistleaf"
+		and crate_panel.get_selected_status_text().contains("可执行"),
+		"the dedicated panel mirrors the selected executable sale",
 	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame

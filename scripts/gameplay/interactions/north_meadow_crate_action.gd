@@ -61,3 +61,34 @@ func _init(
 	label = action_label
 	enabled = action_enabled
 	blocked_reason = action_blocked_reason
+
+
+func role_label() -> String:
+	match visual_role:
+		VisualRole.DAILY_SEED:
+			return "每日种子"
+		VisualRole.DAILY_FORAGE:
+			return "每日采集"
+		VisualRole.TRADE_SELL:
+			return "出售"
+		VisualRole.TRADE_BUY:
+			return "购买"
+	return "行动"
+
+
+func blocked_reason_label() -> String:
+	if blocked_reason == &"inventory_full":
+		return "背包容量不足"
+	if blocked_reason == &"insufficient_cost":
+		return "所需物品不足"
+	if blocked_reason == &"reward_capacity":
+		return "交换所得无处放置"
+	if blocked_reason == &"already_claimed":
+		return "今日已经领取"
+	return "当前条件不满足"
+
+
+func execution_state_label() -> String:
+	if enabled:
+		return "可执行"
+	return "暂不可执行 · %s" % blocked_reason_label()

@@ -392,25 +392,12 @@ func _open_message(action: NorthMeadowCrateAction) -> String:
 	var state := (
 		""
 		if action.enabled
-		else "（不可执行：%s）" % _blocked_reason_label(action.blocked_reason)
+		else "（不可执行：%s）" % action.blocked_reason_label()
 	)
 	return "北草甸物资箱 · %s%s · Q/Tab 切换 · E/A 确认" % [
 		action.label,
 		state,
 	]
-
-
-func _blocked_reason_label(reason: StringName) -> String:
-	if reason == &"inventory_full":
-		return "背包容量不足"
-	if reason == &"insufficient_cost":
-		return "所需物品不足"
-	if reason == &"reward_capacity":
-		return "交换所得无处放置"
-	if reason == &"already_claimed":
-		return "今日已经领取"
-	return "当前条件不满足"
-
 
 func _close() -> void:
 	_is_open = false

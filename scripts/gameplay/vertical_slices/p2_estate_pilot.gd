@@ -25,10 +25,12 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _title_label: Label = $HUD/TitlePanel/Margin/Title
 @onready var _debug_panel: PanelContainer = $HUD/DebugPanel
 @onready var _debug_label: Label = $HUD/DebugPanel/Margin/DebugLabel
+@onready var _status_panel: PanelContainer = $HUD/StatusPanel
 @onready var _status_label: Label = $HUD/StatusPanel/Margin/StatusLabel
 @onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
 @onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
 @onready var _objective_label: Label = %ObjectiveLabel
+@onready var _crate_choice_panel: P2CrateChoicePanel = $HUD/CrateChoicePanel
 @onready var _day_transition: P2DayTransitionOverlay = $HUD/DayTransition
 @onready var _pause_menu: P2PauseMenu = $HUD/PauseMenu
 
@@ -310,6 +312,10 @@ func get_farm_overlay() -> FarmPlotOverlay:
 
 func get_daily_interaction_overlay() -> EstateDailyInteractionOverlay:
 	return _daily_overlay
+
+
+func get_crate_choice_panel() -> P2CrateChoicePanel:
+	return _crate_choice_panel
 
 
 func get_interaction_feedback() -> P2InteractionFeedback:
@@ -727,7 +733,10 @@ func _is_crate_open() -> bool:
 func _cancel_crate() -> void:
 	if _crate_flow == null or _farming_session == null:
 		return
+	var was_open: bool = _is_crate_open()
 	_advance_crate(NorthMeadowCrateFlow.Intent.CANCEL)
+	if was_open:
+		_status_label.text = "已关闭北草甸物资箱"
 
 
 func _request_or_complete_rest() -> void:
@@ -955,16 +964,18 @@ func _commit_durable_state(
 func _update_daily_overlay() -> void:
 	if (
 		_daily_overlay == null
+		or _crate_choice_panel == null
 		or _daily_resource_claims == null
 		or _crate_flow == null
 	):
 		return
-	_daily_overlay.show_crate(
-		_crate_flow.presentation(
-			_farming_session,
-			_daily_resource_claims,
-		)
+	var presentation := _crate_flow.presentation(
+		_farming_session,
+		_daily_resource_claims,
 	)
+	_daily_overlay.show_crate(presentation)
+	_crate_choice_panel.present(presentation)
+	_status_panel.visible = not presentation.is_open
 	_daily_overlay.show_rest_confirmation(
 		_rest_confirmation_day == _farming_session.world_day
 	)
