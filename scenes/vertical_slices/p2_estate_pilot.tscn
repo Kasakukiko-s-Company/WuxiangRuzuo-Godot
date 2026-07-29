@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/vertical_slices/p2_estate_pilot.gd" id="1_pilot"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/farm_plot_overlay.gd" id="2_farm_overlay"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/gameplay/world/estate_daily_interaction_overlay.gd" id="5_daily_overlay"]
 [ext_resource type="Script" path="res://scripts/gameplay/feedback/p2_interaction_feedback.gd" id="6_feedback"]
 [ext_resource type="Script" path="res://scripts/ui/p2_pause_menu.gd" id="7_pause_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/p2_day_transition_overlay.tscn" id="8_day_transition"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(18, 20)
@@ -142,15 +143,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "H01 ESTATE PILOT"
 
-[node name="SleepFade" type="ColorRect" parent="HUD"]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.015, 0.035, 0.045, 0.0)
+[node name="DayTransition" parent="HUD" instance=ExtResource("8_day_transition")]
 
 [node name="PauseMenu" type="Control" parent="HUD"]
 unique_name_in_owner = true

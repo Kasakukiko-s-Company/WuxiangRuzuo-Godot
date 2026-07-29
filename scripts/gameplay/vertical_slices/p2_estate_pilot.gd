@@ -29,7 +29,7 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
 @onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
 @onready var _objective_label: Label = %ObjectiveLabel
-@onready var _sleep_fade: ColorRect = $HUD/SleepFade
+@onready var _day_transition: P2DayTransitionOverlay = $HUD/DayTransition
 @onready var _pause_menu: P2PauseMenu = $HUD/PauseMenu
 
 var _input_service: InputService
@@ -102,10 +102,18 @@ func _physics_process(_delta: float) -> void:
 	if _discard_next_input_sample:
 		_discard_next_input_sample = false
 		return
-	if snapshot.pause or _pause_menu.is_open():
+	if (
+		snapshot.pause
+		or _pause_menu.is_open()
+		or _day_transition.is_open()
+	):
 		apply_input_snapshot(snapshot)
 		return
 	_player.apply_input_snapshot(snapshot)
+	if _day_transition.is_open():
+		_refresh_farming_view()
+		_update_debug()
+		return
 	apply_input_snapshot(snapshot)
 
 
@@ -120,6 +128,12 @@ func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 			_open_pause_menu()
 		return
 	if _pause_menu.is_open():
+		return
+	if _day_transition.is_open():
+		if snapshot.reduce_motion_toggle:
+			set_reduce_motion(not _reduce_motion)
+		if snapshot.interact or snapshot.primary_action:
+			_dismiss_day_transition()
 		return
 	if snapshot.reset:
 		reset_to_safe_spawn()
@@ -306,6 +320,10 @@ func get_pause_menu() -> P2PauseMenu:
 	return _pause_menu
 
 
+func get_day_transition() -> P2DayTransitionOverlay:
+	return _day_transition
+
+
 func current_life_loop_objective() -> P2LifeLoopObjective:
 	if (
 		_farming_session == null
@@ -324,6 +342,7 @@ func get_player_cell() -> Vector2i:
 
 
 func reset_to_safe_spawn() -> void:
+	_dismiss_day_transition()
 	var spawn: EstateAnchorResult = _estate_runtime.query_anchor(
 		&"spawn",
 		SAFE_SPAWN_ID,
@@ -361,6 +380,7 @@ func set_reduce_motion(enabled: bool) -> void:
 	_camera.position_smoothing_enabled = not enabled
 	if enabled:
 		_camera.reset_smoothing()
+		_day_transition.finish_motion()
 
 
 func set_debug_visible(enabled: bool) -> void:
@@ -718,6 +738,7 @@ func _request_or_complete_rest() -> void:
 		_update_daily_overlay()
 		_play_interaction_feedback(&"sfx.rest.confirm", _rest_anchor.cell)
 		return
+	var completed_day: int = _farming_session.world_day
 	var result := DailyRestCycle.attempt(
 		_farming_session,
 		DailyRestCommand.new(
@@ -735,7 +756,11 @@ func _request_or_complete_rest() -> void:
 			result.grown_crop_count,
 		]
 		_play_interaction_feedback(&"sfx.rest.complete", _rest_anchor.cell)
-		_play_rest_transition()
+		_play_rest_transition(P2DayTransitionSummary.new(
+			completed_day,
+			_farming_session.world_day,
+			result.grown_crop_count,
+		))
 		_commit_durable_state(&"day.rested", true, &"day.rested")
 	else:
 		_clear_rest_confirmation()
@@ -749,20 +774,17 @@ func _clear_rest_confirmation() -> void:
 	_update_daily_overlay()
 
 
-func _play_rest_transition() -> void:
-	if _reduce_motion:
-		_sleep_fade.visible = false
+func _play_rest_transition(summary: P2DayTransitionSummary) -> void:
+	_player.velocity = Vector2.ZERO
+	_player.set_input_locked(true)
+	_day_transition.present(summary, _reduce_motion)
+
+
+func _dismiss_day_transition() -> void:
+	if _day_transition == null or not _day_transition.is_open():
 		return
-	_sleep_fade.visible = true
-	_sleep_fade.color = Color(0.015, 0.035, 0.045, 0.82)
-	var tween := create_tween()
-	tween.tween_property(
-		_sleep_fade,
-		"color",
-		Color(0.015, 0.035, 0.045, 0.0),
-		0.45,
-	)
-	tween.tween_callback(func() -> void: _sleep_fade.visible = false)
+	_day_transition.dismiss()
+	_player.set_input_locked(_pause_menu.is_open())
 
 
 func _attempt_harvest(target_cell: Vector2i) -> bool:
@@ -797,6 +819,8 @@ func _on_interaction_requested(
 	world_position: Vector2,
 	facing_direction: Vector2i,
 ) -> void:
+	if _day_transition.is_open():
+		return
 	var target_cell := _coordinate_mapper.facing_cell(
 		world_position,
 		facing_direction,
@@ -900,7 +924,7 @@ func _close_pause_menu() -> void:
 	if get_tree() != null:
 		get_tree().paused = false
 	_pause_menu.close()
-	_player.set_input_locked(false)
+	_player.set_input_locked(_day_transition.is_open())
 	_discard_next_input_sample = true
 
 

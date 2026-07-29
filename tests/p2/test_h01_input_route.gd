@@ -166,10 +166,19 @@ func _run() -> void:
 		)
 		await _tap_key(KEY_E)
 		_check(
-			pilot.get_farming_session().world_day == 2,
-			"second physical E confirms home rest and advances one day",
+			pilot.get_farming_session().world_day == 2
+			and pilot.get_day_transition().is_open()
+			and player.is_input_locked(),
+			"second physical E advances one day and opens the modal day summary",
 		)
 		_place_for_interaction(player, mapper, resource_approach)
+		await _tap_key(KEY_E)
+		_check(
+			not pilot.get_day_transition().is_open()
+			and not player.is_input_locked()
+			and not daily_overlay.is_crate_open(),
+			"the next physical E dismisses the day summary without leaking into the world",
+		)
 		await _tap_key(KEY_E)
 		_check(
 			_inventory_quantity(

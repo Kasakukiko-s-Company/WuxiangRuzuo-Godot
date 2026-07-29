@@ -5,6 +5,9 @@ const RESOURCE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_
 const RESOURCE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_choice.png"
 const TRADE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_trade_choice.png"
 const REST_OUTPUT_PATH: String = "res://builds/verification/p2_h01_rest_confirmation.png"
+const DAY_TRANSITION_OUTPUT_PATH: String = (
+	"res://builds/verification/p2_h01_day_transition.png"
+)
 const PAUSE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_pause_menu.png"
 const RETURN_CONFIRMATION_OUTPUT_PATH: String = (
 	"res://builds/verification/p2_h01_return_confirmation.png"
@@ -105,14 +108,6 @@ func _capture() -> void:
 		quit(1)
 		return
 
-	_place_for_interaction(player, mapper, rest_approach)
-	pilot.get_camera().reset_smoothing()
-	player.interaction_requested.emit(player.global_position, player.facing)
-	await create_timer(0.2).timeout
-	if not _save_view(REST_OUTPUT_PATH):
-		quit(1)
-		return
-
 	player.global_position = mapper.cell_center(farm_approach["source"])
 	player.facing = farm_approach["direction"]
 	player.velocity = Vector2.ZERO
@@ -124,6 +119,21 @@ func _capture() -> void:
 	if not _save_view(FARM_OUTPUT_PATH):
 		quit(1)
 		return
+
+	_place_for_interaction(player, mapper, rest_approach)
+	pilot.get_camera().reset_smoothing()
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await create_timer(0.2).timeout
+	if not _save_view(REST_OUTPUT_PATH):
+		quit(1)
+		return
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await create_timer(0.3).timeout
+	if not _save_view(DAY_TRANSITION_OUTPUT_PATH):
+		quit(1)
+		return
+	pilot.apply_input_snapshot(_continue_snapshot())
+	await process_frame
 
 	pilot.apply_input_snapshot(_pause_snapshot())
 	await process_frame
@@ -147,12 +157,13 @@ func _capture() -> void:
 	pilot.apply_input_snapshot(_pause_snapshot())
 	await process_frame
 	print(
-		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s, %s, %s, %s, %s"
+		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s, %s, %s, %s, %s, %s"
 		% [
 			RESOURCE_OUTPUT_PATH,
 			RESOURCE_CHOICE_OUTPUT_PATH,
 			TRADE_CHOICE_OUTPUT_PATH,
 			REST_OUTPUT_PATH,
+			DAY_TRANSITION_OUTPUT_PATH,
 			FARM_OUTPUT_PATH,
 			PAUSE_OUTPUT_PATH,
 			RETURN_CONFIRMATION_OUTPUT_PATH,
@@ -187,6 +198,12 @@ func _action_snapshot(slot_index: int) -> InputSnapshot:
 func _pause_snapshot() -> InputSnapshot:
 	var snapshot := InputSnapshot.neutral()
 	snapshot.pause = true
+	return snapshot
+
+
+func _continue_snapshot() -> InputSnapshot:
+	var snapshot := InputSnapshot.neutral()
+	snapshot.interact = true
 	return snapshot
 
 

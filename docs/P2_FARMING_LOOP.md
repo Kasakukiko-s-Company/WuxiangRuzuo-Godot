@@ -6,7 +6,7 @@
 
 `前往北草甸选择当日资源 → 选择种子时耕地 → 播种 → 浇水 → 回家二次确认休息 → 跨日成长 → 成熟 → 收获入包 → 卖出雾叶 → 回购种子`
 
-它验证了互斥资源选择、资源获得、农作事务、正式休息点、轻量交换、Godot 场景桥接和本地保存恢复。Main 选择的档位会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。会话内 Esc/Start 可暂停、恢复或经二次确认安全返回标题；可写会话只有在显式退出保存成功后才导航，写入失败会保持暂停并允许重试；只读恢复则明确保留损坏证据而不承诺保存。HUD 还会从当前 session、领取记录和目录实时推导一个可执行的下一目标，或在异常恢复状态下诚实报告阻塞原因；它不是任务进度，也不进入存档。该技术切片仍不代表 P2 完成。
+它验证了互斥资源选择、资源获得、农作事务、正式休息点、轻量交换、Godot 场景桥接和本地保存恢复。成功休息会先以强类型摘要显示“已结束日、成长株数、新一天”，玩家明确确认后才恢复移动和世界交互；这是可替换的 P2 日结反馈，不冒充最终室内过夜演出。Main 选择的档位会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。会话内 Esc/Start 可暂停、恢复或经二次确认安全返回标题；可写会话只有在显式退出保存成功后才导航，写入失败会保持暂停并允许重试；只读恢复则明确保留损坏证据而不承诺保存。HUD 还会从当前 session、领取记录和目录实时推导一个可执行的下一目标，或在异常恢复状态下诚实报告阻塞原因；它不是任务进度，也不进入存档。该技术切片仍不代表 P2 完成。
 
 ## 可玩入口与操作
 
@@ -17,6 +17,7 @@
 | 移动 | WASD / 方向键 | 左摇杆 |
 | 打开/确认资源选择、收获、查询或在家门休息 | E / Enter | A |
 | 使用当前快捷栏物品 | F / Space | X |
+| 关闭日结界面 | E / Enter / F / Space | A / X |
 | 异常状态预览 | V | B |
 | 选择快捷栏 | 1～8；平时用 Q/Tab 前后切换 | 左/右肩键 |
 | 切换北草甸资源候选 | 资源选择打开时用 Q/Tab | 左/右肩键 |
@@ -56,7 +57,8 @@ HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作�
 - `P2EstatePilot` 持有当前 session、每日领取记录及可取消的资源/交换选择 UI 状态；每个物理帧采样一次语义输入、查询 H01 格/锚点语义并刷新视图。它只捕获/安装 `P2PersistentState` 并发送 durable commit signal，不读取 JSON、档位键或文件路径。P2 中的 Player 明确进入 external-snapshot 模式并关闭自身物理采样，避免父子双重驱动和速度被清零。
 - `resource_north_meadow` 仍是地图提供的资源生成区域数据包络；Area2D 物理监测关闭不等于其语义数据不可查询。玩法用强类型来源定义把领域 ID 投影到锚点和中心位置，不读取候选路径或 TMX 对象序号。
 - `home_door` 是当前正式日终交互点：第一次交互只显示确认，第二次才结算当天；移动、重置或与其他目标交互会取消确认。旧 `N` 原型动作不再推进 P2 日历。
-- `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、两个选择标记、当前选择环、家门提示和领取/确认状态；休息成功使用可关闭的短淡出，不拥有领域状态。
+- `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、行动标记、当前选择环、家门提示和领取/确认状态，不拥有领域状态。
+- `P2DayTransitionSummary` 只携带成功日结的已结束日、新一天和成长株数；`P2DayTransitionOverlay` 只渲染该快照并提供可确认关闭的瞬时模态。模态期间 Player 输入锁定，直接 signal 也不能绕过；同一帧的休息确认不会穿透为关闭操作。Esc/Start 仍可打开暂停层，恢复后保持锁定直到玩家关闭日结界面；减少动态效果会立即完成淡入。
 - `FarmPlotOverlay` 使用程序化绘制表现耕地、当日湿土和 0～3 阶段作物；它不是状态源，也不是正式资源。
 - `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集、交换和休息；减少动态效果时切换为极短静态反馈。
 - `H01LifeLoopGuide` 是不依赖 Node、I/O 或存档的只读投影：它以真实领取、交易和背包事务做 dry-run，再生成强类型 `P2LifeLoopObjective`。时间敏感的浇水优先于被满背包阻塞的收获；已照料一株即可建议休息，不强迫种完全部种子；当日免费资源优先于回购，已有种子时不会持续诱导购买。缺少必要工具或无可执行领取/收获时显示明确阻塞原因，不承诺必然失败的操作。
@@ -79,15 +81,17 @@ Godot `4.7.1.stable`：
   - `tests/p2/test_daily_resource_gathering.gd`
   - `tests/p2/test_daily_rest_cycle.gd`
 - 新增场景闭环测试：`tests/p2/test_h01_farming_loop.gd`。
+- 新增日结投影/场景测试：`tests/p2/test_p2_day_transition.gd`；完整闭环同步覆盖世界交互防绕过、暂停覆盖后保持锁定和显式恢复控制。
 - 下一目标纯状态测试：`tests/p2/test_h01_life_loop_guide.gd` 覆盖领取、耕地、播种、浇水、休息、成熟、收获、出售、必要回购、满背包和混合作物优先级；场景闭环同步验证常驻 HUD 随真实动作更新。
 - 新增音频 adapter 测试：`tests/p2/test_godot_audio_service.gd`；场景闭环同步验证 8 个稳定 SFX ID、H01 music ID 与交互动画。
-- 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/Q/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源选择、互斥领取、交易打开/取消/卖出/回购、次日恢复、休息确认、正式跨日、耕地和 N 不再跨日。
+- 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/Q/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源选择、互斥领取、交易打开/取消/卖出/回购、次日恢复、休息确认、正式跨日、日结界面同帧防穿透、显式关闭、耕地和 N 不再跨日。
 - 暂停与安全返回：`tests/p2/test_p2_pause_navigation.gd` 覆盖同帧 pause+move 的暂停优先级、真实 Escape/Start 跨 physics frame 恢复且不反弹重开、二次确认默认聚焦取消、返回标题前显式保存所选档位、写失败保持暂停并可重试、重进位置恢复，以及只读恢复不覆盖损坏证据。
-- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，实际生成并检查八张 640×360 截图：
+- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，实际生成并检查九张 640×360 逻辑视口、1280×720 物理输出截图：
   - `builds/verification/p2_h01_resource_source.png`
   - `builds/verification/p2_h01_resource_choice.png`
   - `builds/verification/p2_h01_trade_choice.png`
   - `builds/verification/p2_h01_rest_confirmation.png`
+  - `builds/verification/p2_h01_day_transition.png`
   - `builds/verification/p2_h01_farming_loop.png`
   - `builds/verification/p2_h01_pause_menu.png`
   - `builds/verification/p2_h01_return_confirmation.png`

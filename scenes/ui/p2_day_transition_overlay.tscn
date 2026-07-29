@@ -1,0 +1,84 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/p2_day_transition_overlay.gd" id="1_overlay"]
+
+[node name="P2DayTransitionOverlay" type="Control"]
+visible = false
+z_index = 90
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_overlay")
+
+[node name="Scrim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.012, 0.029, 0.036, 0.94)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Overline" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 11
+text = "暮色落下 · 家园安静下来"
+horizontal_alignment = 1
+
+[node name="CompletedDay" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.93, 0.76, 1)
+theme_override_font_sizes/font_size = 25
+text = "第 1 天结束"
+horizontal_alignment = 1
+
+[node name="Growth" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.82, 0.75, 1)
+theme_override_font_sizes/font_size = 13
+text = "今夜田地静静休息"
+horizontal_alignment = 1
+
+[node name="Dawn" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.78, 0.42, 1)
+theme_override_font_sizes/font_size = 17
+text = "第 2 天 · 清晨"
+horizontal_alignment = 1
+
+[node name="ContinueHint" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.63, 0.62, 1)
+theme_override_font_sizes/font_size = 10
+text = "E / F · 手柄 A / X 继续"
+horizontal_alignment = 1

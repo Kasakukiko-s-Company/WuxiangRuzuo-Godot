@@ -290,6 +290,48 @@ func _run() -> void:
 			advanced.world_day == expected_day,
 			"confirmed home-door rest reaches day %d" % expected_day,
 		)
+		var transition := pilot.get_day_transition()
+		var transition_summary: P2DayTransitionSummary = (
+			transition.current_summary()
+		)
+		_check(
+			transition.is_open()
+			and player.is_input_locked()
+			and transition_summary != null
+			and transition_summary.completed_day == expected_day - 1
+			and transition_summary.new_day == expected_day
+			and transition_summary.grown_crop_count == 1,
+			"confirmed rest presents the typed day summary before control returns",
+		)
+		_place_for_interaction(player, mapper, resource_approach)
+		player.interaction_requested.emit(player.global_position, player.facing)
+		_check(
+			not pilot.get_daily_interaction_overlay().is_crate_open(),
+			"direct world interactions cannot bypass the day-transition lock",
+		)
+		if expected_day == 2:
+			var pause_during_transition := InputSnapshot.neutral()
+			pause_during_transition.pause = true
+			_send_snapshot(pilot, pause_during_transition)
+			_check(
+				pilot.get_pause_menu().is_open()
+				and transition.is_open(),
+				"pause can safely cover an active day transition",
+			)
+			_send_snapshot(pilot, pause_during_transition)
+			_check(
+				not pilot.get_pause_menu().is_open()
+				and player.is_input_locked(),
+				"resuming keeps gameplay locked until the day summary is dismissed",
+			)
+		var continue_snapshot := InputSnapshot.neutral()
+		continue_snapshot.interact = true
+		_send_snapshot(pilot, continue_snapshot)
+		_check(
+			not transition.is_open()
+			and not player.is_input_locked(),
+			"confirm dismisses the day transition and restores gameplay control",
+		)
 		if expected_day < 4:
 			player.global_position = mapper.cell_center(source_cell)
 			player.facing = approach["direction"]
