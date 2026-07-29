@@ -31,12 +31,19 @@ func _run() -> void:
 	if not result.is_valid():
 		push_error(result.describe_issues())
 	if result.is_valid():
-		_check(result.catalog.items.size() == 4, "catalog contains four item definitions")
+		_check(result.catalog.items.size() == 5, "catalog contains five item definitions")
 		_check(result.catalog.crops.size() == 1, "catalog contains mistleaf")
 		_check(result.catalog.npcs.size() == 15, "catalog contains the confirmed fifteen NPCs")
 		_check(result.catalog.maps.size() == 4, "catalog contains exactly four demo maps")
 		_check(result.catalog.portals.size() == 6, "catalog contains six directed portals")
 		_check(result.catalog.get_item(&"mistleaf_seed") != null, "stable item lookup works")
+		_check(result.catalog.get_item(&"village_scrip") != null, "exchange item lookup works")
+		_check(
+			result.catalog.get_localized_text(
+				result.catalog.get_item(&"village_scrip").display_name_key,
+			) == "村社券",
+			"exchange UI can resolve the localized village-scrip name",
+		)
 		_check(result.catalog.get_map(&"home_interior") != null, "stable map lookup works")
 		_check(result.catalog.get_npc(&"npc_qiao_ling") != null, "stable NPC lookup works")
 		_check(result.catalog.get_resource(&"fallback.sprite.missing") != null, "semantic resource lookup works")

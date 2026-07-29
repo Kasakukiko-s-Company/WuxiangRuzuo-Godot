@@ -46,6 +46,12 @@ func _run() -> void:
 	pilot.configure_estate_runtime(injected_runtime)
 	pilot.configure_input_service(scripted_input)
 	pilot.configure_game_catalog(game_catalog_result.catalog)
+	pilot.configure_trade_book(TradeBook.new(
+		TradeOfferCatalogFileLoader.load_catalog(
+			game_catalog_result.catalog,
+		).catalog,
+		game_catalog_result.catalog,
+	))
 	root.add_child(pilot)
 	await process_frame
 	await physics_frame

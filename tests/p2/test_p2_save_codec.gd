@@ -31,6 +31,11 @@ func _run() -> void:
 	var estate_catalog: EstateMapCatalog = estate_result.catalog
 	var inventory := InventoryState.create_empty()
 	var seed_addition := inventory.with_added(&"mistleaf_seed", 2, game_catalog)
+	var scrip_addition := seed_addition.inventory.with_added(
+		&"village_scrip",
+		10,
+		game_catalog,
+	)
 	var snapshot := SaveSnapshot.new()
 	snapshot.saved_at = "2026-07-29T02:30:00Z"
 	snapshot.profile_id = &"profile-1"
@@ -43,7 +48,7 @@ func _run() -> void:
 		5,
 	)
 	snapshot.farm = FarmState.create_empty(&"home_h01_open_meadow")
-	snapshot.inventory = seed_addition.inventory
+	snapshot.inventory = scrip_addition.inventory
 	snapshot.estate_map_state = EstateMapState.new(
 		&"spring",
 		&"reclaimed",
@@ -98,6 +103,13 @@ func _run() -> void:
 				and decoded.snapshot.world_day == 3,
 				"H01 map identity and world day round-trip",
 			)
+			_check(
+				_inventory_quantity(
+					decoded.snapshot.inventory,
+					&"village_scrip",
+				) == 10,
+				"village scrip round-trips through existing schema v2 inventory slots",
+			)
 
 	var legacy := SaveCodec.decode(
 		LEGACY_V1_PAYLOAD,
@@ -120,6 +132,18 @@ func _run() -> void:
 		)
 
 	_finish()
+
+
+func _inventory_quantity(
+	inventory: InventoryState,
+	item_id: StringName,
+) -> int:
+	var quantity: int = 0
+	for slot_index: int in inventory.capacity():
+		var stack := inventory.stack_at(slot_index)
+		if stack != null and stack.item_id == item_id:
+			quantity += stack.quantity
+	return quantity
 
 
 func _check(condition: bool, label: String) -> void:

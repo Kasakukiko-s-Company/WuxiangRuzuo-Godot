@@ -66,6 +66,13 @@ func has_localized_text(key: StringName) -> bool:
 	return locale_value is Dictionary and (locale_value as Dictionary).has(String(key))
 
 
+func get_localized_text(key: StringName) -> String:
+	var locale_value: Variant = localized_text.get(default_locale)
+	if not locale_value is Dictionary:
+		return String(key)
+	return String((locale_value as Dictionary).get(String(key), String(key)))
+
+
 func _index_by_id(definitions: Array) -> Dictionary:
 	var result: Dictionary = {}
 	for definition: Variant in definitions:

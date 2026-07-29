@@ -16,14 +16,65 @@ func _run() -> void:
 		composition_root.estate_map_catalog != null,
 		"composition root owns the validated estate map catalog",
 	)
+	_check(
+		composition_root.trade_offer_catalog != null,
+		"composition root owns the validated trade offer catalog",
+	)
 	if composition_root.game_catalog != null:
-		_check(composition_root.game_catalog.items.size() == 4, "runtime bootstrap loads four items")
+		_check(composition_root.game_catalog.items.size() == 5, "runtime bootstrap loads five items")
 		_check(composition_root.game_catalog.maps.size() == 4, "runtime bootstrap loads four maps")
 		_check(composition_root.game_catalog.npcs.size() == 15, "runtime bootstrap loads fifteen NPC identities")
 	if composition_root.estate_map_catalog != null:
 		_check(
 			composition_root.estate_map_catalog.maps.size() == 8,
 			"runtime bootstrap loads all eight audited estate candidates",
+		)
+	if composition_root.trade_offer_catalog != null:
+		_check(
+			composition_root.trade_offer_catalog.offers.size() == 2,
+			"runtime bootstrap loads both H01 exchange offers",
+		)
+		var wrong_endpoint := TradeOfferCatalog.create([
+			TradeOfferDefinition.new(
+				&"economy.other.sell_mistleaf",
+				&"economy.other.endpoint",
+				&"mistleaf",
+				1,
+				&"village_scrip",
+				30,
+			),
+		], composition_root.game_catalog)
+		_check(
+			not AppCompositionRoot.validate_h01_trade_contract(
+				wrong_endpoint,
+				composition_root.game_catalog,
+			).is_empty(),
+			"composition root contract rejects a legal catalog without the H01 endpoint",
+		)
+		var drifted_prices := TradeOfferCatalog.create([
+			TradeOfferDefinition.new(
+				&"economy.h01.sell_mistleaf",
+				&"economy.h01.north_meadow_crate",
+				&"mistleaf",
+				1,
+				&"village_scrip",
+				31,
+			),
+			TradeOfferDefinition.new(
+				&"economy.h01.buy_mistleaf_seed",
+				&"economy.h01.north_meadow_crate",
+				&"village_scrip",
+				20,
+				&"mistleaf_seed",
+				1,
+			),
+		], composition_root.game_catalog)
+		_check(
+			not AppCompositionRoot.validate_h01_trade_contract(
+				drifted_prices,
+				composition_root.game_catalog,
+			).is_empty(),
+			"H01 exchange values cannot drift from item catalog prices",
 		)
 		var h01: EstateMapDefinition = composition_root.estate_map_catalog.get_map(
 			&"home_h01_open_meadow"

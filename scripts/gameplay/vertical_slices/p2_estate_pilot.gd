@@ -11,6 +11,7 @@ const RESOURCE_SEED_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
 const RESOURCE_FORAGE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow.forage"
 const RESOURCE_CHOICE_GROUP_ID: StringName = &"home.h01.resource.north_meadow.daily_choice"
 const REST_POINT_ID: StringName = &"home.h01.rest.home_door"
+const TRADE_ENDPOINT_ID: StringName = &"economy.h01.north_meadow_crate"
 const RESOURCE_SEED_QUANTITY: int = 3
 const RESOURCE_FORAGE_QUANTITY: int = 1
 
@@ -31,6 +32,7 @@ var _input_service: InputService
 var _audio_service: AudioService
 var _estate_runtime: EstateMapRuntime
 var _game_catalog: GameCatalog
+var _trade_book: TradeBook
 var _farming_session: FarmingSessionState
 var _rendered_farming_session: FarmingSessionState
 var _daily_resource_claims: DailyResourceClaims
@@ -42,6 +44,9 @@ var _resource_anchor: EstateAnchorResult
 var _rest_anchor: EstateAnchorResult
 var _resource_choice_day: int = 0
 var _resource_choice_index: int = 0
+var _trade_offers: Array[TradeOfferDefinition] = []
+var _trade_choice_day: int = 0
+var _trade_choice_index: int = 0
 var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
@@ -54,6 +59,7 @@ func _ready() -> void:
 	assert(_input_service != null, "P2 estate pilot requires an injected InputService")
 	assert(_estate_runtime != null, "P2 estate pilot requires an injected estate runtime")
 	assert(_game_catalog != null, "P2 estate pilot requires an injected GameCatalog")
+	assert(_trade_book != null, "P2 estate pilot requires an injected TradeBook")
 	_player.set_external_snapshot_mode(true)
 	_player.interaction_requested.connect(_on_interaction_requested)
 	_initialize_farming_session()
@@ -94,29 +100,38 @@ func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 		set_reduce_motion(not _reduce_motion)
 	if snapshot.quickbar_slot_index >= 0:
 		_clear_resource_choice()
+		_clear_trade_choice()
 		_select_quickbar_slot(snapshot.quickbar_slot_index)
 	if snapshot.select_previous:
 		if _is_resource_choice_pending():
 			_select_relative_resource_offer(-1)
+		elif _is_trade_choice_pending():
+			_select_relative_trade_offer(-1)
 		else:
 			_select_relative_slot(-1)
 	if snapshot.select_next:
 		if _is_resource_choice_pending():
 			_select_relative_resource_offer(1)
+		elif _is_trade_choice_pending():
+			_select_relative_trade_offer(1)
 		else:
 			_select_relative_slot(1)
 	if snapshot.secondary_action:
 		_clear_resource_choice()
+		_clear_trade_choice()
 		_cycle_anomaly_preview()
 	if snapshot.primary_action:
 		_clear_resource_choice()
+		_clear_trade_choice()
 		_use_selected_item()
 	if snapshot.watering_action:
 		_clear_resource_choice()
+		_clear_trade_choice()
 		_select_and_use_watering_can()
 	if snapshot.move != Vector2.ZERO:
 		_clear_rest_confirmation()
 		_clear_resource_choice()
+		_clear_trade_choice()
 	_refresh_farming_view()
 	_update_debug()
 
@@ -146,6 +161,12 @@ func configure_game_catalog(catalog: GameCatalog) -> void:
 	assert(catalog != null, "P2 estate pilot requires a GameCatalog")
 	assert(not is_node_ready(), "game catalog must be injected before the pilot enters the tree")
 	_game_catalog = catalog
+
+
+func configure_trade_book(book: TradeBook) -> void:
+	assert(book != null, "P2 estate pilot requires a TradeBook")
+	assert(not is_node_ready(), "trade book must be injected before the pilot enters the tree")
+	_trade_book = book
 
 
 func configure_initial_state(state: P2PersistentState) -> bool:
@@ -252,6 +273,7 @@ func reset_to_safe_spawn() -> void:
 	_player.set_input_locked(false)
 	_clear_rest_confirmation()
 	_clear_resource_choice()
+	_clear_trade_choice()
 	_status_label.text = "已回到安全出生点 · 农作状态保留"
 	_camera.reset_smoothing()
 
@@ -354,6 +376,11 @@ func _initialize_daily_interactions() -> void:
 		not _resource_offers.has(null),
 		"P2 resource choice offers must resolve from the source catalog",
 	)
+	_trade_offers = _trade_book.offers(TRADE_ENDPOINT_ID)
+	assert(
+		not _trade_offers.is_empty(),
+		"P2 H01 trade endpoint must expose at least one offer",
+	)
 	var rest_definitions: Array[DailyRestPointDefinition] = [
 		DailyRestPointDefinition.new(
 			REST_POINT_ID,
@@ -402,6 +429,8 @@ func _restore_initial_state() -> bool:
 	_player_health = state.player_health
 	_resource_choice_day = 0
 	_resource_choice_index = 0
+	_trade_choice_day = 0
+	_trade_choice_index = 0
 	_rest_confirmation_day = 0
 	var player_cell := _coordinate_mapper.world_to_cell(
 		state.player_position
@@ -592,7 +621,7 @@ func _select_and_use_watering_can() -> void:
 func _request_or_complete_resource_choice() -> void:
 	if _resource_choice_claimed_today():
 		_clear_resource_choice()
-		_status_label.text = "北草甸今天已经选择过资源了"
+		_request_or_complete_trade()
 		return
 	if not _is_resource_choice_pending():
 		_resource_choice_day = _farming_session.world_day
@@ -638,8 +667,84 @@ func _attempt_daily_resource_gathering(source_id: StringName) -> void:
 		_status_label.text = "当前无法采集这处资源"
 
 
+func _request_or_complete_trade() -> void:
+	if not _is_trade_choice_pending():
+		_trade_choice_day = _farming_session.world_day
+		_trade_choice_index = 0
+		_show_trade_choice_status()
+		_update_daily_overlay()
+		return
+	var offer := _trade_offers[_trade_choice_index]
+	var result := _trade_book.execute(
+		_farming_session.state.inventory,
+		TradeCommand.new(TRADE_ENDPOINT_ID, offer.id),
+	)
+	if result.status == TradeResult.Status.COMPLETED:
+		_replace_inventory(result.inventory)
+		_status_label.text = "交换完成 · %s" % _trade_offer_label(offer)
+		_clear_trade_choice()
+		_play_interaction_feedback(
+			&"sfx.trade.exchange",
+			_resource_anchor.cell,
+		)
+		_commit_durable_state(&"economy.traded")
+	elif result.status == TradeResult.Status.INSUFFICIENT_COST:
+		_status_label.text = "交换所需物品不足 · %s" % _trade_offer_label(offer)
+	elif result.status == TradeResult.Status.REWARD_CAPACITY:
+		_status_label.text = "背包没有空间容纳交换所得"
+	else:
+		_clear_trade_choice()
+		_status_label.text = "当前交换项目不可用"
+
+
+func _is_trade_choice_pending() -> bool:
+	return _trade_choice_day == _farming_session.world_day
+
+
+func _clear_trade_choice() -> void:
+	if _trade_choice_day == 0:
+		return
+	_trade_choice_day = 0
+	_trade_choice_index = 0
+	_update_daily_overlay()
+
+
+func _select_relative_trade_offer(offset: int) -> void:
+	_trade_choice_index = posmod(
+		_trade_choice_index + offset,
+		_trade_offers.size(),
+	)
+	_show_trade_choice_status()
+	_update_daily_overlay()
+
+
+func _show_trade_choice_status() -> void:
+	var selected := _trade_offers[_trade_choice_index]
+	_status_label.text = (
+		"北草甸交换 · %s · Q/Tab/肩键切换 · E/A确认"
+		% _trade_offer_label(selected)
+	)
+
+
+func _trade_offer_label(offer: TradeOfferDefinition) -> String:
+	return "%s×%d → %s×%d" % [
+		_item_display_name(offer.cost_item_id),
+		offer.cost_quantity,
+		_item_display_name(offer.reward_item_id),
+		offer.reward_quantity,
+	]
+
+
+func _item_display_name(item_id: StringName) -> String:
+	var item := _game_catalog.get_item(item_id)
+	if item == null:
+		return String(item_id)
+	return _game_catalog.get_localized_text(item.display_name_key)
+
+
 func _request_or_complete_rest() -> void:
 	_clear_resource_choice()
+	_clear_trade_choice()
 	if _rest_confirmation_day != _farming_session.world_day:
 		_rest_confirmation_day = _farming_session.world_day
 		_status_label.text = "回屋休息并结束今天？再次交互确认"
@@ -732,11 +837,13 @@ func _on_interaction_requested(
 		return
 	if target_cell == _rest_anchor.cell:
 		_clear_resource_choice()
+		_clear_trade_choice()
 		_request_or_complete_rest()
 		_refresh_farming_view()
 		return
 	_clear_rest_confirmation()
 	_clear_resource_choice()
+	_clear_trade_choice()
 	if _attempt_harvest(target_cell):
 		_refresh_farming_view()
 		return
@@ -827,6 +934,8 @@ func _update_daily_overlay() -> void:
 		_rest_confirmation_day == _farming_session.world_day,
 		_is_resource_choice_pending(),
 		_resource_choice_index,
+		_is_trade_choice_pending(),
+		_trade_choice_index,
 	)
 
 
@@ -908,6 +1017,8 @@ func _short_item_name(item_id: StringName) -> String:
 		return "种"
 	if item_id == &"mistleaf":
 		return "雾叶"
+	if item_id == &"village_scrip":
+		return "券"
 	return String(item_id)
 
 

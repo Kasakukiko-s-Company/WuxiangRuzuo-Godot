@@ -4,9 +4,9 @@
 
 2026-07-28 已在 H01 正式地产运行时上把首个农作闭环推进为可玩的日常生活闭环：
 
-`前往北草甸选择当日资源 → 选择种子时耕地 → 播种 → 浇水 → 回家二次确认休息 → 跨日成长 → 成熟 → 收获入包`
+`前往北草甸选择当日资源 → 选择种子时耕地 → 播种 → 浇水 → 回家二次确认休息 → 跨日成长 → 成熟 → 收获入包 → 卖出雾叶 → 回购种子`
 
-它验证了互斥资源选择、资源获得、农作事务、正式休息点、Godot 场景桥接和本地保存恢复。当前 `profile-1` 会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。该技术切片仍不代表 P2 完成。
+它验证了互斥资源选择、资源获得、农作事务、正式休息点、轻量交换、Godot 场景桥接和本地保存恢复。当前 `profile-1` 会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。该技术切片仍不代表 P2 完成。
 
 ## 可玩入口与操作
 
@@ -20,13 +20,14 @@
 | 异常状态预览 | V | B |
 | 选择快捷栏 | 1～8；平时用 Q/Tab 前后切换 | 左/右肩键 |
 | 切换北草甸资源候选 | 资源选择打开时用 Q/Tab | 左/右肩键 |
+| 切换北草甸交换项目 | 当日资源领取后打开交换，再用 Q/Tab | 左/右肩键 |
 | 快速选择并使用浇水壶 | G | 暂无默认键 |
 | 回安全出生点 | R | Y |
 | 调试信息 | F3 | Back |
 
 初始背包固定为八格，只含锄头×1、浇水壶×1。H01 北草甸地图锚点 `resource_north_meadow` 绑定一个每日资源选择组，当前候选为“雾叶草种子×3”和“雾叶×1”。第一次交互只打开选择，Q/Tab 或手柄肩键切换，第二次交互确认；移动、使用物品、重置或与其他目标交互会取消待确认状态。背包无法容纳所选奖励时事务失败、选择资格保留，玩家可以切换另一项。
 
-HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作物/物品目录计算，用于暴露延迟产出与即时物品的量级差异。当前切片没有出售、消费或货币系统，所以该数字不是可兑现收入，也不足以证明已经完成有意义的经济选择；它只是成本/收益节奏的可运行基线。
+HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作物/物品目录计算。当前雾叶可以在当日资源领取后的北草甸物资箱兑换村社券，并用村社券回购种子；数值因此已经可兑现，但每日免费资源仍会显著影响稀缺性，尚不足以证明经济平衡已经成立。
 
 ## 领域规则
 
@@ -45,18 +46,20 @@ HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作�
 - `FarmState.tile_at()` 与 `InventoryState.stack_at()` 返回防御性副本，场景层不能绕过事务修改权威状态。
 - `FarmState.restore()` 验证自身结构、作物目录、阶段派生和种植/结算日关系，不再错误依赖旧四地图目录；地图 ID 的世界/地产目录校验留在 `SaveCodec`/application 边界。
 - `SaveSnapshot.schemaVersion=2` 新增 H01 `estateMapState` 与 `dailyResourceClaims`；decoder 仍能读取 Godot v1，但不伪造缺失的 H01 状态。
+- `TradeOfferCatalog` 校验端点、稳定 offer ID、正数量和游戏目录物品引用；`TradeBook` 对不可变背包执行原子交换，奖励容量失败时不会留下部分扣除。
+- `village_scrip` 是普通背包 material，不是已定稿的通用货币；它通过既有 inventory slots 持久化，因此本批不修改 schema v2。
 - `P2PersistentState` 是场景和保存模块之间的强类型聚合；`GameSaveModule` 隔离 current/protected 语义，`SaveService` 只看到不透明字符串。
 
 ## Godot 场景桥接
 
-- `P2EstatePilot` 持有当前 session、每日领取记录和可取消的资源选择 UI 状态；每个物理帧采样一次语义输入、查询 H01 格/锚点语义并刷新视图。它只捕获/安装 `P2PersistentState` 并发送 durable commit signal，不读取 JSON、档位键或文件路径。P2 中的 Player 明确进入 external-snapshot 模式并关闭自身物理采样，避免父子双重驱动和速度被清零。
+- `P2EstatePilot` 持有当前 session、每日领取记录及可取消的资源/交换选择 UI 状态；每个物理帧采样一次语义输入、查询 H01 格/锚点语义并刷新视图。它只捕获/安装 `P2PersistentState` 并发送 durable commit signal，不读取 JSON、档位键或文件路径。P2 中的 Player 明确进入 external-snapshot 模式并关闭自身物理采样，避免父子双重驱动和速度被清零。
 - `resource_north_meadow` 仍是地图提供的资源生成区域数据包络；Area2D 物理监测关闭不等于其语义数据不可查询。玩法用强类型来源定义把领域 ID 投影到锚点和中心位置，不读取候选路径或 TMX 对象序号。
 - `home_door` 是当前正式日终交互点：第一次交互只显示确认，第二次才结算当天；移动、重置或与其他目标交互会取消确认。旧 `N` 原型动作不再推进 P2 日历。
 - `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、两个选择标记、当前选择环、家门提示和领取/确认状态；休息成功使用可关闭的短淡出，不拥有领域状态。
 - `FarmPlotOverlay` 使用程序化绘制表现耕地、当日湿土和 0～3 阶段作物；它不是状态源，也不是正式资源。
-- `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集和休息；减少动态效果时切换为极短静态反馈。
-- Main 只向 `AppCompositionRoot` 请求一个固定 profile 的 H01 launch；组合根注入通过校验的 `GameCatalog`、H01 runtime、`InputService`、`AudioService`、`GameSaveModule` 和具体 `SaveService`。
-- `GodotAudioService` 通过 `data/audio_catalog.json` 将稳定 ID 映射到 1 个音乐播放器和 4 个 SFX 播放器；玩法不读取音频路径。当前接入 7 个 P2 SFX 和 1 个 H01 春季日间音乐候选。
+- `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集、交换和休息；减少动态效果时切换为极短静态反馈。
+- Main 只向 `AppCompositionRoot` 请求一个固定 profile 的 H01 launch；组合根注入通过校验的 `GameCatalog`、`TradeOfferCatalog`、`TradeBook`、H01 runtime、`InputService`、`AudioService`、`GameSaveModule` 和具体 `SaveService`。
+- `GodotAudioService` 通过 `data/audio_catalog.json` 将稳定 ID 映射到 1 个音乐播放器和 4 个 SFX 播放器；玩法不读取音频路径。当前接入 8 个 P2 SFX 和 1 个 H01 春季日间音乐候选。
 - HUD 始终显示世界日、八格快捷栏和真实保存模式。空档、当前档、受保护恢复点和存档故障不会冒充同一状态。
 - 播种季节和 HUD 季节均来自当前 `EstateMapState.season`，不再硬编码春季；它仍是地产状态轴，不冒充完整历法。
 
@@ -73,13 +76,14 @@ Godot `4.7.1.stable`：
   - `tests/p2/test_daily_resource_gathering.gd`
   - `tests/p2/test_daily_rest_cycle.gd`
 - 新增场景闭环测试：`tests/p2/test_h01_farming_loop.gd`。
-- 新增音频 adapter 测试：`tests/p2/test_godot_audio_service.gd`；场景闭环同步验证 7 个稳定 SFX ID、H01 music ID 与交互动画。
-- 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/Q/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源选择、互斥领取、次日恢复、休息确认、正式跨日、耕地和 N 不再跨日。
-- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，实际生成并检查三张 1280×720 截图：
+- 新增音频 adapter 测试：`tests/p2/test_godot_audio_service.gd`；场景闭环同步验证 8 个稳定 SFX ID、H01 music ID 与交互动画。
+- 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/Q/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源选择、互斥领取、交易打开/取消/卖出/回购、次日恢复、休息确认、正式跨日、耕地和 N 不再跨日。
+- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，前序批次实际生成并检查四张 1280×720 截图：
   - `builds/verification/p2_h01_resource_source.png`
   - `builds/verification/p2_h01_resource_choice.png`
   - `builds/verification/p2_h01_rest_confirmation.png`
   - `builds/verification/p2_h01_farming_loop.png`
+- `p2_h01_trade_choice.png` 的捕获工具已更新，但本轮桌面图形进程权限被拒绝，仍按 `GODOT_MANUAL_STEPS.md` 记为未生成。
 - 截图和运行日志位于 D 盘 Git 忽略目录，不进入提交。
 
 ## 当前保存边界
@@ -93,12 +97,12 @@ Godot `4.7.1.stable`：
 ## 本轮明确不做
 
 - 三档位选择/删除/最近档 UI、发行期 Windows 路径、Steam 云、Web/微信 adapter 或旧 Cocos 档导入。
-- 室内床铺场景、完整过夜演出、体力、水量、经济、商店或多类资源生态。
-- 能把目录售价实际兑现的出售/消费/货币闭环，以及经玩家测试的选择平衡。
+- 室内床铺场景、完整过夜演出、体力、水量、正式商店、独立钱包或多类资源生态。
+- 正式通用货币、批量交易、动态价格，以及经玩家测试的选择平衡。
 - 多作物平衡、季节死亡、肥料、工具升级、机器加工或建造。
 - 最终发行级逐帧作物/工具动画、UI 美术、完整音乐/环境音/音效覆盖与主观混音验收。
 - H02～H08 批量运行时接入、正式世界路由、NPC、剧情或战斗。
 
 ## P2 剩余出口
 
-代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复缺口已经关闭，但三档管理 UI 和发行 adapter 仍属于后续。北草甸二选一已经提供可运行的互斥奖励和容量失败成本，在出售/消费能力进入前仍不能单独关闭“有意义的经济选择”出口。下一批应实现最小可兑现经济闭环并做节奏验证，同时保持本轮 schema v2 回归。
+代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复缺口已经关闭，但三档管理 UI 和发行 adapter 仍属于后续。北草甸二选一与轻量交换已经提供可运行的延迟产出、即时物品、卖出和回购闭环，但每日免费资源仍会削弱稀缺性，且尚无真实玩家节奏证据。下一批应在不提前固化通用货币和正式商店的前提下做自动节奏模拟、调整早期资源压力并安排玩家验证。完整交换边界见 `P2_LIGHTWEIGHT_ECONOMY.md`。

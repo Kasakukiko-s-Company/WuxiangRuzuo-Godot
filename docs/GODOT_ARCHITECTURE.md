@@ -41,6 +41,8 @@ scenes / scripts/gameplay / scripts/ui
 | `DailyResourceGathering` | 已实现 P2 切片 | 按稳定来源 ID 执行奖励，按来源或互斥组领取键记录世界日 |
 | `DailyRestPointCatalog` | 已实现 P2 切片 | 原子验证休息点 ID、地图与锚点 |
 | `DailyRestCycle` | 已实现 P2 切片 | 通过地图/休息点/完成日命令触发日终结算 |
+| `TradeOfferCatalog` | 已实现 P2 切片 | 解码并索引受验证的稳定端点与交换项目 |
+| `TradeBook` | 已实现 P2 切片 | 对不可变背包执行原子交换；失败返回原状态 |
 | `SaveCodec` | 已实现 v2 | Godot schema v1/v2 的编码/解码/完整快照校验；不负责存储或档位策略 |
 | `GameSaveModule` | 已实现 P2 切片 | 固定 profile 的 current/protected 选择、H01 强类型聚合和损坏隔离 |
 | `AtomicFileSaveAdapter` | 已实现开发期 Windows adapter | 同目录 `.tmp` 写入、`.rollback` 提交保护、`.bak` 崩溃回退和不透明载荷读写；路径由 composition root 注入 |
@@ -73,12 +75,14 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 - `CropPlanting`、`FarmWatering`、`FarmDayCycle` 与 `CropHarvesting` 使用各自命令和结果类型，不让场景节点直接改作物字段。
 - `DailyResourceSourceCatalog` 先验证来源 ID 到地图、锚点、物品和数量的唯一映射；同一每日选择组的来源必须共享地图和锚点，组 ID 不得与来源 ID 冲突。`DailyResourceClaims` 与 `DailyResourceGathering` 再以来源 ID 或共享组 ID 作为稳定领取键，把“每个领取键每天最多成功一次”放在纯领域层。背包满、日期回退或伪造来源时领取记录不前移。
 - `DailyRestPointCatalog` 验证休息点的地图归属与锚点；`DailyRestCycle` 只接收目录 ID 与待完成世界日。场景的二次确认只负责发出命令，不能直接递增日期。
+- `TradeOfferCatalog` 独立于场景验证 offer、endpoint、物品引用与数量；`TradeBook` 只暴露 `offers(endpoint_id)` 和 `execute(inventory, command)`。H01 Node 只管理可取消的选择索引，不能临时改价格或直接修改背包。
+- `village_scrip` 作为普通 material 进入既有背包/存档 seam，不建立尚未通过产品验证的全局钱包。未来若改变为通用货币，必须显式迁移 schema 和语义。
 - `FarmDayAdvanceCommand` 携带明确 `completed_day`，使已处理命令幂等、未来命令拒绝，并让整批作物在预检通过后才统一结算。
 - `FarmState.restore()` 验证农田自身结构、作物引用、阶段派生与种植/结算日关系；世界地图 ID 是否存在由 codec/application 使用相应世界目录校验，避免领域层继续绑定退役的四地图 fixture。
 - `P2EstatePilot.apply_input_snapshot()` 是语义输入转发 seam；实际 `_physics_process` 每帧只从注入的 `InputService` 采样一次，再把同一快照转发给玩家和农作桥接。P2 的 Player 明确启用 external-snapshot mode 并关闭自身 physics callback，避免双重物理所有权；独立 P1 场景仍由 Player 自己采样。
-- `FarmPlotOverlay` 与 `EstateDailyInteractionOverlay` 只投影农田、资源来源和休息确认，不拥有权威状态。当前画面是可替换的程序化占位，不构成正式美术批准。
+- `FarmPlotOverlay` 与 `EstateDailyInteractionOverlay` 只投影农田、资源/交换选择和休息确认，不拥有权威状态。当前画面是可替换的程序化占位，不构成正式美术批准。
 - 当前季节读取 `EstateMapRuntime.get_current_state().season`，同时驱动播种校验和 HUD；完整历法仍未实现。
-- `P2EstatePilot` 在空档时创建 session，在恢复档时安装 application 层提供的 `P2PersistentState`。成功耕地、播种、浇水、收获、资源领取、地产状态变更和日终休息发送 durable commit signal；离开场景还捕获最后位置。节点不知道保存格式或路径。
+- `P2EstatePilot` 在空档时创建 session，在恢复档时安装 application 层提供的 `P2PersistentState`。成功耕地、播种、浇水、收获、资源领取、交换、地产状态变更和日终休息发送 durable commit signal；离开场景还捕获最后位置。节点不知道保存格式或路径。
 
 ## P1 场景 seam
 

@@ -72,6 +72,10 @@ func _run() -> void:
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(ScriptedInputService.new())
 	pilot.configure_game_catalog(game_catalog)
+	pilot.configure_trade_book(TradeBook.new(
+		TradeOfferCatalogFileLoader.load_catalog(game_catalog).catalog,
+		game_catalog,
+	))
 	_check(
 		pilot.configure_initial_state(initial_state),
 		"pilot accepts a matching typed initial state before entering the tree",

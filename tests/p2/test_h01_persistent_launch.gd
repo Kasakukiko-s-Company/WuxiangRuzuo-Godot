@@ -59,9 +59,61 @@ func _run() -> void:
 		"an empty profile creates a playable H01 session",
 	)
 	if new_launch.is_ready():
+		var committed_reasons: Array[StringName] = []
+		new_launch.pilot.durable_state_committed.connect(
+			func(reason: StringName, _protect: bool) -> void:
+				committed_reasons.append(reason)
+		)
 		root.add_child(new_launch.pilot)
 		current_scene = new_launch.pilot
 		await process_frame
+		var runtime := new_launch.pilot.get_estate_runtime()
+		var resource_anchor := runtime.query_anchor(
+			&"resource_spawn_zone",
+			&"resource_north_meadow",
+		)
+		var resource_approach := _find_anchor_approach(
+			runtime,
+			resource_anchor,
+		)
+		_check(
+			not resource_approach.is_empty(),
+			"persistent launch can reach the H01 exchange endpoint",
+		)
+		if not resource_approach.is_empty():
+			var player := new_launch.pilot.get_player()
+			var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
+			_place_for_interaction(player, mapper, resource_approach)
+			player.interaction_requested.emit(
+				player.global_position,
+				player.facing,
+			)
+			await process_frame
+			var select_forage := InputSnapshot.neutral()
+			select_forage.select_next = true
+			new_launch.pilot.apply_input_snapshot(select_forage)
+			player.interaction_requested.emit(
+				player.global_position,
+				player.facing,
+			)
+			await process_frame
+			player.interaction_requested.emit(
+				player.global_position,
+				player.facing,
+			)
+			await process_frame
+			player.interaction_requested.emit(
+				player.global_position,
+				player.facing,
+			)
+			await process_frame
+			_check(
+				committed_reasons.has(&"economy.traded")
+				and new_storage.payloads[&"profile-1"].contains(
+					"village_scrip"
+				),
+				"a real trade emits a durable commit containing village scrip",
+			)
 		new_launch.pilot.durable_state_committed.emit(
 			&"test.current",
 			false,
@@ -100,8 +152,12 @@ func _run() -> void:
 		)
 		_check(
 			restored.map_id == &"home_h01_open_meadow"
-			and restored.farming_session.world_day == 1,
-			"the composition root installs restored typed state before ready",
+			and restored.farming_session.world_day == 1
+			and _inventory_quantity(
+				restored.farming_session.state.inventory,
+				&"village_scrip",
+			) == 30,
+			"the composition root restores the inventory produced by a real trade",
 		)
 		recovered_launch.pilot.queue_free()
 		current_scene = null
@@ -197,6 +253,51 @@ func _run() -> void:
 	)
 
 	_finish()
+
+
+func _find_anchor_approach(
+	runtime: EstateMapRuntime,
+	anchor: EstateAnchorResult,
+) -> Dictionary:
+	if not anchor.is_found():
+		return {}
+	var directions: Array[Vector2i] = [
+		Vector2i.RIGHT,
+		Vector2i.DOWN,
+		Vector2i.LEFT,
+		Vector2i.UP,
+	]
+	for direction: Vector2i in directions:
+		var source := anchor.cell - direction
+		var semantics := runtime.query_cell(source)
+		if semantics.is_in_bounds() and not semantics.colliding:
+			return {
+				"source": source,
+				"direction": direction,
+			}
+	return {}
+
+
+func _place_for_interaction(
+	player: P1PlayerController,
+	mapper: TileCoordinateMapper,
+	approach: Dictionary,
+) -> void:
+	player.global_position = mapper.cell_center(approach["source"])
+	player.facing = approach["direction"]
+	player.velocity = Vector2.ZERO
+
+
+func _inventory_quantity(
+	inventory: InventoryState,
+	item_id: StringName,
+) -> int:
+	var quantity: int = 0
+	for slot_index: int in inventory.capacity():
+		var stack := inventory.stack_at(slot_index)
+		if stack != null and stack.item_id == item_id:
+			quantity += stack.quantity
+	return quantity
 
 
 func _check(condition: bool, label: String) -> void:

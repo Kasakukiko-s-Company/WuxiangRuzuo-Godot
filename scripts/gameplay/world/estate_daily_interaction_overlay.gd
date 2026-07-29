@@ -7,6 +7,8 @@ var _resource_available: bool = true
 var _rest_confirmation_pending: bool = false
 var _resource_choice_pending: bool = false
 var _resource_choice_index: int = 0
+var _trade_choice_pending: bool = false
+var _trade_choice_index: int = 0
 
 
 func configure(
@@ -23,18 +25,24 @@ func show_state(
 	rest_confirmation_pending: bool,
 	resource_choice_pending: bool = false,
 	resource_choice_index: int = 0,
+	trade_choice_pending: bool = false,
+	trade_choice_index: int = 0,
 ) -> void:
 	if (
 		_resource_available == resource_available
 		and _rest_confirmation_pending == rest_confirmation_pending
 		and _resource_choice_pending == resource_choice_pending
 		and _resource_choice_index == resource_choice_index
+		and _trade_choice_pending == trade_choice_pending
+		and _trade_choice_index == trade_choice_index
 	):
 		return
 	_resource_available = resource_available
 	_rest_confirmation_pending = rest_confirmation_pending
 	_resource_choice_pending = resource_choice_pending
 	_resource_choice_index = resource_choice_index
+	_trade_choice_pending = trade_choice_pending
+	_trade_choice_index = trade_choice_index
 	queue_redraw()
 
 
@@ -54,6 +62,14 @@ func get_resource_choice_index() -> int:
 	return _resource_choice_index
 
 
+func is_trade_choice_pending() -> bool:
+	return _trade_choice_pending
+
+
+func get_trade_choice_index() -> int:
+	return _trade_choice_index
+
+
 func is_resource_available() -> bool:
 	return _resource_available
 
@@ -67,10 +83,14 @@ func _draw_resource_source() -> void:
 	var aura := Color(0.42, 0.78, 0.48, 0.24)
 	var crate := Color(0.48, 0.30, 0.17, 1.0)
 	var sprout := Color(0.68, 0.92, 0.52, 1.0)
-	if not _resource_available:
+	if not _resource_available and not _trade_choice_pending:
 		aura = Color(0.42, 0.45, 0.43, 0.13)
 		crate = Color(0.33, 0.31, 0.28, 1.0)
 		sprout = Color(0.44, 0.48, 0.44, 1.0)
+	elif _trade_choice_pending:
+		aura = Color(0.92, 0.72, 0.28, 0.28)
+		crate = Color(0.55, 0.34, 0.16, 1.0)
+		sprout = Color(0.94, 0.78, 0.34, 1.0)
 	draw_circle(_resource_position, 14.0, aura)
 	draw_rect(
 		Rect2(_resource_position + Vector2(-9.0, -4.0), Vector2(18.0, 11.0)),
@@ -96,6 +116,8 @@ func _draw_resource_source() -> void:
 	)
 	if _resource_choice_pending:
 		_draw_resource_choice()
+	elif _trade_choice_pending:
+		_draw_trade_choice()
 
 
 func _draw_resource_choice() -> void:
@@ -115,6 +137,33 @@ func _draw_resource_choice() -> void:
 		TAU,
 		12,
 		Color(1.0, 0.94, 0.66, 1.0),
+		2.0,
+	)
+
+
+func _draw_trade_choice() -> void:
+	var sell_color := Color(0.48, 0.82, 0.66, 1.0)
+	var buy_color := Color(0.96, 0.72, 0.3, 1.0)
+	var sell_center := _resource_position + Vector2(-10.0, -22.0)
+	var buy_center := _resource_position + Vector2(10.0, -22.0)
+	draw_circle(sell_center, 4.0, sell_color)
+	draw_circle(buy_center, 4.0, buy_color)
+	draw_line(
+		sell_center + Vector2(2.0, 7.0),
+		buy_center + Vector2(-2.0, 7.0),
+		Color(0.94, 0.86, 0.56, 0.9),
+		1.5,
+	)
+	var selected_center := (
+		sell_center if _trade_choice_index == 0 else buy_center
+	)
+	draw_arc(
+		selected_center,
+		7.0,
+		0.0,
+		TAU,
+		12,
+		Color(1.0, 0.96, 0.72, 1.0),
 		2.0,
 	)
 

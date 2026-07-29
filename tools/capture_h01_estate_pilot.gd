@@ -3,6 +3,7 @@ extends SceneTree
 const FARM_OUTPUT_PATH: String = "res://builds/verification/p2_h01_farming_loop.png"
 const RESOURCE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_source.png"
 const RESOURCE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_choice.png"
+const TRADE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_trade_choice.png"
 const REST_OUTPUT_PATH: String = "res://builds/verification/p2_h01_rest_confirmation.png"
 
 
@@ -87,6 +88,11 @@ func _capture() -> void:
 		return
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await create_timer(0.2).timeout
+	if not _save_view(TRADE_CHOICE_OUTPUT_PATH):
+		quit(1)
+		return
 
 	_place_for_interaction(player, mapper, rest_approach)
 	pilot.get_camera().reset_smoothing()
@@ -108,10 +114,11 @@ func _capture() -> void:
 		quit(1)
 		return
 	print(
-		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s"
+		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s, %s"
 		% [
 			RESOURCE_OUTPUT_PATH,
 			RESOURCE_CHOICE_OUTPUT_PATH,
+			TRADE_CHOICE_OUTPUT_PATH,
 			REST_OUTPUT_PATH,
 			FARM_OUTPUT_PATH,
 		]

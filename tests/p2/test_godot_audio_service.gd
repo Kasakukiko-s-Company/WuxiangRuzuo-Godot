@@ -14,8 +14,8 @@ func _run() -> void:
 	var service := GodotAudioService.new(host)
 	_check(service.is_ready(), "Godot audio adapter loads the versioned audio catalog")
 	_check(
-		service.get_registered_cue_count() == 8,
-		"Godot audio adapter registers one music cue and seven P2 sound cues",
+		service.get_registered_cue_count() == 9,
+		"Godot audio adapter registers one music cue and eight P2 sound cues",
 	)
 	_check(
 		host.get_child_count() == 5,

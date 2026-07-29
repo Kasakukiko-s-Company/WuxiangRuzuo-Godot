@@ -27,6 +27,10 @@ func _run() -> void:
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(composition_root.create_input_service())
 	pilot.configure_game_catalog(composition_root.game_catalog)
+	pilot.configure_trade_book(TradeBook.new(
+		composition_root.trade_offer_catalog,
+		composition_root.game_catalog,
+	))
 	root.add_child(pilot)
 	await process_frame
 	await physics_frame
@@ -81,6 +85,50 @@ func _run() -> void:
 			and not daily_overlay.is_resource_available(),
 			"Q switches to the immediate forage offer and E confirms it",
 		)
+		await _tap_key(KEY_E)
+		_check(
+			daily_overlay.is_trade_choice_pending()
+			and daily_overlay.get_trade_choice_index() == 0,
+			"physical E opens the distinct trade choice after daily collection",
+		)
+		await _tap_key(KEY_D)
+		_check(
+			not daily_overlay.is_trade_choice_pending(),
+			"physical movement cancels an unconfirmed trade",
+		)
+		_place_for_interaction(player, mapper, resource_approach)
+		await _tap_key(KEY_E)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf",
+			) == 0
+			and _inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"village_scrip",
+			) == 30,
+			"physical E confirms the default mistleaf sale",
+		)
+		await _tap_key(KEY_E)
+		await _tap_key(KEY_Q)
+		_check(
+			daily_overlay.is_trade_choice_pending()
+			and daily_overlay.get_trade_choice_index() == 1,
+			"physical Q selects the seed purchase offer",
+		)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"village_scrip",
+			) == 10
+			and _inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf_seed",
+			) == 1,
+			"physical E buys a seed with the earned village scrip",
+		)
 
 	var rest_anchor: EstateAnchorResult = runtime.query_anchor(
 		&"interaction",
@@ -109,11 +157,11 @@ func _run() -> void:
 			_inventory_quantity(
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf",
-			) == 1
+			) == 0
 			and _inventory_quantity(
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
-			) == 0
+			) == 1
 			and daily_overlay.is_resource_choice_pending()
 			and daily_overlay.is_resource_available(),
 			"the daily choice reopens without collecting when day two begins",
@@ -123,7 +171,7 @@ func _run() -> void:
 			_inventory_quantity(
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
-			) == 3,
+			) == 4,
 			"day two can confirm the default seed offer after day one forage",
 		)
 

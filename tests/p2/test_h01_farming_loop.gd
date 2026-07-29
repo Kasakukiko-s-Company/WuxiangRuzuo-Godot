@@ -35,11 +35,20 @@ func _initialize() -> void:
 func _run() -> void:
 	var game_catalog_result := CatalogFileLoader.load_catalog()
 	var estate_catalog_result := EstateMapCatalogFileLoader.load_catalog()
-	_check(
-		game_catalog_result.is_valid() and estate_catalog_result.is_valid(),
-		"farming loop loads both validated catalogs",
+	var trade_catalog_result := TradeOfferCatalogFileLoader.load_catalog(
+		game_catalog_result.catalog,
 	)
-	if not game_catalog_result.is_valid() or not estate_catalog_result.is_valid():
+	_check(
+		game_catalog_result.is_valid()
+		and estate_catalog_result.is_valid()
+		and trade_catalog_result.is_valid(),
+		"farming loop loads all validated catalogs",
+	)
+	if (
+		not game_catalog_result.is_valid()
+		or not estate_catalog_result.is_valid()
+		or not trade_catalog_result.is_valid()
+	):
 		_finish()
 		return
 	var game_catalog: GameCatalog = game_catalog_result.catalog
@@ -57,6 +66,10 @@ func _run() -> void:
 	pilot.configure_estate_runtime(runtime)
 	pilot.configure_input_service(scripted_input)
 	pilot.configure_game_catalog(game_catalog)
+	pilot.configure_trade_book(TradeBook.new(
+		trade_catalog_result.catalog,
+		game_catalog,
+	))
 	pilot.configure_audio_service(recording_audio)
 	root.add_child(pilot)
 	await process_frame
@@ -278,9 +291,42 @@ func _run() -> void:
 		_inventory_quantity(harvested.state.inventory, &"mistleaf") == 1,
 		"harvest places one mistleaf in the in-memory inventory",
 	)
+	_place_for_interaction(player, mapper, resource_approach)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		pilot.get_daily_interaction_overlay().is_trade_choice_pending()
+		and pilot.get_daily_interaction_overlay().get_trade_choice_index() == 0,
+		"the claimed crate projects a distinct default trade choice",
+	)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	var sold := pilot.get_farming_session()
+	_check(
+		_inventory_quantity(sold.state.inventory, &"mistleaf") == 0
+		and _inventory_quantity(sold.state.inventory, &"village_scrip") == 30,
+		"the claimed north-meadow crate sells one harvested mistleaf",
+	)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	var select_buy := InputSnapshot.neutral()
+	select_buy.select_next = true
+	_send_snapshot(pilot, select_buy)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	var bought := pilot.get_farming_session()
+	_check(
+		_inventory_quantity(bought.state.inventory, &"village_scrip") == 10
+		and _inventory_quantity(bought.state.inventory, &"mistleaf_seed") == 6,
+		"earned village scrip buys one replacement seed without a wallet schema",
+	)
 	var overlay: FarmPlotOverlay = pilot.get_farm_overlay()
 	_check(
-		overlay.get_rendered_tile_count() == harvested.state.farm.tile_count(),
+		overlay.get_rendered_tile_count() == bought.state.farm.tile_count(),
 		"farm overlay mirrors every authoritative tilled tile",
 	)
 	var expected_sounds: Array[StringName] = [
@@ -291,6 +337,7 @@ func _run() -> void:
 		&"sfx.rest.confirm",
 		&"sfx.rest.complete",
 		&"sfx.farm.harvest",
+		&"sfx.trade.exchange",
 	]
 	for expected_sound: StringName in expected_sounds:
 		_check(
@@ -303,8 +350,8 @@ func _run() -> void:
 		"P2 produces visual feedback for successful life-loop actions",
 	)
 	_check(
-		interaction_feedback.get_last_action_id() == &"sfx.farm.harvest",
-		"harvest leaves a typed visual feedback cue",
+		interaction_feedback.get_last_action_id() == &"sfx.trade.exchange",
+		"the final exchange leaves a typed visual feedback cue",
 	)
 	var title := pilot.get_node("HUD/TitlePanel/Margin/Title") as Label
 	_check(

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "offers": [
+    {
+      "id": "economy.h01.sell_mistleaf",
+      "endpointId": "economy.h01.north_meadow_crate",
+      "cost": {
+        "itemId": "mistleaf",
+        "quantity": 1
+      },
+      "reward": {
+        "itemId": "village_scrip",
+        "quantity": 30
+      }
+    },
+    {
+      "id": "economy.h01.buy_mistleaf_seed",
+      "endpointId": "economy.h01.north_meadow_crate",
+      "cost": {
+        "itemId": "village_scrip",
+        "quantity": 20
+      },
+      "reward": {
+        "itemId": "mistleaf_seed",
+        "quantity": 1
+      }
+    }
+  ]
+}

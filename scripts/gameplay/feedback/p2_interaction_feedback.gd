@@ -8,6 +8,7 @@ const SUPPORTED_ACTION_IDS: Array[StringName] = [
 	&"sfx.farm.water",
 	&"sfx.farm.harvest",
 	&"sfx.resource.gather",
+	&"sfx.trade.exchange",
 	&"sfx.rest.confirm",
 	&"sfx.rest.complete",
 ]
@@ -92,6 +93,8 @@ func _draw() -> void:
 		_draw_harvest(radius, alpha)
 	elif _action_id == &"sfx.resource.gather":
 		_draw_gather(radius, alpha)
+	elif _action_id == &"sfx.trade.exchange":
+		_draw_exchange(radius, alpha)
 	elif (
 		_action_id == &"sfx.rest.confirm"
 		or _action_id == &"sfx.rest.complete"
@@ -148,6 +151,14 @@ func _draw_gather(radius: float, alpha: float) -> void:
 	draw_arc(_origin, radius, PI * 0.05, PI * 0.95, 14, color, 2.0)
 	draw_circle(_origin + Vector2(-radius * 0.35, -2.0), 2.0, color)
 	draw_circle(_origin + Vector2(radius * 0.28, -4.0), 1.7, color)
+
+
+func _draw_exchange(radius: float, alpha: float) -> void:
+	var color := Color(0.94, 0.78, 0.34, alpha)
+	draw_arc(_origin, radius, -PI * 0.8, PI * 0.15, 12, color, 2.0)
+	draw_arc(_origin, radius, PI * 0.2, PI * 1.15, 12, color, 2.0)
+	draw_circle(_origin + Vector2(-radius * 0.62, -2.0), 2.0, color)
+	draw_circle(_origin + Vector2(radius * 0.62, 2.0), 2.0, color)
 
 
 func _draw_rest(radius: float, alpha: float) -> void:

@@ -3,17 +3,20 @@
 ## G2 目录实现
 
 - `data/crops.json`：`mistleaf`，种子 `mistleaf_seed`，收获物 `mistleaf`。
-- `data/items.json`：`hoe_basic`、`watering_can_basic`、`mistleaf_seed`、`mistleaf`。
+- `data/items.json`：`hoe_basic`、`watering_can_basic`、`mistleaf_seed`、`mistleaf`、地方交换凭证 `village_scrip`。
 - `data/tools.json`：锄地/浇水语义与 1 格范围。
 - `data/npcs.json`：15 名 NPC 稳定 ID、开场年龄、内容层级、关系边界和默认锚点。
 - `data/localization.json`：zh-CN 文本键。
 - `data/demo_world.json`：四地图、稳定锚点和六条双向 portal。
 - `data/runtime_resources.json`：保留语义资源 ID；路径全部为 null，表示未迁移。
 - `data/estate_maps.json`：地产候选契约的正式运行投影，包含八图稳定身份、尺寸、安全出生点和状态轴；当前只有 H01 具有正式运行场景路径。
+- `data/trade_offers.json`：独立 schema v1 交换目录；当前定义 H01 北草甸端点的雾叶卖出与种子回购。
 
 G2 的 `GameCatalogCodec` 将七份文档作为一个事务解码；任一版本、结构、枚举、范围、重复 ID、本地化或交叉引用错误都会拒绝整个目录。成功结果是强类型 `GameCatalog`，玩法不直接读取 JSON Dictionary。关系快照中的 NPC ID 必须存在于 NPC 目录。
 
 `EstateMapCatalogCodec` 独立解码地产目录，拒绝重复 map/estate/candidate ID、非法稳定 ID、非 32px 格、空或重复状态值、缺失 season/development/anomaly、错误状态组合数和候选 staging 场景路径。它不修改 G2 `demo_world.json`，也不把八块候选地产写入存档 Schema。
+
+`TradeOfferCatalogCodec` 独立解码交换目录，拒绝错误版本、空目录、重复或非法稳定 offer ID、非法 endpoint、非正数量、相同收支物品和未知物品引用。交换目录不是钱包存档；`village_scrip` 仍通过普通背包槽位持久化。
 
 ## 稳定 ID
 
@@ -49,4 +52,4 @@ P2 application 层当前使用 `profile-1`～`profile-3` 作为互相隔离的�
 
 ## 不变量
 
-所有引用 ID 必须存在；背包数量和生命在范围内；每 NPC 只有一份关系记录；可有多条 dating 但最多一名配偶；世界日 `>=1`；同日矿洞 ID 不重复；地产 map ID、玩家位置/回退锚点、状态轴、农田格和领取日必须通过相应目录与地图边界校验；领取日不得晚于世界日。持久快照不保存粒子、Tween、可取消确认、冷却、敌人瞬时位置或视觉预设。
+所有引用 ID 必须存在；交换 offer 的收支物品必须不同且数量为正；背包数量和生命在范围内；每 NPC 只有一份关系记录；可有多条 dating 但最多一名配偶；世界日 `>=1`；同日矿洞 ID 不重复；地产 map ID、玩家位置/回退锚点、状态轴、农田格和领取日必须通过相应目录与地图边界校验；领取日不得晚于世界日。持久快照不保存粒子、Tween、可取消确认、冷却、敌人瞬时位置或视觉预设。
