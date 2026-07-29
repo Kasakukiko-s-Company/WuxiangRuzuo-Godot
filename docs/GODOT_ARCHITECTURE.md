@@ -2,7 +2,7 @@
 
 ## 当前事实（G2 技术底座 + P1 体验原型 + P2 生活闭环切片）
 
-项目有可启动 `Main.tscn`、按入口隔离的真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON 和 `FileAccess` 只存在于 application 数据加载边界、codec 或具体 persistence adapter，不进入 domain/gameplay；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、统一资源/交换物资箱、家门二次确认休息、八格快捷栏、跨天成长、程序化状态投影，以及 profile-1 的 D 盘原子自动保存/恢复和受保护恢复点。H01 美术资源仍为 `shippingApproval=false`；项目仍没有档位选择 UI、正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
+项目有可启动 `Main.tscn`、按入口隔离的真实目录装配、强类型 `GameCatalog`、`InventoryState`、`FarmState`、Godot `SaveSnapshot`/`SaveCodec` 与五类平台契约。无类型 JSON 和 `FileAccess` 只存在于 application 数据加载边界、codec 或具体 persistence adapter，不进入 domain/gameplay；领域状态不继承 Node。P1 新增 `MovementIntent`、`TileCoordinateMapper`、`P1PlayerController` 与 `GodotInputService`。P2 地产地图工程先导新增强类型 `EstateMapCatalog`、统一 `EstateMapRuntime` 查询 seam、H01 正式场景、真实 TileMapLayer 碰撞、Camera2D 与主入口。当前 H01 已接入纯领域农作事务、统一资源/交换物资箱、家门二次确认休息、八格快捷栏、跨天成长、程序化状态投影，以及三个档位的 D 盘原子自动保存/恢复、受保护恢复点、最近档位和带确认删除。H01 美术资源仍为 `shippingApproval=false`；当前档位页是 640×360 技术 UI，不是最终标题美术。项目仍没有正式世界路由、NPC 日程/关系事件、战斗切片或最终 UI。
 
 ## 目录与依赖方向
 
@@ -47,6 +47,7 @@ scenes / scripts/gameplay / scripts/ui
 | `AppEntryStatus` / `AppCatalogSource` | 已实现入口隔离 | 以生产/测试 adapter 加载目录，并让局部 H01 故障只阻断 H01 入口 |
 | `SaveCodec` | 已实现 v2 | Godot schema v1/v2 的编码/解码/完整快照校验；不负责存储或档位策略 |
 | `GameSaveModule` | 已实现 P2 切片 | 固定 profile 的 current/protected 选择、H01 强类型聚合和损坏隔离 |
+| `SaveProfileRoster` | 已实现 P2 切片 | 三档只读摘要、独立最近档 metadata、确认后的完整命名空间删除 |
 | `AtomicFileSaveAdapter` | 已实现开发期 Windows adapter | 同目录 `.tmp` 写入、`.rollback` 提交保护、`.bak` 崩溃回退和不透明载荷读写；路径由 composition root 注入 |
 | `CocosSaveImporter` | 独立迁移器 | 显式读取旧 v1 payload；不污染正常 codec |
 | `RelationshipLedger` | 领域服务 | 全员好感、多 dating、唯一配偶、年龄边界 |
@@ -95,7 +96,7 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 
 ## 存档 seam
 
-`SaveCodec` 只处理领域快照；`SaveService` 契约只处理不透明 payload。`P2PersistentState` 聚合 H01 farming session、玩家位置/朝向/生命、地产状态和每日领取记录。`GameSaveModule` 为一个固定 profile 决定 current/protected 的加载与保存；`P2PersistenceBinding` 把场景 durable signal 接到 module；`AppCompositionRoot` 隐藏场景、目录和具体存储装配。
+`SaveCodec` 只处理领域快照；`SaveService` 契约只处理不透明 payload。`P2PersistentState` 聚合 H01 farming session、玩家位置/朝向/生命、地产状态和每日领取记录。`GameSaveModule` 为一个固定 profile 决定 current/protected 的加载与保存，并提供不写隔离证据的 `inspect()` 给档位目录。`SaveProfileRoster` 只向 UI 暴露强类型摘要，使用独立 `profile-directory` metadata v1 记录最近档，并以 quarantine → protected → current 的顺序删除整个档位命名空间。`P2PersistenceBinding` 把场景 durable signal 接到 module；`AppCompositionRoot` 隐藏场景、目录和具体存储装配。
 
 开发期 Windows adapter 使用项目内 D 盘 `builds/save-dev/`，以同目录 `.tmp` 写入并 flush；旧目标先进入 `.rollback`，新目标提交成功后才把 rollback 晋升为 `.bak`。pre-promote 中断时 adapter 把较新的 rollback 暴露为 primary、旧 bak 暴露为 previous；post-promote 中断则把新 target 暴露为 primary、rollback 暴露为 previous。module 先验证 current primary；它无效时，再验证 current previous、protected primary 和 protected previous，并按世界日、保存时间与稳定来源优先级选择最新 fallback。无效载荷写入 quarantine，隔离失败则由 module 锁定只读恢复。普通动作只更新 current，成功休息同时更新 protected。没有有效候选时启动被阻止，原载荷不被覆盖。发行期 Windows user data、Web/微信和 Steam adapter 不改变领域 schema。
 

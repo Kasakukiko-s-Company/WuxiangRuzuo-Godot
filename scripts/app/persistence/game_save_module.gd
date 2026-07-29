@@ -15,6 +15,9 @@ class Candidate extends RefCounted:
 	var requires_resave: bool = false
 	var message: String
 	var source: GameSaveLoadResult.Source = GameSaveLoadResult.Source.NONE
+	var unavailable_reason: GameSaveLoadResult.UnavailableReason = (
+		GameSaveLoadResult.UnavailableReason.NONE
+	)
 
 
 var _storage: SaveService
@@ -55,16 +58,32 @@ func _init(
 	_expected_map_id = expected_map_id
 
 
+## Resolves the same candidate order as load(), but never writes quarantine,
+## adopts a base snapshot, or unlocks save(). Title/profile UI must use this.
+func inspect() -> GameSaveLoadResult:
+	return _resolve_profile(false)
+
+
 func load() -> GameSaveLoadResult:
 	_load_attempted = true
 	_saving_allowed = true
 	_base_snapshot = null
+	return _resolve_profile(true)
+
+
+func _resolve_profile(preserve_unavailable: bool) -> GameSaveLoadResult:
 	var current := _read_candidate(
 		_profile_id,
 		GameSaveLoadResult.Source.CURRENT,
 	)
 	if current.is_valid:
-		return _loaded_result(current, GameSaveLoadResult.Source.CURRENT)
+		return _loaded_result(
+			current,
+			GameSaveLoadResult.Source.CURRENT,
+			"",
+			true,
+			preserve_unavailable,
+		)
 	var current_previous := _read_candidate(
 		_profile_id,
 		GameSaveLoadResult.Source.CURRENT_PREVIOUS,
@@ -91,6 +110,14 @@ func load() -> GameSaveLoadResult:
 		protected_previous,
 	])
 	if fallback != null:
+		if not preserve_unavailable:
+			return _loaded_result(
+				fallback,
+				fallback.source,
+				"recovery candidate available",
+				true,
+				false,
+			)
 		return _fallback_result(
 			fallback,
 			fallback.source,
@@ -103,7 +130,8 @@ func load() -> GameSaveLoadResult:
 		and protected_previous.is_missing
 	):
 		return GameSaveLoadResult.missing()
-	_saving_allowed = false
+	if preserve_unavailable:
+		_saving_allowed = false
 	return GameSaveLoadResult.unavailable(
 		(
 			"current: %s; current previous: %s; protected: %s; "
@@ -113,7 +141,8 @@ func load() -> GameSaveLoadResult:
 			_candidate_message(current_previous),
 			_candidate_message(protected),
 			_candidate_message(protected_previous),
-		]
+		],
+		_unavailable_reason(candidates),
 	)
 
 
@@ -178,6 +207,9 @@ func _read_candidate(
 		return candidate
 	if read_result.status == SaveReadResult.Status.FAILED:
 		candidate.read_failed = true
+		candidate.unavailable_reason = (
+			GameSaveLoadResult.UnavailableReason.READ_FAILED
+		)
 		candidate.message = "storage read failed: %s" % read_result.message
 		return candidate
 	candidate.raw_payload = read_result.payload
@@ -187,15 +219,26 @@ func _read_candidate(
 		_estate_catalog,
 	)
 	if decoded.status != SaveCodecResult.Status.DECODED:
+		candidate.unavailable_reason = (
+			GameSaveLoadResult.UnavailableReason.UNSUPPORTED_SCHEMA
+			if decoded.status == SaveCodecResult.Status.UNSUPPORTED_SCHEMA
+			else GameSaveLoadResult.UnavailableReason.CORRUPT
+		)
 		candidate.message = "codec rejected payload: %s" % (
 			decoded.describe_issues()
 		)
 		return candidate
 	if decoded.snapshot.profile_id != _profile_id:
+		candidate.unavailable_reason = (
+			GameSaveLoadResult.UnavailableReason.INCOMPATIBLE
+		)
 		candidate.message = "payload profile does not match requested profile"
 		return candidate
 	var state := _state_from_snapshot(decoded.snapshot)
 	if state == null:
+		candidate.unavailable_reason = (
+			GameSaveLoadResult.UnavailableReason.INCOMPATIBLE
+		)
 		candidate.message = (
 			"payload is valid but incompatible with the configured estate"
 		)
@@ -213,8 +256,10 @@ func _loaded_result(
 	source: GameSaveLoadResult.Source,
 	message: String = "",
 	saving_allowed: bool = true,
+	adopt_snapshot: bool = true,
 ) -> GameSaveLoadResult:
-	_base_snapshot = candidate.snapshot
+	if adopt_snapshot:
+		_base_snapshot = candidate.snapshot
 	return GameSaveLoadResult.loaded(
 		candidate.state,
 		source,
@@ -222,6 +267,7 @@ func _loaded_result(
 		candidate.requires_resave,
 		message,
 		saving_allowed,
+		candidate.snapshot.saved_at,
 	)
 
 
@@ -415,6 +461,30 @@ func _protected_slot_id() -> StringName:
 
 func _candidate_message(candidate: Candidate) -> String:
 	return "missing" if candidate.is_missing else candidate.message
+
+
+func _unavailable_reason(
+	candidates: Array[Candidate],
+) -> GameSaveLoadResult.UnavailableReason:
+	var reason := GameSaveLoadResult.UnavailableReason.CORRUPT
+	for candidate: Candidate in candidates:
+		if (
+			candidate.unavailable_reason
+			== GameSaveLoadResult.UnavailableReason.READ_FAILED
+		):
+			return GameSaveLoadResult.UnavailableReason.READ_FAILED
+		if (
+			candidate.unavailable_reason
+			== GameSaveLoadResult.UnavailableReason.UNSUPPORTED_SCHEMA
+		):
+			reason = GameSaveLoadResult.UnavailableReason.UNSUPPORTED_SCHEMA
+		elif (
+			candidate.unavailable_reason
+			== GameSaveLoadResult.UnavailableReason.INCOMPATIBLE
+			and reason == GameSaveLoadResult.UnavailableReason.CORRUPT
+		):
+			reason = GameSaveLoadResult.UnavailableReason.INCOMPATIBLE
+	return reason
 
 
 func _facing_name(facing: Vector2i) -> StringName:

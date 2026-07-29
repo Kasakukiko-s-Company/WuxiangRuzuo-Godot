@@ -15,6 +15,14 @@ enum Source {
 	PROTECTED_PREVIOUS,
 }
 
+enum UnavailableReason {
+	NONE,
+	CORRUPT,
+	UNSUPPORTED_SCHEMA,
+	INCOMPATIBLE,
+	READ_FAILED,
+}
+
 var status: Status
 var source: Source = Source.NONE
 var state: P2PersistentState
@@ -22,6 +30,8 @@ var source_schema_version: int = 0
 var requires_resave: bool = false
 var saving_allowed: bool = true
 var message: String
+var saved_at: String
+var unavailable_reason: UnavailableReason = UnavailableReason.NONE
 
 
 static func loaded(
@@ -31,6 +41,7 @@ static func loaded(
 	loaded_requires_resave: bool,
 	load_message: String = "",
 	load_saving_allowed: bool = true,
+	load_saved_at: String = "",
 ) -> GameSaveLoadResult:
 	var result := GameSaveLoadResult.new()
 	result.status = Status.LOADED
@@ -40,6 +51,7 @@ static func loaded(
 	result.requires_resave = loaded_requires_resave
 	result.message = load_message
 	result.saving_allowed = load_saving_allowed
+	result.saved_at = load_saved_at
 	return result
 
 
@@ -49,10 +61,14 @@ static func missing() -> GameSaveLoadResult:
 	return result
 
 
-static func unavailable(failure_message: String) -> GameSaveLoadResult:
+static func unavailable(
+	failure_message: String,
+	failure_reason: UnavailableReason = UnavailableReason.CORRUPT,
+) -> GameSaveLoadResult:
 	var result := GameSaveLoadResult.new()
 	result.status = Status.UNAVAILABLE
 	result.message = failure_message
+	result.unavailable_reason = failure_reason
 	return result
 
 

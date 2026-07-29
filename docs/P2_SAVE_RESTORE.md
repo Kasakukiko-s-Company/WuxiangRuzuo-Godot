@@ -2,7 +2,7 @@
 
 ## 当前结论
 
-2026-07-29 已为 H01 生活闭环建立可运行的 application session、Godot schema v2、开发期 Windows 原子文件 adapter、current 自动保存和 protected 安全恢复点。Main 当前使用 `profile-1`；`profile-1`～`profile-3` 的存储键与快照 profile 校验已经隔离，但三档选择/删除/最近档 UI 尚未实现。
+2026-07-29 已为 H01 生活闭环建立可运行的 application session、Godot schema v2、开发期 Windows 原子文件 adapter、current 自动保存和 protected 安全恢复点。Main 现提供三个独立档位、最近档位、恢复/损坏状态摘要和带确认的完整删除；H01 只使用玩家选中的档位。档位目录使用独立 metadata schema v1，没有修改 `SaveSnapshot` schema v2。
 
 这批关闭的是 P2 的“本地技术保存恢复”缺口，不表示完整游戏存档体验或 P2 整体完成。
 
@@ -10,7 +10,10 @@
 
 ```text
 Main
-  -> AppCompositionRoot.create_h01_launch(profile_id)
+  -> SaveProfileRoster (read-only summaries / recent / delete)
+      -> GameSaveModule.inspect()
+      -> SaveService
+  -> AppCompositionRoot.create_h01_launch(selected_profile_id)
       -> GameSaveModule
           -> SaveCodec
           -> SaveService (opaque payload)
@@ -23,6 +26,7 @@ Main
 - `P2EstatePilot` 只捕获/安装强类型状态并发送 durable commit signal。
 - `P2PersistenceBinding` 把成功动作连接到固定 profile 的 `GameSaveModule`。
 - `GameSaveModule` 隐藏 current/protected、v1/v2 provenance、H01 上下文检查和损坏隔离。
+- `SaveProfileRoster` 隐藏三档只读巡检、最近档 metadata 和档位命名空间删除；UI 不解析存档 JSON。
 - `AtomicFileSaveAdapter` 是保存路径与不透明 save payload I/O 的唯一具体层；其他 application 目录/音频加载器仍各自在自己的边界使用文件 API。
 
 ## 快照范围
@@ -52,6 +56,15 @@ schema v2 当前保存：
 
 业务恢复点与物理 `.bak` 不同：`profile-N.protected.json` 是休息边界的完整快照；`profile-N.json.bak` 只保护一次文件替换。
 
+## 三档目录与删除语义
+
+- `SaveProfileRoster.refresh()` 复用 `GameSaveModule.inspect()` 的候选顺序，但严格不执行 write、remove 或 quarantine；打开标题页不会改变任何档位证据。
+- 档位摘要强类型区分空档、可继续、可从恢复点继续、损坏、不支持 schema、内容不兼容和存储读取失败，并携带世界日、地图、保存时间和恢复来源。
+- 最近档位保存于独立逻辑键 `profile-directory`，文档为 `{"schemaVersion":1,"lastPlayedProfileId":"profile-N"}`；只在 H01 成功装配后记录。最近档损坏时仍保持选中且禁止启动，不静默跳到其他档位。
+- 删除必须先显式确认。取消不写存储；确认后依次删除四个 quarantine 键、protected、最后才删除 current，并在每个逻辑键后验证 current/previous 均 missing。
+- 任一步删除失败都返回 partial，不把档位谎报为空；current 最后删除，尽量保留最有价值的可玩证据。删除最近档后再清除 `profile-directory`。
+- `profile-directory` 是应用元数据协议，不进入或改变 `SaveSnapshot` schema v2。
+
 ## 文件协议与 D 盘边界
 
 开发期根目录：
@@ -80,11 +93,14 @@ adapter 在目标同目录写 `.tmp` 并 flush/close。替换时先把当前目�
 - `tests/p2/test_p2_persistent_state_bridge.gd`：进树前恢复及玩法 durable signal。
 - `tests/p2/test_h01_persistent_launch.gd`：composition root 端到端新局、保存、恢复、protected 回退和无覆盖阻断。
 - `tests/maps/test_p2_main_entry.gd`：Main 入口实际拥有 profile-scoped persistence binding。
+- `tests/p2/test_save_profile_roster.gd`：三个摘要、最近档、恢复/错误分类、只读刷新、完整删除顺序及部分失败。
+- `tests/p2/test_save_profile_main_ui.gd`：档位选择、所选档启动、最近档恢复、损坏阻断、确认/取消和 640×360 布局。
+- `tests/p2/test_save_profile_roster_atomic_adapter.gd`：真实 D 盘 adapter 下清除 target/previous/temp，且其他档位字节不变。
 
 ## 后续
 
-- P2：实现可兑现的轻量经济闭环和节奏验证。
-- 后续 UI：三档选择、删除确认、最近档与恢复提示。
+- P2：继续玩家节奏验证、经济参数校准和当前生活切片剩余出口条件；三档技术 UI 不等于最终标题/存档美术完成。
+- 后续 UI：P5/P7 以正式视觉、设置、可访问性和完整游戏流程替换当前技术档位页。
 - 下一 schema：增加单调 `saveRevision`，取代同一世界日下对 `savedAt` 文本顺序的依赖。
 - 发行级 adapter：把瞬态第三物理候选、previous 恢复后的冗余重建和 previous rotation 降级诊断纳入压力/故障注入测试。
 - P6～P8：长流程、断电/磁盘满、跨版本 fixture、可访问性与多设备测试。

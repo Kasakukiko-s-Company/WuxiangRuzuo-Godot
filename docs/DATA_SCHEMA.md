@@ -44,7 +44,9 @@ mineRun { worldDay, brokenNodeIds, defeatedEncounterIds }
 
 `SaveSnapshot.schemaVersion=2` 和 `SaveCodec` 已覆盖上述字段、八格背包、引用范围、H01 地产状态与每日领取记录，并能完成确定性 JSON 往返。decoder 继续接受 Godot schema v1，返回 `source_schema_version` 与 `requires_resave`，但不会凭空补造 v1 中不存在的地产或领取历史；因此有效的旧 G2 技术快照仍可由 codec 读取，却不能伪装成可恢复的 H01 P2 会话。
 
-P2 application 层当前使用 `profile-1`～`profile-3` 作为互相隔离的当前检查点键，以 `profile-N.protected` 保存成功休息后的受保护恢复点。恢复还验证每个键的物理 previous 候选；current primary 无效时按世界日、保存时间和稳定来源优先级选取最新 fallback。fallback 前隔离可读无效载荷，隔离失败则只读恢复。没有有效候选时阻止启动并保留原载荷，不静默创建新局覆盖证据。尚未实现最近档 metadata、三档选择 UI、档案删除 UI、Steam 云或 Web/微信 adapter。
+P2 application 层当前使用 `profile-1`～`profile-3` 作为互相隔离的当前检查点键，以 `profile-N.protected` 保存成功休息后的受保护恢复点。恢复还验证每个键的物理 previous 候选；current primary 无效时按世界日、保存时间和稳定来源优先级选取最新 fallback。fallback 前隔离可读无效载荷，隔离失败则只读恢复。没有有效候选时阻止启动并保留原载荷，不静默创建新局覆盖证据。
+
+三档目录另有独立 metadata 文档，逻辑键为 `profile-directory`，当前 schema v1 只包含 `schemaVersion` 与合法的 `lastPlayedProfileId`。它不属于 `SaveSnapshot`，不会推动存档 schema 版本。Main 只消费强类型档位摘要；最近档损坏时保持选中并阻止启动。确认删除会清除该档位的 current、protected、两者的 primary/previous quarantine 逻辑键及其物理 previous，current 最后删除；若它是最近档，再清除目录 metadata。Steam 云或 Web/微信 adapter 尚未实现。
 
 ## 迁移原则
 

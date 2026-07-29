@@ -26,10 +26,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 24.0
-offset_right = -24.0
-offset_bottom = -24.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -37,21 +37,22 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="Content" type="VBoxContainer" parent="Margin/Center"]
+custom_minimum_size = Vector2(590, 0)
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 3
 alignment = 1
 
 [node name="Title" type="Label" parent="Margin/Center/Content"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.9, 0.79, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 22
 text = "雾乡如昨"
 horizontal_alignment = 1
 
 [node name="Milestone" type="Label" parent="Margin/Center/Content"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "完整游戏制作 · P2 核心生活循环垂直切片"
 horizontal_alignment = 1
 
@@ -59,27 +60,149 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.74, 0.78, 0.72, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 9
 text = "Bootstrapping…"
 horizontal_alignment = 1
+autowrap_mode = 2
 
-[node name="Scope" type="Label" parent="Margin/Center/Content"]
+[node name="ProfilePanel" type="PanelContainer" parent="Margin/Center/Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.48, 0.55, 0.54, 1)
-theme_override_font_sizes/font_size = 12
-text = "H01 农作闭环可玩 · profile-1 本地自动保存 · 休息更新受保护恢复点"
+
+[node name="ProfileList" type="VBoxContainer" parent="Margin/Center/Content/ProfilePanel"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Profile1Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(570, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "档位 1 · 读取中…"
+
+[node name="Profile2Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(570, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "档位 2 · 读取中…"
+
+[node name="Profile3Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(570, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+toggle_mode = true
+text = "档位 3 · 读取中…"
+
+[node name="ProfileDetailLabel" type="Label" parent="Margin/Center/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.7, 0.68, 1)
+theme_override_font_sizes/font_size = 9
+text = "正在读取档位…"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="LaunchP2Button" type="Button" parent="Margin/Center/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(300, 42)
+custom_minimum_size = Vector2(300, 30)
 theme_override_colors/font_color = Color(0.84, 0.91, 0.78, 1)
-theme_override_font_sizes/font_size = 16
-text = "进入 H01 地产农作闭环"
+theme_override_font_sizes/font_size = 13
+text = "开始所选档位"
+
+[node name="DeleteProfileButton" type="Button" parent="Margin/Center/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(300, 24)
+theme_override_colors/font_color = Color(0.82, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 10
+text = "删除所选档位"
 
 [node name="LaunchP1Button" type="Button" parent="Margin/Center/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(300, 36)
+custom_minimum_size = Vector2(300, 24)
 theme_override_colors/font_color = Color(0.72, 0.82, 0.72, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 10
 text = "回到 P1 雾岭边缘体验原型"
+
+[node name="DeleteConfirmLayer" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Scrim" type="ColorRect" parent="DeleteConfirmLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.025, 0.03, 0.82)
+
+[node name="Center" type="CenterContainer" parent="DeleteConfirmLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="DeleteConfirmLayer/Center"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="DeleteConfirmLayer/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="Content" type="VBoxContainer" parent="DeleteConfirmLayer/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="DeleteConfirmLayer/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.76, 0.68, 1)
+theme_override_font_sizes/font_size = 18
+text = "确认删除档位"
+horizontal_alignment = 1
+
+[node name="DeleteMessage" type="Label" parent="DeleteConfirmLayer/Center/Panel/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.82, 0.78, 1)
+theme_override_font_sizes/font_size = 13
+text = "删除后无法从当前或受保护恢复点继续。"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="DeleteConfirmLayer/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="CancelDeleteButton" type="Button" parent="DeleteConfirmLayer/Center/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+text = "取消"
+
+[node name="ConfirmDeleteButton" type="Button" parent="DeleteConfirmLayer/Center/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.64, 0.58, 1)
+text = "确认删除"

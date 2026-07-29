@@ -246,6 +246,35 @@ func get_estate_pilot_definition() -> EstateMapDefinition:
 	return estate_map_catalog.get_map(ESTATE_PILOT_MAP_ID)
 
 
+func create_save_service() -> SaveService:
+	var save_directory := ProjectSettings.globalize_path(
+		DEVELOPMENT_SAVE_DIRECTORY
+	)
+	if not _is_d_drive_path(save_directory):
+		return null
+	return AtomicFileSaveAdapter.new(save_directory)
+
+
+func create_profile_roster(
+	storage_override: SaveService = null,
+) -> SaveProfileRoster:
+	if not is_ready():
+		return null
+	var storage := (
+		storage_override
+		if storage_override != null
+		else create_save_service()
+	)
+	if storage == null:
+		return null
+	return SaveProfileRoster.new(
+		storage,
+		game_catalog,
+		estate_map_catalog,
+		ESTATE_PILOT_MAP_ID,
+	)
+
+
 func create_h01_launch(
 	profile_id: StringName,
 	storage_override: SaveService = null,
@@ -263,14 +292,11 @@ func create_h01_launch(
 		return H01LaunchResult.blocked("H01 scene contract is unavailable")
 	var storage := storage_override
 	if storage == null:
-		var save_directory := ProjectSettings.globalize_path(
-			DEVELOPMENT_SAVE_DIRECTORY
-		)
-		if not _is_d_drive_path(save_directory):
+		storage = create_save_service()
+		if storage == null:
 			return H01LaunchResult.blocked(
 				"development save directory must remain on the D drive"
 			)
-		storage = AtomicFileSaveAdapter.new(save_directory)
 	var save_module := GameSaveModule.new(
 		storage,
 		game_catalog,
