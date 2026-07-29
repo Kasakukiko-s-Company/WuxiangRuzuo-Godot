@@ -33,6 +33,7 @@ func _run() -> void:
 
 	var mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 	var player := pilot.get_player()
+	var daily_overlay := pilot.get_daily_interaction_overlay()
 	await _tap_key(KEY_N)
 	_check(
 		pilot.get_farming_session().world_day == 1,
@@ -55,8 +56,30 @@ func _run() -> void:
 			_inventory_quantity(
 				pilot.get_farming_session().state.inventory,
 				&"mistleaf_seed",
-			) == 3,
-			"physical E collects the H01 seed resource through the input service",
+			) == 0
+			and daily_overlay.is_resource_choice_pending()
+			and daily_overlay.get_resource_choice_index() == 0,
+			"first physical E opens the daily resource choice without collecting",
+		)
+		await _tap_key(KEY_Q)
+		_check(
+			daily_overlay.is_resource_choice_pending()
+			and daily_overlay.get_resource_choice_index() == 1,
+			"Q moves the visible resource choice to the second offer",
+		)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf",
+			) == 1
+			and _inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf_seed",
+			) == 0
+			and not daily_overlay.is_resource_choice_pending()
+			and not daily_overlay.is_resource_available(),
+			"Q switches to the immediate forage offer and E confirms it",
 		)
 
 	var rest_anchor: EstateAnchorResult = runtime.query_anchor(
@@ -79,6 +102,29 @@ func _run() -> void:
 		_check(
 			pilot.get_farming_session().world_day == 2,
 			"second physical E confirms home rest and advances one day",
+		)
+		_place_for_interaction(player, mapper, resource_approach)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf",
+			) == 1
+			and _inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf_seed",
+			) == 0
+			and daily_overlay.is_resource_choice_pending()
+			and daily_overlay.is_resource_available(),
+			"the daily choice reopens without collecting when day two begins",
+		)
+		await _tap_key(KEY_E)
+		_check(
+			_inventory_quantity(
+				pilot.get_farming_session().state.inventory,
+				&"mistleaf_seed",
+			) == 3,
+			"day two can confirm the default seed offer after day one forage",
 		)
 
 	var approach := _find_farmable_approach(runtime)

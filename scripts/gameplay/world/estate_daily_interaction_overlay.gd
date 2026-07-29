@@ -5,6 +5,8 @@ var _resource_position: Vector2
 var _rest_position: Vector2
 var _resource_available: bool = true
 var _rest_confirmation_pending: bool = false
+var _resource_choice_pending: bool = false
+var _resource_choice_index: int = 0
 
 
 func configure(
@@ -19,14 +21,20 @@ func configure(
 func show_state(
 	resource_available: bool,
 	rest_confirmation_pending: bool,
+	resource_choice_pending: bool = false,
+	resource_choice_index: int = 0,
 ) -> void:
 	if (
 		_resource_available == resource_available
 		and _rest_confirmation_pending == rest_confirmation_pending
+		and _resource_choice_pending == resource_choice_pending
+		and _resource_choice_index == resource_choice_index
 	):
 		return
 	_resource_available = resource_available
 	_rest_confirmation_pending = rest_confirmation_pending
+	_resource_choice_pending = resource_choice_pending
+	_resource_choice_index = resource_choice_index
 	queue_redraw()
 
 
@@ -36,6 +44,18 @@ func get_resource_world_position() -> Vector2:
 
 func get_rest_world_position() -> Vector2:
 	return _rest_position
+
+
+func is_resource_choice_pending() -> bool:
+	return _resource_choice_pending
+
+
+func get_resource_choice_index() -> int:
+	return _resource_choice_index
+
+
+func is_resource_available() -> bool:
+	return _resource_available
 
 
 func _draw() -> void:
@@ -72,6 +92,29 @@ func _draw_resource_source() -> void:
 		_resource_position + Vector2(0.0, -8.0),
 		_resource_position + Vector2(5.0, -11.0),
 		sprout,
+		2.0,
+	)
+	if _resource_choice_pending:
+		_draw_resource_choice()
+
+
+func _draw_resource_choice() -> void:
+	var seed_color := Color(0.72, 0.95, 0.52, 1.0)
+	var forage_color := Color(0.92, 0.72, 0.38, 1.0)
+	var seed_center := _resource_position + Vector2(-10.0, -22.0)
+	var forage_center := _resource_position + Vector2(10.0, -22.0)
+	draw_circle(seed_center, 4.0, seed_color)
+	draw_circle(forage_center, 4.0, forage_color)
+	var selected_center := (
+		seed_center if _resource_choice_index == 0 else forage_center
+	)
+	draw_arc(
+		selected_center,
+		7.0,
+		0.0,
+		TAU,
+		12,
+		Color(1.0, 0.94, 0.66, 1.0),
 		2.0,
 	)
 

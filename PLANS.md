@@ -147,7 +147,8 @@
 - 2026-07-28 已把外部案例中的功能区域/环路、居民可发现性、居民日程与居民知识分离、资源家族和 AI 方向参考板准入经验保存到 `docs/DESIGN_REFERENCE_LESSONS.md`，并同步领域词汇、P3/P5 路线、NPC 候选边界、资源生产、来源台账和法律护栏。只吸收抽象方法，没有复制外部图片、地图、角色、物品、数值或文本；没有修改当前 P2 功能或存档 Schema。
 - 2026-07-28 完整审计用户提供的另一项目视听生产对话，只迁移 ElevenLabs 安全生产方法；没有复制其中角色、卡牌、cue、提示词或候选文件。建立 D 盘 `audio-source/p2-life-loop-v1/` 批次，使用 `eleven_text_to_sound_v2` 生成 7 cue×3 的 48 kHz stereo PCM 候选，使用 `music_v2` plan + detailed endpoint 生成 1 首 60 秒 H01 日间候选；22/22 自动门禁通过，实际延迟核销 1116 credits，超额计费关闭。
 - P2 运行时现通过 `GodotAudioService` 和版本化 `data/audio_catalog.json` 播放 7 个稳定 SFX ID 与 1 个 H01 music ID；`P2InteractionFeedback` 为成功的耕地、播种、浇水、收获、采集和休息提供 Tween/自绘反馈并支持减少动态效果。Godot 4.7.1 Compatibility 在 Intel Iris Xe 上实际运行并捕获反馈画面；候选仍为 `subjectiveListeningApproval=false`、`commercialReleaseAuthorized=false`、`shippingApproval=false`，不冒充最终发行混音。
-- 当前 P2 仍缺文件存档/恢复、有意义的选择和成本/收益节奏验证；代表性动画与声音这一缺口已关闭，不等于 P2 已完成。完整记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`。
+- 2026-07-29 H01 北草甸改为每日互斥资源选择组：第一次 E/A 打开、Q/Tab/肩键切换、第二次 E/A 确认“种子×3”或“雾叶×1”；组内来源共享领取键，同日不能重复取得另一项，背包失败不消耗资格，次日恢复。选择提示、状态投影、真实输入和 Compatibility Renderer 截图均有自动证据；27 个 Godot 测试文件、headless import/parse 与默认 Main 启动全部 exit 0。
+- 当前 P2 仍缺文件存档/恢复，以及能实际兑现并经玩家节奏验证的成本/收益选择；北草甸目录价值比较只是可运行的互斥奖励基线，不冒充完整经济决策。代表性动画与声音这一缺口已关闭，不等于 P2 已完成。记录见 `docs/P2_AUDIO_VISUAL_FEEDBACK.md`、`docs/P2_RESOURCE_CHOICE.md`。
 
 ## 后续制作阶段
 

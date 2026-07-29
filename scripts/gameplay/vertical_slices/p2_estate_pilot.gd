@@ -2,10 +2,12 @@ class_name P2EstatePilot
 extends Node2D
 
 const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
-const RESOURCE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
+const RESOURCE_SEED_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
+const RESOURCE_FORAGE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow.forage"
+const RESOURCE_CHOICE_GROUP_ID: StringName = &"home.h01.resource.north_meadow.daily_choice"
 const REST_POINT_ID: StringName = &"home.h01.rest.home_door"
-const RESOURCE_ITEM_ID: StringName = &"mistleaf_seed"
-const RESOURCE_QUANTITY: int = 3
+const RESOURCE_SEED_QUANTITY: int = 3
+const RESOURCE_FORAGE_QUANTITY: int = 1
 
 @onready var _player: P1PlayerController = $Player
 @onready var _camera: Camera2D = $Player/Camera2D
@@ -28,10 +30,12 @@ var _rendered_farming_session: FarmingSessionState
 var _daily_resource_claims: DailyResourceClaims
 var _daily_resource_sources: DailyResourceSourceCatalog
 var _daily_rest_points: DailyRestPointCatalog
-var _resource_source: DailyResourceSourceDefinition
+var _resource_offers: Array[DailyResourceSourceDefinition] = []
 var _rest_point: DailyRestPointDefinition
 var _resource_anchor: EstateAnchorResult
 var _rest_anchor: EstateAnchorResult
+var _resource_choice_day: int = 0
+var _resource_choice_index: int = 0
 var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
@@ -76,19 +80,30 @@ func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 	if snapshot.reduce_motion_toggle:
 		set_reduce_motion(not _reduce_motion)
 	if snapshot.quickbar_slot_index >= 0:
+		_clear_resource_choice()
 		_select_quickbar_slot(snapshot.quickbar_slot_index)
 	if snapshot.select_previous:
-		_select_relative_slot(-1)
+		if _is_resource_choice_pending():
+			_select_relative_resource_offer(-1)
+		else:
+			_select_relative_slot(-1)
 	if snapshot.select_next:
-		_select_relative_slot(1)
+		if _is_resource_choice_pending():
+			_select_relative_resource_offer(1)
+		else:
+			_select_relative_slot(1)
 	if snapshot.secondary_action:
+		_clear_resource_choice()
 		_cycle_anomaly_preview()
 	if snapshot.primary_action:
+		_clear_resource_choice()
 		_use_selected_item()
 	if snapshot.watering_action:
+		_clear_resource_choice()
 		_select_and_use_watering_can()
 	if snapshot.move != Vector2.ZERO:
 		_clear_rest_confirmation()
+		_clear_resource_choice()
 	_refresh_farming_view()
 	_update_debug()
 
@@ -163,6 +178,7 @@ func reset_to_safe_spawn() -> void:
 	_player.velocity = Vector2.ZERO
 	_player.set_input_locked(false)
 	_clear_rest_confirmation()
+	_clear_resource_choice()
 	_status_label.text = "已回到安全出生点 · 农作状态保留"
 	_camera.reset_smoothing()
 
@@ -230,12 +246,22 @@ func _initialize_daily_interactions() -> void:
 	_daily_resource_claims = DailyResourceClaims.create_empty()
 	var source_definitions: Array[DailyResourceSourceDefinition] = [
 		DailyResourceSourceDefinition.new(
-			RESOURCE_SOURCE_ID,
+			RESOURCE_SEED_SOURCE_ID,
 			_estate_runtime.get_map_id(),
 			&"resource_spawn_zone",
 			&"resource_north_meadow",
-			RESOURCE_ITEM_ID,
-			RESOURCE_QUANTITY,
+			&"mistleaf_seed",
+			RESOURCE_SEED_QUANTITY,
+			RESOURCE_CHOICE_GROUP_ID,
+		),
+		DailyResourceSourceDefinition.new(
+			RESOURCE_FORAGE_SOURCE_ID,
+			_estate_runtime.get_map_id(),
+			&"resource_spawn_zone",
+			&"resource_north_meadow",
+			&"mistleaf",
+			RESOURCE_FORAGE_QUANTITY,
+			RESOURCE_CHOICE_GROUP_ID,
 		),
 	]
 	_daily_resource_sources = DailyResourceSourceCatalog.create(
@@ -246,7 +272,14 @@ func _initialize_daily_interactions() -> void:
 		_daily_resource_sources != null,
 		"P2 resource source definitions must match the validated game catalog",
 	)
-	_resource_source = _daily_resource_sources.get_source(RESOURCE_SOURCE_ID)
+	_resource_offers = [
+		_daily_resource_sources.get_source(RESOURCE_SEED_SOURCE_ID),
+		_daily_resource_sources.get_source(RESOURCE_FORAGE_SOURCE_ID),
+	]
+	assert(
+		not _resource_offers.has(null),
+		"P2 resource choice offers must resolve from the source catalog",
+	)
 	var rest_definitions: Array[DailyRestPointDefinition] = [
 		DailyRestPointDefinition.new(
 			REST_POINT_ID,
@@ -262,8 +295,8 @@ func _initialize_daily_interactions() -> void:
 	)
 	_rest_point = _daily_rest_points.get_point(REST_POINT_ID)
 	_resource_anchor = _estate_runtime.query_anchor(
-		_resource_source.anchor_kind,
-		_resource_source.anchor_id,
+		_resource_offers[0].anchor_kind,
+		_resource_offers[0].anchor_id,
 	)
 	_rest_anchor = _estate_runtime.query_anchor(
 		_rest_point.anchor_kind,
@@ -436,12 +469,28 @@ func _select_and_use_watering_can() -> void:
 			return
 
 
-func _attempt_daily_resource_gathering() -> void:
+func _request_or_complete_resource_choice() -> void:
+	if _resource_choice_claimed_today():
+		_clear_resource_choice()
+		_status_label.text = "北草甸今天已经选择过资源了"
+		return
+	if not _is_resource_choice_pending():
+		_resource_choice_day = _farming_session.world_day
+		_resource_choice_index = 0
+		_show_resource_choice_status()
+		_update_daily_overlay()
+		return
+	_attempt_daily_resource_gathering(
+		_resource_offers[_resource_choice_index].id
+	)
+
+
+func _attempt_daily_resource_gathering(source_id: StringName) -> void:
 	var result := DailyResourceGathering.attempt(
 		_farming_session,
 		_daily_resource_claims,
 		DailyResourceGatheringCommand.new(
-			RESOURCE_SOURCE_ID,
+			source_id,
 			_farming_session.world_day,
 		),
 		_daily_resource_sources,
@@ -450,20 +499,26 @@ func _attempt_daily_resource_gathering() -> void:
 	if result.is_success():
 		_farming_session = result.session
 		_daily_resource_claims = result.claims
-		_status_label.text = "在北草甸找到雾叶草种子 ×%d" % RESOURCE_QUANTITY
+		var source: DailyResourceSourceDefinition = (
+			_daily_resource_sources.get_source(source_id)
+		)
+		_status_label.text = "北草甸选择完成：%s" % _resource_offer_label(source)
+		_clear_resource_choice()
 		_play_interaction_feedback(
 			&"sfx.resource.gather",
 			_resource_anchor.cell,
 		)
 	elif result.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED:
-		_status_label.text = "北草甸今天已经采集过了"
+		_clear_resource_choice()
+		_status_label.text = "北草甸今天已经选择过资源了"
 	elif result.status == DailyResourceGatheringResult.Status.INVENTORY_FULL:
-		_status_label.text = "背包已满，资源仍留在原处"
+		_status_label.text = "背包无法容纳该选项；资格仍保留，可切换另一项"
 	else:
 		_status_label.text = "当前无法采集这处资源"
 
 
 func _request_or_complete_rest() -> void:
+	_clear_resource_choice()
 	if _rest_confirmation_day != _farming_session.world_day:
 		_rest_confirmation_day = _farming_session.world_day
 		_status_label.text = "回屋休息并结束今天？再次交互确认"
@@ -549,14 +604,16 @@ func _on_interaction_requested(
 	)
 	if target_cell == _resource_anchor.cell:
 		_clear_rest_confirmation()
-		_attempt_daily_resource_gathering()
+		_request_or_complete_resource_choice()
 		_refresh_farming_view()
 		return
 	if target_cell == _rest_anchor.cell:
+		_clear_resource_choice()
 		_request_or_complete_rest()
 		_refresh_farming_view()
 		return
 	_clear_rest_confirmation()
+	_clear_resource_choice()
 	if _attempt_harvest(target_cell):
 		_refresh_farming_view()
 		return
@@ -615,10 +672,67 @@ func _update_daily_overlay() -> void:
 	if _daily_overlay == null or _daily_resource_claims == null:
 		return
 	_daily_overlay.show_state(
-		_daily_resource_claims.last_claimed_day(RESOURCE_SOURCE_ID)
-		!= _farming_session.world_day,
+		not _resource_choice_claimed_today(),
 		_rest_confirmation_day == _farming_session.world_day,
+		_is_resource_choice_pending(),
+		_resource_choice_index,
 	)
+
+
+func _resource_choice_claimed_today() -> bool:
+	return (
+		_daily_resource_claims.last_claimed_day(RESOURCE_CHOICE_GROUP_ID)
+		>= _farming_session.world_day
+	)
+
+
+func _is_resource_choice_pending() -> bool:
+	return _resource_choice_day == _farming_session.world_day
+
+
+func _clear_resource_choice() -> void:
+	if _resource_choice_day == 0:
+		return
+	_resource_choice_day = 0
+	_resource_choice_index = 0
+	_update_daily_overlay()
+
+
+func _select_relative_resource_offer(offset: int) -> void:
+	_resource_choice_index = posmod(
+		_resource_choice_index + offset,
+		_resource_offers.size(),
+	)
+	_show_resource_choice_status()
+	_update_daily_overlay()
+
+
+func _show_resource_choice_status() -> void:
+	var selected := _resource_offers[_resource_choice_index]
+	_status_label.text = (
+		"二选一 · %s · Q/Tab/肩键切换 · E/A确认"
+		% _resource_offer_label(selected)
+	)
+
+
+func _resource_offer_label(source: DailyResourceSourceDefinition) -> String:
+	if source.item_id == &"mistleaf_seed":
+		var crop := _game_catalog.get_crop(&"mistleaf")
+		var harvest_item := _game_catalog.get_item(&"mistleaf")
+		var future_value := (
+			source.quantity
+			* crop.harvest_quantity
+			* harvest_item.sell_price
+		)
+		return "种子×%d → 预计收获价值%d" % [
+			source.quantity,
+			future_value,
+		]
+	var item := _game_catalog.get_item(source.item_id)
+	return "雾叶×%d → 即时目录价值%d" % [
+		source.quantity,
+		source.quantity * item.sell_price,
+	]
 
 
 func _play_interaction_feedback(

@@ -98,10 +98,31 @@ func _run() -> void:
 	_place_for_interaction(player, mapper, resource_approach)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame
+	_check(
+		_inventory_quantity(
+			pilot.get_farming_session().state.inventory,
+			&"mistleaf_seed",
+		) == 0,
+		"first resource interaction opens the default seed offer without collecting",
+	)
+	var resource_choice_movement := InputSnapshot.neutral()
+	resource_choice_movement.move = Vector2.RIGHT
+	_send_snapshot(pilot, resource_choice_movement)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
+	_check(
+		_inventory_quantity(
+			pilot.get_farming_session().state.inventory,
+			&"mistleaf_seed",
+		) == 0,
+		"movement cancels the resource choice so the next interaction reopens it",
+	)
+	player.interaction_requested.emit(player.global_position, player.facing)
+	await process_frame
 	var gathered: FarmingSessionState = pilot.get_farming_session()
 	_check(
 		_inventory_quantity(gathered.state.inventory, &"mistleaf_seed") == 3,
-		"interacting with the resource source obtains the first seed supply",
+		"confirming the default long-term offer obtains three seeds",
 	)
 	player.interaction_requested.emit(player.global_position, player.facing)
 	await process_frame

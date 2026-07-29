@@ -37,8 +37,8 @@ scenes / scripts/gameplay / scripts/ui
 | `CropGrowth` | 已实现 P2 切片 | 浇水条件、连续跨天成长、阶段与成熟推导 |
 | `CropHarvesting` | 已实现 P2 切片 | 成熟检查、背包容量与原子收获 |
 | `FarmDayCycle` | 已实现 P2 切片 | 严格按连续世界日结算全部作物 |
-| `DailyResourceSourceCatalog` | 已实现 P2 切片 | 原子验证来源 ID、地图/锚点、物品和数量 |
-| `DailyResourceGathering` | 已实现 P2 切片 | 按稳定来源 ID 和世界日原子增加物品并记录领取 |
+| `DailyResourceSourceCatalog` | 已实现 P2 切片 | 原子验证来源 ID、选择组、地图/锚点、物品和数量 |
+| `DailyResourceGathering` | 已实现 P2 切片 | 按稳定来源 ID 执行奖励，按来源或互斥组领取键记录世界日 |
 | `DailyRestPointCatalog` | 已实现 P2 切片 | 原子验证休息点 ID、地图与锚点 |
 | `DailyRestCycle` | 已实现 P2 切片 | 通过地图/休息点/完成日命令触发日终结算 |
 | `SaveCodec` | 已实现 G2 | 新 Godot schema 的编码/解码/完整快照校验；不负责存储 |
@@ -69,7 +69,7 @@ P2 的 `EstateMapRuntime` 公开 map ID、世界边界、当前状态、强类�
 
 - `FarmingTransactionState` 把 `FarmState` 与 `InventoryState` 作为一次原子领域事务的输入/输出；`FarmingSessionState` 只再增加权威 `world_day`。这些权威引用为只读属性，外部场景查询取得 snapshot。
 - `CropPlanting`、`FarmWatering`、`FarmDayCycle` 与 `CropHarvesting` 使用各自命令和结果类型，不让场景节点直接改作物字段。
-- `DailyResourceSourceCatalog` 先验证来源 ID 到地图、锚点、物品和数量的唯一映射；`DailyResourceClaims` 与 `DailyResourceGathering` 再把“每个来源每天最多成功领取一次”放在纯领域层。背包满、日期回退或伪造来源时领取记录不前移。
+- `DailyResourceSourceCatalog` 先验证来源 ID 到地图、锚点、物品和数量的唯一映射；同一每日选择组的来源必须共享地图和锚点，组 ID 不得与来源 ID 冲突。`DailyResourceClaims` 与 `DailyResourceGathering` 再以来源 ID 或共享组 ID 作为稳定领取键，把“每个领取键每天最多成功一次”放在纯领域层。背包满、日期回退或伪造来源时领取记录不前移。
 - `DailyRestPointCatalog` 验证休息点的地图归属与锚点；`DailyRestCycle` 只接收目录 ID 与待完成世界日。场景的二次确认只负责发出命令，不能直接递增日期。
 - `FarmDayAdvanceCommand` 携带明确 `completed_day`，使已处理命令幂等、未来命令拒绝，并让整批作物在预检通过后才统一结算。
 - `FarmState.restore()` 验证农田自身结构、作物引用、阶段派生与种植/结算日关系；世界地图 ID 是否存在由 codec/application 使用相应世界目录校验，避免领域层继续绑定退役的四地图 fixture。

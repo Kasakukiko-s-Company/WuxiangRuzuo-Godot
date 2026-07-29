@@ -1,6 +1,8 @@
 extends SceneTree
 
 const SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
+const FORAGE_SOURCE_ID: StringName = &"home.h01.resource.north_meadow.forage"
+const CHOICE_GROUP_ID: StringName = &"home.h01.resource.north_meadow.daily_choice"
 
 var _failures: int = 0
 
@@ -27,6 +29,16 @@ func _run() -> void:
 			&"resource_north_meadow",
 			&"mistleaf_seed",
 			3,
+			CHOICE_GROUP_ID,
+		),
+		DailyResourceSourceDefinition.new(
+			FORAGE_SOURCE_ID,
+			&"home_h01_open_meadow",
+			&"resource_spawn_zone",
+			&"resource_north_meadow",
+			&"mistleaf",
+			1,
+			CHOICE_GROUP_ID,
 		),
 	]
 	var sources := DailyResourceSourceCatalog.create(
@@ -37,6 +49,45 @@ func _run() -> void:
 	if sources == null:
 		_finish()
 		return
+	var mismatched_group_sources: Array[DailyResourceSourceDefinition] = [
+		source_definitions[0],
+		DailyResourceSourceDefinition.new(
+			&"home.h01.resource.invalid_remote_offer",
+			&"home_h01_open_meadow",
+			&"resource_spawn_zone",
+			&"different_anchor",
+			&"mistleaf",
+			1,
+			CHOICE_GROUP_ID,
+		),
+	]
+	_check(
+		DailyResourceSourceCatalog.create(
+			mismatched_group_sources,
+			catalog,
+		) == null,
+		"a daily choice group cannot silently combine different map anchors",
+	)
+	var colliding_claim_key_sources: Array[DailyResourceSourceDefinition] = (
+		source_definitions.duplicate()
+	)
+	colliding_claim_key_sources.append(
+		DailyResourceSourceDefinition.new(
+			CHOICE_GROUP_ID,
+			&"home_h01_open_meadow",
+			&"resource_spawn_zone",
+			&"resource_north_meadow",
+			&"mistleaf",
+			1,
+		)
+	)
+	_check(
+		DailyResourceSourceCatalog.create(
+			colliding_claim_key_sources,
+			catalog,
+		) == null,
+		"a choice-group claim key cannot collide with an ordinary source ID",
+	)
 	var session := FarmingSessionState.new(
 		FarmingTransactionState.new(
 			FarmState.create_empty(&"home_h01_open_meadow"),
@@ -66,8 +117,22 @@ func _run() -> void:
 		"resource collection adds the whole configured quantity atomically",
 	)
 	_check(
-		collected.claims.last_claimed_day(SOURCE_ID) == 1,
-		"successful collection records the source and world day",
+		collected.claims.last_claimed_day(CHOICE_GROUP_ID) == 1,
+		"successful collection records the shared choice group and world day",
+	)
+	var mutually_exclusive := DailyResourceGathering.attempt(
+		collected.session,
+		collected.claims,
+		DailyResourceGatheringCommand.new(FORAGE_SOURCE_ID, 1),
+		sources,
+		catalog,
+	)
+	_check(
+		mutually_exclusive.status
+		== DailyResourceGatheringResult.Status.ALREADY_COLLECTED
+		and mutually_exclusive.session == collected.session
+		and mutually_exclusive.claims == collected.claims,
+		"claiming one offer locks every source in its daily choice group",
 	)
 
 	var replayed := DailyResourceGathering.attempt(
@@ -89,7 +154,7 @@ func _run() -> void:
 		next_day_session,
 		collected.claims,
 		DailyResourceGatheringCommand.new(
-			SOURCE_ID,
+			FORAGE_SOURCE_ID,
 			2,
 		),
 		sources,
@@ -100,8 +165,12 @@ func _run() -> void:
 		and _inventory_quantity(
 			next_day.session.state.inventory,
 			&"mistleaf_seed",
-		) == 6,
-		"a daily source becomes available again on a later world day",
+		) == 3
+		and _inventory_quantity(
+			next_day.session.state.inventory,
+			&"mistleaf",
+		) == 1,
+		"the choice group reopens next day and allows the other offer",
 	)
 
 	var full_inventory := InventoryState.create_empty(1)
@@ -123,8 +192,52 @@ func _run() -> void:
 	_check(
 		rejected_full.status == DailyResourceGatheringResult.Status.INVENTORY_FULL
 		and rejected_full.session == full_session
-		and rejected_full.claims.last_claimed_day(SOURCE_ID) == 0,
+		and rejected_full.claims.last_claimed_day(CHOICE_GROUP_ID) == 0,
 		"a full inventory rejects the transaction without consuming the source",
+	)
+	var recoverable_inventory := InventoryState.create_empty(2)
+	recoverable_inventory = recoverable_inventory.with_added(
+		&"mistleaf_seed",
+		98,
+		catalog,
+	).inventory
+	recoverable_inventory = recoverable_inventory.with_added(
+		&"mistleaf",
+		1,
+		catalog,
+	).inventory
+	var recoverable_session := FarmingSessionState.new(
+		FarmingTransactionState.new(
+			FarmState.create_empty(&"home_h01_open_meadow"),
+			recoverable_inventory,
+		),
+		1,
+	)
+	var rejected_seed_offer := DailyResourceGathering.attempt(
+		recoverable_session,
+		DailyResourceClaims.create_empty(),
+		command,
+		sources,
+		catalog,
+	)
+	var accepted_forage_offer := DailyResourceGathering.attempt(
+		rejected_seed_offer.session,
+		rejected_seed_offer.claims,
+		DailyResourceGatheringCommand.new(FORAGE_SOURCE_ID, 1),
+		sources,
+		catalog,
+	)
+	_check(
+		rejected_seed_offer.status
+		== DailyResourceGatheringResult.Status.INVENTORY_FULL
+		and rejected_seed_offer.claims.last_claimed_day(CHOICE_GROUP_ID) == 0
+		and accepted_forage_offer.status
+		== DailyResourceGatheringResult.Status.COLLECTED
+		and _inventory_quantity(
+			accepted_forage_offer.session.state.inventory,
+			&"mistleaf",
+		) == 2,
+		"a failed full offer preserves the group so another fitting offer can succeed",
 	)
 
 	var wrong_day := DailyResourceGathering.attempt(
@@ -177,7 +290,7 @@ func _run() -> void:
 		"a configured source cannot be collected from another map",
 	)
 
-	var future_claims := claims.with_claim(SOURCE_ID, 2)
+	var future_claims := claims.with_claim(CHOICE_GROUP_ID, 2)
 	var rolled_back := DailyResourceGathering.attempt(
 		session,
 		future_claims,
@@ -187,7 +300,7 @@ func _run() -> void:
 	)
 	_check(
 		rolled_back.status == DailyResourceGatheringResult.Status.ALREADY_COLLECTED
-		and rolled_back.claims.last_claimed_day(SOURCE_ID) == 2,
+		and rolled_back.claims.last_claimed_day(CHOICE_GROUP_ID) == 2,
 		"a later claim blocks collection after a rolled-back world day",
 	)
 

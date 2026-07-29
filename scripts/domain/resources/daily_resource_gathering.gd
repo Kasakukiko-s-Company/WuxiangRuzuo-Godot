@@ -36,7 +36,8 @@ static func attempt(
 			session,
 			claims,
 		)
-	if claims.last_claimed_day(command.source_id) >= command.world_day:
+	var claim_key := source.claim_key()
+	if claims.last_claimed_day(claim_key) >= command.world_day:
 		return _rejected(
 			DailyResourceGatheringResult.Status.ALREADY_COLLECTED,
 			session,
@@ -77,7 +78,7 @@ static func attempt(
 	return DailyResourceGatheringResult.new(
 		DailyResourceGatheringResult.Status.COLLECTED,
 		next_session,
-		claims.with_claim(command.source_id, command.world_day),
+		claims.with_claim(claim_key, command.world_day),
 	)
 
 

@@ -23,6 +23,25 @@ static func create(
 		):
 			return null
 		sources[definition.id] = definition
+	var group_representatives: Dictionary[StringName, DailyResourceSourceDefinition] = {}
+	for definition: DailyResourceSourceDefinition in definitions:
+		if definition.claim_group_id.is_empty():
+			continue
+		if sources.has(definition.claim_group_id):
+			return null
+		var representative: DailyResourceSourceDefinition = (
+			group_representatives.get(definition.claim_group_id)
+			as DailyResourceSourceDefinition
+		)
+		if representative == null:
+			group_representatives[definition.claim_group_id] = definition
+			continue
+		if (
+			representative.map_id != definition.map_id
+			or representative.anchor_kind != definition.anchor_kind
+			or representative.anchor_id != definition.anchor_id
+		):
+			return null
 	return DailyResourceSourceCatalog.new(sources)
 
 

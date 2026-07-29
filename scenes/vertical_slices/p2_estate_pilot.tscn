@@ -66,7 +66,7 @@ theme_override_constants/margin_bottom = 6
 [node name="Title" type="Label" parent="HUD/TitlePanel/Margin"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
-text = "P2 地产生活闭环 · H01 开阔草甸（内存状态，不写存档）\n移动 · E/A 采集/收获/回屋休息 · F/X 使用 · 1-8 快捷栏 · R 重置"
+text = "P2 地产生活闭环 · H01 开阔草甸（内存状态，不写存档）\n移动 · E/A 选择/确认/收获/休息 · Q/Tab/肩键切换 · F/X 使用 · R 重置"
 autowrap_mode = 2
 
 [node name="FarmingPanel" type="PanelContainer" parent="HUD"]

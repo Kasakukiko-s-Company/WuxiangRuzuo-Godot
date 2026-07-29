@@ -31,6 +31,11 @@ var quantity: int:
 		return _quantity
 	set(_attempted_value):
 		push_error("DailyResourceSourceDefinition.quantity is read-only")
+var claim_group_id: StringName:
+	get:
+		return _claim_group_id
+	set(_attempted_value):
+		push_error("DailyResourceSourceDefinition.claim_group_id is read-only")
 
 var _id: StringName
 var _map_id: StringName
@@ -38,6 +43,7 @@ var _anchor_kind: StringName
 var _anchor_id: StringName
 var _item_id: StringName
 var _quantity: int
+var _claim_group_id: StringName
 
 
 func _init(
@@ -47,6 +53,7 @@ func _init(
 	definition_anchor_id: StringName,
 	definition_item_id: StringName,
 	definition_quantity: int,
+	definition_claim_group_id: StringName = &"",
 ) -> void:
 	_id = definition_id
 	_map_id = definition_map_id
@@ -54,3 +61,8 @@ func _init(
 	_anchor_id = definition_anchor_id
 	_item_id = definition_item_id
 	_quantity = definition_quantity
+	_claim_group_id = definition_claim_group_id
+
+
+func claim_key() -> StringName:
+	return _claim_group_id if not _claim_group_id.is_empty() else _id
