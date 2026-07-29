@@ -5,6 +5,7 @@ signal durable_state_committed(
 	reason: StringName,
 	protect_recovery: bool,
 )
+signal return_to_title_requested
 
 const SAFE_SPAWN_ID: StringName = &"home_safe_spawn_meadow"
 const RESOURCE_SEED_SOURCE_ID: StringName = &"home.h01.resource.north_meadow"
@@ -27,6 +28,7 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _day_label: Label = $HUD/FarmingPanel/Margin/Rows/DayLabel
 @onready var _quickbar_label: Label = $HUD/FarmingPanel/Margin/Rows/QuickbarLabel
 @onready var _sleep_fade: ColorRect = $HUD/SleepFade
+@onready var _pause_menu: P2PauseMenu = $HUD/PauseMenu
 
 var _input_service: InputService
 var _audio_service: AudioService
@@ -47,7 +49,9 @@ var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _reduce_motion: bool = false
 var _initial_persistent_state: P2PersistentState
 var _persistence_status: String = "内存状态，不写存档"
+var _persistence_saving_allowed: bool = true
 var _player_health: int = 5
+var _discard_next_input_sample: bool = false
 
 
 func _ready() -> void:
@@ -57,6 +61,10 @@ func _ready() -> void:
 	assert(_trade_book != null, "P2 estate pilot requires an injected TradeBook")
 	_player.set_external_snapshot_mode(true)
 	_player.interaction_requested.connect(_on_interaction_requested)
+	_pause_menu.resume_requested.connect(_close_pause_menu)
+	_pause_menu.return_to_title_requested.connect(
+		_on_return_to_title_requested
+	)
 	_initialize_farming_session()
 	_initialize_daily_interactions()
 	if not _restore_initial_state():
@@ -71,6 +79,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if _pause_menu != null and _pause_menu.is_open():
+		get_tree().paused = false
 	if _farming_session != null and _estate_runtime != null:
 		_commit_durable_state(&"session.exiting")
 	if _audio_service != null:
@@ -81,12 +91,28 @@ func _physics_process(_delta: float) -> void:
 	if _input_service == null:
 		return
 	var snapshot: InputSnapshot = _input_service.snapshot()
+	if _discard_next_input_sample:
+		_discard_next_input_sample = false
+		return
+	if snapshot.pause or _pause_menu.is_open():
+		apply_input_snapshot(snapshot)
+		return
 	_player.apply_input_snapshot(snapshot)
 	apply_input_snapshot(snapshot)
 
 
 func apply_input_snapshot(snapshot: InputSnapshot) -> void:
 	assert(snapshot != null, "P2 estate pilot input snapshot must be present")
+	if snapshot.pause:
+		if _pause_menu.is_return_confirmation_open():
+			_pause_menu.cancel_return_confirmation()
+		elif _pause_menu.is_open():
+			_close_pause_menu()
+		else:
+			_open_pause_menu()
+		return
+	if _pause_menu.is_open():
+		return
 	if snapshot.reset:
 		reset_to_safe_spawn()
 	if snapshot.debug_toggle:
@@ -170,7 +196,10 @@ func configure_initial_state(state: P2PersistentState) -> bool:
 	return true
 
 
-func configure_persistence_status(status: String) -> void:
+func configure_persistence_status(
+	status: String,
+	saving_allowed: bool = true,
+) -> void:
 	assert(
 		not is_node_ready(),
 		"persistence status must be configured before entering the tree",
@@ -180,6 +209,7 @@ func configure_persistence_status(status: String) -> void:
 		"persistence status must not be empty",
 	)
 	_persistence_status = status.strip_edges()
+	_persistence_saving_allowed = saving_allowed
 
 
 func capture_persistent_state() -> P2PersistentState:
@@ -199,8 +229,16 @@ func capture_persistent_state() -> P2PersistentState:
 	)
 
 
-func present_persistence_failure(message: String) -> void:
-	_persistence_status = "存档故障 · 仅内存（不会覆盖）"
+func present_persistence_failure(
+	message: String,
+	saving_allowed: bool = true,
+) -> void:
+	_persistence_saving_allowed = saving_allowed
+	_persistence_status = (
+		"自动保存失败 · 后续操作将重试"
+		if saving_allowed
+		else "存档故障 · 只读（不会覆盖）"
+	)
 	_update_persistence_labels()
 	_refresh_persistence_day_label()
 	_status_label.text = "自动保存失败：%s" % message
@@ -213,6 +251,19 @@ func present_persistence_status(status: String, message: String = "") -> void:
 	_refresh_persistence_day_label()
 	if not message.is_empty():
 		_status_label.text = message
+
+
+func present_navigation_failure(message: String) -> void:
+	_close_pause_menu()
+	_status_label.text = message
+
+
+func present_return_save_failure(message: String) -> void:
+	_pause_menu.present_return_failure(
+		message,
+		_persistence_status,
+		_persistence_saving_allowed,
+	)
 
 
 func get_estate_runtime() -> EstateMapRuntime:
@@ -241,6 +292,10 @@ func get_daily_interaction_overlay() -> EstateDailyInteractionOverlay:
 
 func get_interaction_feedback() -> P2InteractionFeedback:
 	return _interaction_feedback
+
+
+func get_pause_menu() -> P2PauseMenu:
+	return _pause_menu
 
 
 func get_player_cell() -> Vector2i:
@@ -790,8 +845,32 @@ func _update_persistence_labels() -> void:
 	_title_label.text = (
 		"P2 地产生活闭环 · H01 开阔草甸（%s）\n"
 		+ "移动 · E/A 选择/确认/收获/休息 · "
-		+ "Q/Tab/肩键切换 · F/X 使用 · R 重置"
+		+ "Q/Tab/肩键切换 · F/X 使用 · Esc/Start 暂停"
 	) % _persistence_status
+
+
+func _open_pause_menu() -> void:
+	_clear_rest_confirmation()
+	_cancel_crate()
+	_player.velocity = Vector2.ZERO
+	_player.set_input_locked(true)
+	_pause_menu.open(
+		_persistence_status,
+		_persistence_saving_allowed,
+	)
+	get_tree().paused = true
+
+
+func _close_pause_menu() -> void:
+	if get_tree() != null:
+		get_tree().paused = false
+	_pause_menu.close()
+	_player.set_input_locked(false)
+	_discard_next_input_sample = true
+
+
+func _on_return_to_title_requested() -> void:
+	return_to_title_requested.emit()
 
 
 func _refresh_persistence_day_label() -> void:

@@ -6,11 +6,11 @@
 
 `前往北草甸选择当日资源 → 选择种子时耕地 → 播种 → 浇水 → 回家二次确认休息 → 跨日成长 → 成熟 → 收获入包 → 卖出雾叶 → 回购种子`
 
-它验证了互斥资源选择、资源获得、农作事务、正式休息点、轻量交换、Godot 场景桥接和本地保存恢复。当前 `profile-1` 会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。该技术切片仍不代表 P2 完成。
+它验证了互斥资源选择、资源获得、农作事务、正式休息点、轻量交换、Godot 场景桥接和本地保存恢复。Main 选择的档位会在成功的持久状态变更和离开场景时更新 current 检查点，成功休息还更新 protected 恢复点；重进 H01 可恢复日期、玩家位置/朝向、农田、湿土/作物、背包/快捷栏、地产状态和每日领取记录。会话内 Esc/Start 可暂停、恢复或经二次确认安全返回标题；可写会话只有在显式退出保存成功后才导航，写入失败会保持暂停并允许重试；只读恢复则明确保留损坏证据而不承诺保存。该技术切片仍不代表 P2 完成。
 
 ## 可玩入口与操作
 
-从 `res://scenes/Main.tscn` 点击“进入 H01 地产农作闭环”。正式入口调用 `AppCompositionRoot.create_h01_launch(&"profile-1")`，不应绕过 application 层直接运行持久会话场景。
+从 `res://scenes/Main.tscn` 选择一个档位后点击“进入 H01 地产农作闭环”。正式入口调用 `AppCompositionRoot.create_h01_launch(selected_profile_id)`，不应绕过 application 层直接运行持久会话场景。
 
 | 操作 | 键盘 | 手柄 |
 | --- | --- | --- |
@@ -23,6 +23,7 @@
 | 切换北草甸交换项目 | 当日资源领取后打开交换，再用 Q/Tab | 左/右肩键 |
 | 快速选择并使用浇水壶 | G | 暂无默认键 |
 | 回安全出生点 | R | Y |
+| 暂停/恢复；确认页中先取消危险操作 | Esc | Start |
 | 调试信息 | F3 | Back |
 
 初始背包固定为八格，只含锄头×1、浇水壶×1。H01 北草甸地图锚点 `resource_north_meadow` 绑定一个每日资源选择组，当前候选为“雾叶草种子×3”和“雾叶×1”。第一次交互只打开选择，Q/Tab 或手柄肩键切换，第二次交互确认；移动、使用物品、重置或与其他目标交互会取消待确认状态。背包无法容纳所选奖励时事务失败、选择资格保留，玩家可以切换另一项。
@@ -58,7 +59,8 @@ HUD 中的“预计收获价值 90”和“即时目录价值 30”由当前作�
 - `EstateDailyInteractionOverlay` 只绘制可替换的资源箱、两个选择标记、当前选择环、家门提示和领取/确认状态；休息成功使用可关闭的短淡出，不拥有领域状态。
 - `FarmPlotOverlay` 使用程序化绘制表现耕地、当日湿土和 0～3 阶段作物；它不是状态源，也不是正式资源。
 - `P2InteractionFeedback` 只消费成功动作 ID 和目标格位置，以 Tween/自绘表现耕地、播种、浇水、收获、采集、交换和休息；减少动态效果时切换为极短静态反馈。
-- Main 只向 `AppCompositionRoot` 请求一个固定 profile 的 H01 launch；组合根注入通过校验的 `GameCatalog`、`TradeOfferCatalog`、`TradeBook`、H01 runtime、`InputService`、`AudioService`、`GameSaveModule` 和具体 `SaveService`。
+- Main 只向 `AppCompositionRoot` 请求所选 profile 的 H01 launch；组合根注入通过校验的 `GameCatalog`、`TradeOfferCatalog`、`TradeBook`、H01 runtime、`InputService`、`AudioService`、`GameSaveModule` 和具体 `SaveService`。
+- `P2PauseMenu` 只拥有会话内模态显示和语义信号；`P2EstatePilot` 负责暂停树并锁住瞬态玩法输入，`P2SessionNavigationBinding` 先向 `P2PersistenceBinding` 取得强类型退出准备结果，只有已保存或明确只读时才使用自己拥有的 Main 场景路径执行 `SceneTree.change_scene_to_file()`。写入失败保持在确认页，支持重试且不会触发场景切换。玩法节点不硬编码标题路径，也不直接决定退出时的存储位置。
 - `GodotAudioService` 通过 `data/audio_catalog.json` 将稳定 ID 映射到 1 个音乐播放器和 4 个 SFX 播放器；玩法不读取音频路径。当前接入 8 个 P2 SFX 和 1 个 H01 春季日间音乐候选。
 - HUD 始终显示世界日、八格快捷栏和真实保存模式。空档、当前档、受保护恢复点和存档故障不会冒充同一状态。
 - 播种季节和 HUD 季节均来自当前 `EstateMapState.season`，不再硬编码春季；它仍是地产状态轴，不冒充完整历法。
@@ -78,12 +80,16 @@ Godot `4.7.1.stable`：
 - 新增场景闭环测试：`tests/p2/test_h01_farming_loop.gd`。
 - 新增音频 adapter 测试：`tests/p2/test_godot_audio_service.gd`；场景闭环同步验证 8 个稳定 SFX ID、H01 music ID 与交互动画。
 - 真实输入路由：`tests/p2/test_h01_input_route.gd` 把物理 E/Q/F/N 键事件送入 InputMap，经 `GodotInputService` 到 P2 场景，验证资源选择、互斥领取、交易打开/取消/卖出/回购、次日恢复、休息确认、正式跨日、耕地和 N 不再跨日。
-- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，前序批次实际生成并检查四张 1280×720 截图：
+- 暂停与安全返回：`tests/p2/test_p2_pause_navigation.gd` 覆盖同帧 pause+move 的暂停优先级、真实 Escape/Start 跨 physics frame 恢复且不反弹重开、二次确认默认聚焦取消、返回标题前显式保存所选档位、写失败保持暂停并可重试、重进位置恢复，以及只读恢复不覆盖损坏证据。
+- Compatibility Renderer：Intel Iris Xe / OpenGL 3.3，实际生成并检查八张 640×360 截图：
   - `builds/verification/p2_h01_resource_source.png`
   - `builds/verification/p2_h01_resource_choice.png`
+  - `builds/verification/p2_h01_trade_choice.png`
   - `builds/verification/p2_h01_rest_confirmation.png`
   - `builds/verification/p2_h01_farming_loop.png`
-- `p2_h01_trade_choice.png` 的捕获工具已更新，但本轮桌面图形进程权限被拒绝，仍按 `GODOT_MANUAL_STEPS.md` 记为未生成。
+  - `builds/verification/p2_h01_pause_menu.png`
+  - `builds/verification/p2_h01_return_confirmation.png`
+  - `builds/verification/p2_h01_return_save_failure.png`
 - 截图和运行日志位于 D 盘 Git 忽略目录，不进入提交。
 
 ## 当前保存边界
@@ -92,11 +98,11 @@ Godot `4.7.1.stable`：
 - `.tmp`、`.rollback`、`.bak` 与目标文件位于同一目录；现有目标先转为 `.rollback`，新目标提交成功后才更新 `.bak`。`.bak` 是物理写入保护，不等于业务上的 `profile-N.protected`。
 - 普通成功动作和离开场景更新 current；成功确认休息再更新 protected。protected 写失败会报告降级，但不否认 current 已成功。
 - current primary 有效时直接恢复；否则同时验证 current previous、protected primary 和 protected previous，并按世界日、保存时间与稳定来源优先级选择最新 fallback。pre-promote 的 `.rollback` 会作为 primary 暴露，不会被更旧 `.bak` 隐藏。无效载荷先隔离；无法隔离时仍可只读恢复，但不会写回。没有任何有效候选时阻止 H01 启动并保留载荷。
-- `profile-1`～`profile-3` 的键空间和 codec 已隔离，Main 当前只选择 `profile-1`；档位选择/删除/最近档 UI 尚未实现。
+- `profile-1`～`profile-3` 的键空间和 codec 已隔离；Main 已提供三档选择、最近档、状态摘要和带确认的完整档位删除，H01 只绑定所选档位。
 
 ## 本轮明确不做
 
-- 三档位选择/删除/最近档 UI、发行期 Windows 路径、Steam 云、Web/微信 adapter 或旧 Cocos 档导入。
+- 最终标题/档位视觉、设置页、发行期 Windows 路径、Steam 云、Web/微信 adapter 或旧 Cocos 档导入。
 - 室内床铺场景、完整过夜演出、体力、水量、正式商店、独立钱包或多类资源生态。
 - 正式通用货币、批量交易、动态价格，以及经玩家测试的选择平衡。
 - 多作物平衡、季节死亡、肥料、工具升级、机器加工或建造。
@@ -105,4 +111,4 @@ Godot `4.7.1.stable`：
 
 ## P2 剩余出口
 
-代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复缺口已经关闭，但三档管理 UI 和发行 adapter 仍属于后续。北草甸二选一与轻量交换已经提供可运行的延迟产出、即时物品、卖出和回购闭环，但每日免费资源仍会削弱稀缺性，且尚无真实玩家节奏证据。下一批应在不提前固化通用货币和正式商店的前提下做自动节奏模拟、调整早期资源压力并安排玩家验证。完整交换边界见 `P2_LIGHTWEIGHT_ECONOMY.md`。
+代表性反馈音与动作已经进入运行切片；当前候选仍需后续主观听感和最终混音，不冒充发行资源。本地 current/protected 保存恢复、三档技术管理和会话安全返回的技术缺口已经关闭；发行 adapter 与最终标题视觉仍属于后续。北草甸二选一与轻量交换已经提供可运行的延迟产出、即时物品、卖出和回购闭环，但每日免费资源仍会削弱稀缺性，且尚无真实玩家节奏证据。下一批应在不提前固化通用货币和正式商店的前提下做自动节奏模拟、调整早期资源压力并安排玩家验证。完整交换边界见 `P2_LIGHTWEIGHT_ECONOMY.md`。

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/vertical_slices/p2_estate_pilot.gd" id="1_pilot"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/farm_plot_overlay.gd" id="2_farm_overlay"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/gameplay/prototypes/p1_prototype_player_view.gd" id="4_player_view"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/estate_daily_interaction_overlay.gd" id="5_daily_overlay"]
 [ext_resource type="Script" path="res://scripts/gameplay/feedback/p2_interaction_feedback.gd" id="6_feedback"]
+[ext_resource type="Script" path="res://scripts/ui/p2_pause_menu.gd" id="7_pause_menu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(18, 20)
@@ -142,3 +143,115 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.015, 0.035, 0.045, 0.0)
+
+[node name="PauseMenu" type="Control" parent="HUD"]
+unique_name_in_owner = true
+visible = false
+process_mode = 3
+z_index = 100
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("7_pause_menu")
+
+[node name="Scrim" type="ColorRect" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.025, 0.03, 0.84)
+
+[node name="Center" type="CenterContainer" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="HUD/PauseMenu/Center"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/PauseMenu/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="Content" type="VBoxContainer" parent="HUD/PauseMenu/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Title" type="Label" parent="HUD/PauseMenu/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.9, 0.79, 1)
+theme_override_font_sizes/font_size = 21
+text = "暂停"
+horizontal_alignment = 1
+
+[node name="PauseSessionStatus" type="Label" parent="HUD/PauseMenu/Center/Panel/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.76, 0.72, 1)
+theme_override_font_sizes/font_size = 11
+text = "当前档位 · 本地自动保存"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="PauseNormalActions" type="VBoxContainer" parent="HUD/PauseMenu/Center/Panel/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="ResumeButton" type="Button" parent="HUD/PauseMenu/Center/Panel/Margin/Content/PauseNormalActions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 34)
+layout_mode = 2
+text = "继续游戏"
+
+[node name="ReturnToTitleButton" type="Button" parent="HUD/PauseMenu/Center/Panel/Margin/Content/PauseNormalActions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 34)
+layout_mode = 2
+text = "保存并返回标题"
+
+[node name="ReturnConfirmation" type="VBoxContainer" parent="HUD/PauseMenu/Center/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ReturnConfirmationMessage" type="Label" parent="HUD/PauseMenu/Center/Panel/Margin/Content/ReturnConfirmation"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.77, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+text = "保存当前状态并返回标题页？\n受保护恢复点仍保留最近一次成功休息。"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="HUD/PauseMenu/Center/Panel/Margin/Content/ReturnConfirmation"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="CancelReturnButton" type="Button" parent="HUD/PauseMenu/Center/Panel/Margin/Content/ReturnConfirmation/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 34)
+layout_mode = 2
+text = "取消"
+
+[node name="ConfirmReturnButton" type="Button" parent="HUD/PauseMenu/Center/Panel/Margin/Content/ReturnConfirmation/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 34)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.76, 0.66, 1)
+text = "确认返回"

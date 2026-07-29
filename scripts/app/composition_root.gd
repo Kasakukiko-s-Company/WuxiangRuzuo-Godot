@@ -7,6 +7,7 @@ const ENTRY_P2_H01: StringName = &"entry.p2.h01"
 const P1_PROTOTYPE_SCENE: String = (
 	"res://scenes/prototypes/p1_experience_probe.tscn"
 )
+const MAIN_SCENE: String = "res://scenes/Main.tscn"
 const ESTATE_PILOT_MAP_ID: StringName = &"home_h01_open_meadow"
 const ESTATE_PILOT_TRADE_ENDPOINT_ID: StringName = (
 	&"economy.h01.north_meadow_crate"
@@ -334,10 +335,11 @@ func create_h01_launch(
 		pilot.configure_persistence_status(_persistence_status(
 			profile_id,
 			load_result,
-		))
+		), load_result.saving_allowed)
 	else:
 		pilot.configure_persistence_status(
-			"%s · 本地自动保存" % profile_id
+			"%s · 本地自动保存" % profile_id,
+			true,
 		)
 	var binding := P2PersistenceBinding.new()
 	binding.name = "PersistenceBinding"
@@ -348,6 +350,10 @@ func create_h01_launch(
 		load_result.saving_allowed,
 	)
 	pilot.add_child(binding)
+	var navigation_binding := P2SessionNavigationBinding.new()
+	navigation_binding.name = "SessionNavigationBinding"
+	navigation_binding.configure(pilot, binding, MAIN_SCENE)
+	pilot.add_child(navigation_binding)
 	return H01LaunchResult.ready(pilot)
 
 

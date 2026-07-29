@@ -5,10 +5,18 @@ const RESOURCE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_
 const RESOURCE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_resource_choice.png"
 const TRADE_CHOICE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_trade_choice.png"
 const REST_OUTPUT_PATH: String = "res://builds/verification/p2_h01_rest_confirmation.png"
+const PAUSE_OUTPUT_PATH: String = "res://builds/verification/p2_h01_pause_menu.png"
+const RETURN_CONFIRMATION_OUTPUT_PATH: String = (
+	"res://builds/verification/p2_h01_return_confirmation.png"
+)
+const RETURN_SAVE_FAILURE_OUTPUT_PATH: String = (
+	"res://builds/verification/p2_h01_return_save_failure.png"
+)
 
 
 class CaptureSaveService extends SaveService:
 	var payloads: Dictionary[StringName, String] = {}
+	var writes_fail: bool = false
 
 
 	func read(slot_id: StringName) -> SaveReadResult:
@@ -22,6 +30,8 @@ class CaptureSaveService extends SaveService:
 
 
 	func write(slot_id: StringName, payload: String) -> SaveWriteResult:
+		if writes_fail:
+			return SaveWriteResult.failed("D 盘存储暂时不可写")
 		payloads[slot_id] = payload
 		return SaveWriteResult.written()
 
@@ -42,9 +52,10 @@ func _capture() -> void:
 		push_error("Unable to bootstrap H01 estate pilot capture: %s" % status)
 		quit(1)
 		return
+	var save_service := CaptureSaveService.new()
 	var launch := composition_root.create_h01_launch(
 		&"profile-1",
-		CaptureSaveService.new(),
+		save_service,
 	)
 	if not launch.is_ready():
 		push_error("Unable to compose the persistent H01 estate pilot: %s" % launch.message)
@@ -113,14 +124,39 @@ func _capture() -> void:
 	if not _save_view(FARM_OUTPUT_PATH):
 		quit(1)
 		return
+
+	pilot.apply_input_snapshot(_pause_snapshot())
+	await process_frame
+	if not _save_view(PAUSE_OUTPUT_PATH):
+		quit(1)
+		return
+	var pause_menu: P2PauseMenu = pilot.get_pause_menu()
+	pause_menu.request_return_confirmation()
+	await process_frame
+	if not _save_view(RETURN_CONFIRMATION_OUTPUT_PATH):
+		quit(1)
+		return
+	save_service.writes_fail = true
+	pause_menu.confirm_return_to_title()
+	await process_frame
+	if not _save_view(RETURN_SAVE_FAILURE_OUTPUT_PATH):
+		quit(1)
+		return
+	save_service.writes_fail = false
+	pilot.apply_input_snapshot(_pause_snapshot())
+	pilot.apply_input_snapshot(_pause_snapshot())
+	await process_frame
 	print(
-		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s, %s"
+		"H01_ESTATE_PILOT_CAPTURE_OK: %s, %s, %s, %s, %s, %s, %s, %s"
 		% [
 			RESOURCE_OUTPUT_PATH,
 			RESOURCE_CHOICE_OUTPUT_PATH,
 			TRADE_CHOICE_OUTPUT_PATH,
 			REST_OUTPUT_PATH,
 			FARM_OUTPUT_PATH,
+			PAUSE_OUTPUT_PATH,
+			RETURN_CONFIRMATION_OUTPUT_PATH,
+			RETURN_SAVE_FAILURE_OUTPUT_PATH,
 		]
 	)
 	quit(0)
@@ -145,6 +181,12 @@ func _action_snapshot(slot_index: int) -> InputSnapshot:
 	var snapshot := InputSnapshot.neutral()
 	snapshot.quickbar_slot_index = slot_index
 	snapshot.primary_action = true
+	return snapshot
+
+
+func _pause_snapshot() -> InputSnapshot:
+	var snapshot := InputSnapshot.neutral()
+	snapshot.pause = true
 	return snapshot
 
 
