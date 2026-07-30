@@ -155,3 +155,11 @@ H01 正式工程先导从唯一输入 `maps/handoff/estate-map-pack-v1/` 指向�
 14 张正式 PNG 与候选同名文件逐一 SHA-256 相同。春季 terrain/objects/logic 来自项目自制 H01 Batch 001；夏秋冬 terrain/objects 为项目内确定性派生；architecture 与 anomaly atlas 沿用已登记的项目自有 H03 资源。没有新增第三方游戏、旧 Cocos、网络下载或来源不明像素。正式 `.tres`/`.tscn` 只改写资源路径、脚本绑定和候选组名，不覆盖候选文件。
 
 本次 `runtimeIntegrated=true` 只表示 H01 已进入正式工程并通过运行测试；它不改变原候选、复垦/扩建/成熟技术占位和整体美术的 `shippingApproval=false`。本轮也没有把其余 H02～H08 像素复制进正式 `assets/`。
+
+## A/B 视觉方向开发期运行接入（2026-07-30）
+
+用户明确要求把既有地图与美术生产结果实际用于当前工程。本批继续以已正式接入的 H01 原生 32px 地图作为玩法画面；同时从 Batch 001 的 A「青雾旧垦」代表场景生成一张仅供开发期标题页使用的 640×360 JPEG，并以 Batch 002 的建议将 B「纸灯暖乡」暖灯轮廓转译为 Godot 原生 Theme、HUD 色彩与轻量环境层。没有从世界板或角色/物品板裁切 Tile、Sprite、图标或动画帧。
+
+源文件 `art-source/visual-direction/ai-resource-families/batch-001/a-cyan-mist-old-homestead-scene.png` 为 2,970,621 bytes，SHA-256 `457194D1FCBBE6A0E1506AA67FE88A2491B024034DA38ACAA37611D3D855B4EE`。开发期派生文件 `assets/art/title/a_cyan_mist_homestead_title_dev.jpg` 为 96,952 bytes，SHA-256 `63CE59F690CB4678BC9FF49A21395B165BA2ED71D40D1E01560853C7D17DDF9F`；由 `tools/build_dev_visual_reference.ps1` 在 D 盘使用 Windows `System.Drawing` 高质量双三次缩放和 JPEG quality 90 可重复生成。文件体积不需要 Git LFS。
+
+该标题图和 A/B 风格转译现标记为 `runtimeIntegrated=true`、`developmentUseApproved=true`，但仍为 `commercialReleaseAuthorized=false`、`shippingApproval=false`。它们可以改善当前开发入口与视觉验证，不能据此宣称最终标题美术、最终角色 SpriteSheet 或发行美术已完成；发行前仍需原生技术美术重构、权利复核和人工画面验收。

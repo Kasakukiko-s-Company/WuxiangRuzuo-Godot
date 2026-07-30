@@ -33,6 +33,7 @@ const RESOURCE_FORAGE_QUANTITY: int = 1
 @onready var _crate_choice_panel: P2CrateChoicePanel = $HUD/CrateChoicePanel
 @onready var _day_transition: P2DayTransitionOverlay = $HUD/DayTransition
 @onready var _pause_menu: P2PauseMenu = $HUD/PauseMenu
+@onready var _atmosphere: AmbientMistOverlay = $HUD/H01Atmosphere
 
 var _input_service: InputService
 var _audio_service: AudioService
@@ -52,6 +53,7 @@ var _rest_confirmation_day: int = 0
 var _coordinate_mapper := TileCoordinateMapper.new(Vector2i(32, 32))
 var _life_loop_guide: H01LifeLoopGuide
 var _reduce_motion: bool = false
+var _quality_level: StringName = &"high"
 var _initial_persistent_state: P2PersistentState
 var _persistence_status: String = "内存状态，不写存档"
 var _persistence_saving_allowed: bool = true
@@ -384,9 +386,27 @@ func apply_estate_state(state: EstateMapState) -> EstateMapApplyResult:
 func set_reduce_motion(enabled: bool) -> void:
 	_reduce_motion = enabled
 	_camera.position_smoothing_enabled = not enabled
+	_atmosphere.set_reduce_motion(enabled)
 	if enabled:
 		_camera.reset_smoothing()
 		_day_transition.finish_motion()
+
+
+func set_quality_level(level: StringName) -> void:
+	assert(
+		AmbientMistOverlay.QUALITY_LEVELS.has(level),
+		"P2 visual quality must be low or high",
+	)
+	_quality_level = level
+	var atmosphere := get_node_or_null(
+		"HUD/H01Atmosphere"
+	) as AmbientMistOverlay
+	assert(atmosphere != null, "P2 visual quality requires its ambient layer")
+	atmosphere.set_quality_level(level)
+
+
+func get_quality_level() -> StringName:
+	return _quality_level
 
 
 func set_debug_visible(enabled: bool) -> void:
@@ -911,9 +931,8 @@ func _update_persistence_labels() -> void:
 	if _title_label == null:
 		return
 	_title_label.text = (
-		"P2 地产生活闭环 · H01 开阔草甸（%s）\n"
-		+ "移动 · E/A 选择/确认/收获/休息 · "
-		+ "Q/Tab/肩键切换 · F/X 使用 · Esc/Start 暂停"
+		"H01 开阔草甸 · %s\n"
+		+ "E/A 交互 · Q/Tab 切换 · F/X 使用 · Esc/Start 暂停"
 	) % _persistence_status
 
 

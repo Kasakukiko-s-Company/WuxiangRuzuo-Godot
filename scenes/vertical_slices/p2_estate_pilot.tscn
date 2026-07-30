@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/vertical_slices/p2_estate_pilot.gd" id="1_pilot"]
 [ext_resource type="Script" path="res://scripts/gameplay/world/farm_plot_overlay.gd" id="2_farm_overlay"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scripts/ui/p2_pause_menu.gd" id="7_pause_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/p2_day_transition_overlay.tscn" id="8_day_transition"]
 [ext_resource type="PackedScene" path="res://scenes/ui/p2_crate_choice_panel.tscn" id="9_crate_choice"]
+[ext_resource type="Theme" path="res://assets/ui/themes/wuxiang_paper_lantern_dev.tres" id="10_theme"]
+[ext_resource type="Script" path="res://scripts/ui/ambient_mist_overlay.gd" id="11_mist"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(18, 20)
@@ -52,12 +54,25 @@ limit_bottom = 3072
 limit_smoothed = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="H01Atmosphere" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_mist")
+drift_speed = 2.4
 
 [node name="TitlePanel" type="PanelContainer" parent="HUD"]
 offset_left = 12.0
 offset_top = 12.0
-offset_right = 510.0
-offset_bottom = 72.0
+offset_right = 372.0
+offset_bottom = 62.0
+theme = ExtResource("10_theme")
 
 [node name="Margin" type="MarginContainer" parent="HUD/TitlePanel"]
 layout_mode = 2
@@ -68,15 +83,17 @@ theme_override_constants/margin_bottom = 6
 
 [node name="Title" type="Label" parent="HUD/TitlePanel/Margin"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "P2 地产生活闭环 · H01 开阔草甸（内存状态，不写存档）\n移动 · E/A 选择/确认/收获/休息 · Q/Tab/肩键切换 · F/X 使用 · R 重置"
+theme_override_colors/font_color = Color(0.92, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 10
+text = "H01 开阔草甸 · 内存状态\nE/A 交互 · Q/Tab 切换 · F/X 使用 · Esc 暂停"
 autowrap_mode = 2
 
 [node name="FarmingPanel" type="PanelContainer" parent="HUD"]
 offset_left = 12.0
-offset_top = 80.0
-offset_right = 410.0
-offset_bottom = 151.0
+offset_top = 69.0
+offset_right = 356.0
+offset_bottom = 137.0
+theme = ExtResource("10_theme")
 
 [node name="Margin" type="MarginContainer" parent="HUD/FarmingPanel"]
 layout_mode = 2
@@ -112,6 +129,7 @@ offset_left = 94.0
 offset_top = 314.0
 offset_right = 546.0
 offset_bottom = 348.0
+theme = ExtResource("10_theme")
 
 [node name="Margin" type="MarginContainer" parent="HUD/StatusPanel"]
 layout_mode = 2
@@ -131,6 +149,7 @@ offset_left = 438.0
 offset_top = 12.0
 offset_right = 628.0
 offset_bottom = 150.0
+theme = ExtResource("10_theme")
 
 [node name="Margin" type="MarginContainer" parent="HUD/DebugPanel"]
 layout_mode = 2
@@ -145,8 +164,10 @@ theme_override_font_sizes/font_size = 10
 text = "H01 ESTATE PILOT"
 
 [node name="CrateChoicePanel" parent="HUD" instance=ExtResource("9_crate_choice")]
+theme = ExtResource("10_theme")
 
 [node name="DayTransition" parent="HUD" instance=ExtResource("8_day_transition")]
+theme = ExtResource("10_theme")
 
 [node name="PauseMenu" type="Control" parent="HUD"]
 unique_name_in_owner = true
@@ -160,6 +181,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+theme = ExtResource("10_theme")
 script = ExtResource("7_pause_menu")
 
 [node name="Scrim" type="ColorRect" parent="HUD/PauseMenu"]

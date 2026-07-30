@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/app/main.gd" id="1_main"]
+[ext_resource type="Texture2D" path="res://assets/art/title/a_cyan_mist_homestead_title_dev.jpg" id="2_title_art"]
+[ext_resource type="Theme" path="res://assets/ui/themes/wuxiang_paper_lantern_dev.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/ui/ambient_mist_overlay.gd" id="4_mist"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -9,27 +12,63 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_theme")
 script = ExtResource("1_main")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.055, 0.09, 0.105, 1)
+texture = ExtResource("2_title_art")
+expand_mode = 1
+stretch_mode = 6
 mouse_filter = 2
+
+[node name="BackgroundTint" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.055, 0.05, 0.24)
+
+[node name="SideScrim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_right = 390.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.04, 0.033, 0.76)
+
+[node name="AmbientMist" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_mist")
+title_mode = true
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
+offset_left = 18.0
+offset_top = 10.0
+offset_right = -262.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -37,30 +76,40 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="Content" type="VBoxContainer" parent="Margin/Center"]
-custom_minimum_size = Vector2(590, 0)
+custom_minimum_size = Vector2(346, 0)
 layout_mode = 2
-theme_override_constants/separation = 3
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="Title" type="Label" parent="Margin/Center/Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.9, 0.79, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.93, 0.96, 0.83, 1)
+theme_override_colors/font_shadow_color = Color(0.04, 0.07, 0.055, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
 text = "雾乡如昨"
 horizontal_alignment = 1
 
 [node name="Milestone" type="Label" parent="Margin/Center/Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.62, 0.74, 0.73, 1)
+theme_override_colors/font_color = Color(0.91, 0.72, 0.4, 1)
 theme_override_font_sizes/font_size = 12
-text = "完整游戏制作 · P2 核心生活循环垂直切片"
+text = "归田 · 结缘 · 逐雾"
+horizontal_alignment = 1
+
+[node name="BuildLabel" type="Label" parent="Margin/Center/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.61, 0.72, 0.67, 0.9)
+theme_override_font_sizes/font_size = 8
+text = "完整游戏制作 · P2 核心生活循环"
 horizontal_alignment = 1
 
 [node name="StatusLabel" type="Label" parent="Margin/Center/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.74, 0.78, 0.72, 1)
-theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.7, 0.78, 0.71, 1)
+theme_override_font_sizes/font_size = 8
 text = "Bootstrapping…"
 horizontal_alignment = 1
 autowrap_mode = 2
@@ -74,25 +123,25 @@ theme_override_constants/separation = 3
 
 [node name="Profile1Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(570, 30)
+custom_minimum_size = Vector2(334, 28)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "档位 1 · 读取中…"
 
 [node name="Profile2Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(570, 30)
+custom_minimum_size = Vector2(334, 28)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "档位 2 · 读取中…"
 
 [node name="Profile3Button" type="Button" parent="Margin/Center/Content/ProfilePanel/ProfileList"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(570, 30)
+custom_minimum_size = Vector2(334, 28)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "档位 3 · 读取中…"
 
@@ -100,7 +149,7 @@ text = "档位 3 · 读取中…"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.7, 0.68, 1)
-theme_override_font_sizes/font_size = 9
+theme_override_font_sizes/font_size = 8
 text = "正在读取档位…"
 horizontal_alignment = 1
 autowrap_mode = 2
@@ -108,7 +157,7 @@ autowrap_mode = 2
 [node name="LaunchP2Button" type="Button" parent="Margin/Center/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(300, 30)
+custom_minimum_size = Vector2(280, 30)
 theme_override_colors/font_color = Color(0.84, 0.91, 0.78, 1)
 theme_override_font_sizes/font_size = 13
 text = "开始所选档位"
@@ -116,7 +165,7 @@ text = "开始所选档位"
 [node name="DeleteProfileButton" type="Button" parent="Margin/Center/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(300, 24)
+custom_minimum_size = Vector2(280, 24)
 theme_override_colors/font_color = Color(0.82, 0.62, 0.58, 1)
 theme_override_font_sizes/font_size = 10
 text = "删除所选档位"
@@ -124,7 +173,7 @@ text = "删除所选档位"
 [node name="LaunchP1Button" type="Button" parent="Margin/Center/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(300, 24)
+custom_minimum_size = Vector2(280, 24)
 theme_override_colors/font_color = Color(0.72, 0.82, 0.72, 1)
 theme_override_font_sizes/font_size = 10
 text = "回到 P1 雾岭边缘体验原型"
