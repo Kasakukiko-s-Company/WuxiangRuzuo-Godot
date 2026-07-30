@@ -37,6 +37,8 @@
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_h01_input_route.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_p2_day_transition.gd
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --script res://tests/p2/test_p2_crate_choice_panel.gd
+& 'D:\python\python.exe' -B -m unittest tests.p2.test_p2_pacing_evidence_report
+& 'D:\python\python.exe' -B tools\playtest\analyze_p2_pacing.py
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --headless --path . --quit-after 2
 & 'D:\lzq\godot\Godot_v4.7.1-stable_win64.exe\Godot_v4.7.1-stable_win64_console.exe' --path . --resolution 1280x720 --script res://tools/capture_h01_estate_pilot.gd
 ```

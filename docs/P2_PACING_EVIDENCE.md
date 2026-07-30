@@ -61,7 +61,19 @@
 - 玩家坐标或逐帧输入轨迹；
 - 任意嵌套 Dictionary/Array。
 
-属性必须完整匹配事件对应的 typed registry：字符串字段只接受逐字段注册的 run kind、场景、地图、目标、动作、状态、结果和修订 ID；计数与时间字段只接受规定范围的整数。允许键中塞入未注册文本、路径或错误类型同样会在写入前停用 adapter。一个会话最多 2048 个事件，单行最多 16384 个字符。文件当前不自动删除；需要清理时只删除上述 Git 忽略目录中的具体证据文件，不得把它们作为项目资源唯一副本或提交到远端。
+属性必须完整匹配事件对应的 typed registry：字符串字段只接受逐字段注册的 run kind、场景、地图、目标、动作、状态、结果和修订 ID；计数与时间字段只接受规定范围的整数。不允许键中塞入未注册文本、路径或错误类型；这类输入同样会在写入前停用 adapter。一个会话最多 2048 个事件，单行最多 16384 个字符。文件当前不自动删除；需要清理时只删除上述 Git 忽略目录中的具体证据文件，不得把它们作为项目资源唯一副本或提交到远端。
+
+## 只读汇总与决策门槛
+
+`tools/playtest/analyze_p2_pacing.py` 对已经安全结束的 JSONL 做独立、fail-closed 汇总。它使用有界流式读取，逐文件检查 UTF-8/JSON、重复键、顶层和属性白名单、连续 sequence、Godot signed-int64 与单调时间、精确注册的 build/content revision、事件拓扑、稳定 session 属性、动作前后状态变化、结束 outcome 和克隆 payload；时长、首动作和指纹都以会话内相对时间计算，绝对 wall-clock/elapsed 整体平移不能污染指标或复制样本。输入必须是证据目录内的 D 盘普通文件，symlink、目录外目标或其他盘目标都会 fail closed。任何完整性问题都会令整份报告 `reportUsable=false`。报告只使用 `source-0001` 形式的中性来源编号和稳定注册值，不回显文件名、session ID、绝对路径、profile、存档 payload 或自由文本。
+
+```powershell
+& 'D:\python\python.exe' tools\playtest\analyze_p2_pacing.py
+```
+
+默认只读 `builds/playtest-evidence/p2-pacing/` 并把 JSON 报告写到标准输出；如显式使用 `--output`，输入和输出都必须解析到 D 盘，输出必须是 `.json`，不能覆盖 `.jsonl` 源证据。automation、resumed 和 `human_internal` fresh 自声明样本分开计数；不同 build/content revision 各自成组，绝不合并补足样本量。最低门槛固定为同一兼容 revision 组 5 份结构完整且不重复的 `complete_loop`，API 和 CLI 都不能降低。达到门槛只会给出 `candidateSetReadyForHumanAttestation=true` 和 `human_attestation_required`：JSON 自报的 `human_internal` 不能证明实际操作者，因此分析器始终保持 `humanEvidenceCollected=false`、`directionalReviewReady=false`、`designDecisionReviewed=false`、`p2CompletionClaimAllowed=false`。真人确认、产品复盘和 P2 出口仍需明确判断。
+
+回归测试：`tests/p2/test_p2_pacing_evidence_report.py` 覆盖空目录、五份结构合格候选、自动化/恢复档隔离、未知 revision、浮点时间、超出 Godot int64 的大整数、相对时间指标、明显不可能的状态链、零时长自声明真人、绝对时间平移克隆、嵌套对象/数组攻击、超长整数 JSON、隐私脱敏、固定最低门槛、D 盘路径、symlink/目录外来源、16384/16385 字符与 2048/2049 事件精确边界、非法 UTF-8，以及两份 GDScript producer 的事件/属性/动作/结果/revision/硬限制注册表一致性。
 
 ## 真人验证出口
 

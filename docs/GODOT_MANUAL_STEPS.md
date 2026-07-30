@@ -39,7 +39,7 @@ schema v2、D 盘原子 current/protected 写入、损坏回退、三 profile �
 
 ## P2 节奏证据
 
-工程可自动确认事件/值域白名单、单调时间、automation/human 显式隔离、D 盘 JSONL、新档有序完成判定、恢复档排除、build/content revision、实际 H01 成功动作接线，以及会话中途写入失败不阻断真实耕地事务和 schema v2 保存。本轮不要求用户代做编辑器检查。
+工程可自动确认事件/值域白名单、Godot int64 与单调时间、automation/human 显式隔离、D 盘 JSONL、新档有序完成判定、恢复档排除、build/content revision、实际 H01 成功动作接线，以及会话中途写入失败不阻断真实耕地事务和 schema v2 保存。本地只读分析器还会拒绝重复键、序列断裂、未结束/伪造 outcome、未知 revision、明显不可能的状态变化、绝对时间平移克隆、嵌套恶意值、目录外链接和隐私字段，并在同一 revision 的结构合格自声明样本少于 5 份时保持 `insufficient_human_samples`。达到 5 份也只会进入 `human_attestation_required`，不会自行认定真人证据或方向复盘就绪。这些技术检查不要求用户代做。
 
 真实玩家首次游玩的节奏与选择价值不能由自动化代理替代，因此仍保留为 P2 产品验证活动；当前仅为 `instrumentationReady=true`，不得勾选 `humanEvidenceCollected` 或 `designDecisionReviewed`。未来开始知情内部采样时必须显式使用 `--p2-pacing-human`，普通游玩和日常调试不会暗中生成记录；无需为了本批代码验收重复执行人工步骤。
 
